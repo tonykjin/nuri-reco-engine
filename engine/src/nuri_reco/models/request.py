@@ -1,7 +1,7 @@
 """PlanRequest: the domain input to POST /v1/plan (spec section 10)."""
 
 import datetime as dt
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field
 
@@ -13,6 +13,8 @@ UnitInterval = Annotated[float, Field(ge=0, le=1)]
 class Training(StrictModel):
     resistance: bool
     weekly_schedule: list[DayType] = Field(min_length=7, max_length=7)
+    # Used for recomp eligibility (spec §4.2); None = unknown.
+    experience: Literal["novice", "intermediate", "advanced", "returning"] | None = None
 
 
 class Flags(StrictModel):
@@ -70,3 +72,6 @@ class PlanRequest(StrictModel):
     constraints: Constraints = Field(default_factory=Constraints)
     preferences: Preferences = Field(default_factory=Preferences)
     as_of: dt.date
+    # The user confirmed the goal order, so contradictory goals are sequenced by priority
+    # instead of returning needs_ordering (spec §4.1 rule 2).
+    sequence_confirmed: bool = False

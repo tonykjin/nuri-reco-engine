@@ -13,6 +13,7 @@ from typing import Any, Literal, Self
 import pytest
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from nuri_reco.goals import RESOLVER_PHASE_NAMES
 from nuri_reco.kb import load_kb
 from nuri_reco.models import DayType, Energy, PlanRequest
 
@@ -120,7 +121,7 @@ def test_persona_expectations_reference_real_rules(name: str) -> None:
     kb = load_kb()
     referenced = expect.required_rule_ids + expect.required_warnings + expect.required_blocks
     assert set(referenced) <= set(kb.rules), set(referenced) - set(kb.rules)
-    phase_names = {p.name for p in kb.phases.phases}
+    phase_names = {p.name for p in kb.phases.phases} | RESOLVER_PHASE_NAMES
     named = [p.name for p in expect.phases] + [w.phase for w in expect.loam_score_weights]
     named += expect.deficit_only_in or []
     assert {n for n in named if n is not None} <= phase_names

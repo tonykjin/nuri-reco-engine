@@ -26,6 +26,8 @@ tiers:
     tier: 2
     domain: "Performance event window"
     text: "2 | Performance event window | From ≈6 weeks before the event through race week, performance fueling wins and body-comp deficits stop"
+    # Goal types each tier owns (resolver lookup, not on the page).
+    goal_types: [endurance_event]
     weeks_before_event: 6
     citation_ids: []
     verify: false
@@ -34,6 +36,7 @@ tiers:
     tier: 3
     domain: "Deadline aesthetic goal"
     text: "3 | Deadline aesthetic goal | Pursued only at a safe rate; clamped, never accelerated"
+    goal_types: [deadline_event]
     citation_ids: []
     verify: false
     heuristic: false
@@ -41,6 +44,7 @@ tiers:
     tier: 4
     domain: "Body composition"
     text: "4 | Body composition | Cut / recomp / bulk; one direction per phase"
+    goal_types: [lose_fat, recomp, build_muscle, gain_weight, strength_hybrid]
     citation_ids: []
     verify: false
     heuristic: false
@@ -48,6 +52,7 @@ tiers:
     tier: 5
     domain: "General health"
     text: "5 | General health | Fiber, micronutrients, diet quality. Always on, never traded away"
+    goal_types: [maintain]
     always_on: true
     citation_ids: []
     verify: false
@@ -56,6 +61,10 @@ tiers:
 tier_rule:
   id: TIER.RULE
   text: "When goals conflict, the higher tier wins the energy direction. Lower tiers become modifiers (protein, carb timing, food priorities) or get sequenced into a later phase."
+  # Condition goals never hold the energy direction; they add RD gating and modifiers. Alone,
+  # they run at maintenance (Matrix A: "Maintenance or individualized", "Per weight goal").
+  modifier_only_goal_types: [t2d, glp1, hypertension]
+  default_energy: maintenance
   citation_ids: []
   verify: false
   heuristic: false
@@ -64,12 +73,19 @@ resolver_rules:
   - id: RESOLVER.ONE_ENERGY_GOAL
     order: 1
     text: "One primary energy goal per phase (deficit, maintenance or surplus). Protein stays high across all phases."
+    copy:
+      deficit: "A steady calorie deficit, with protein kept high to protect muscle."
+      maintenance: "Eating at maintenance, with protein kept high."
+      surplus: "A small calorie surplus to support building muscle."
     citation_ids: []
     verify: false
     heuristic: false
   - id: RESOLVER.CONTRADICTION
     order: 2
     text: 'Contradictory energy directions in the same phase (e.g. "gain weight" + "lose fat") → check recomp eligibility. If eligible, use recomp. If not, ask the user to order them and sequence them as phases.'
+    copy:
+      question: "These goals pull in opposite directions. Which matters most first?"
+      sequenced: "You chose to work on this goal first; the next one follows once it's done."
     citation_ids: []
     verify: false
     heuristic: false
@@ -116,6 +132,9 @@ combinations:
         lean_body_fat_pct_below: { male: 15, female: 25 }
         stalled_weeks: { min: 6, max: 8 }
         then: [cut, lean_bulk]
+        copy:
+          cut: "You're already trained and lean, so losing fat first and then building muscle works better than doing both at once."
+          lean_bulk: "With the cut done, a small surplus supports building muscle."
         citation_ids: []
         verify: true
         heuristic: false
@@ -155,6 +174,8 @@ combinations:
       - id: COMBO.LOSEFAT_DEADLINE.STEP_BACK
         text: "after the event, step back to maintenance over 2–4 weeks 🧪"
         step_back_weeks: { min: 2, max: 4 }
+        copy:
+          why: "After the event, calories step back up to maintenance gradually."
         citation_ids: []
         verify: false
         heuristic: true

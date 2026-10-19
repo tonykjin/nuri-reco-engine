@@ -48,15 +48,16 @@
   },
   "as_of": "2026-10-16",
   "expect": {
-    "notes": "Spec 11.2 #3 / 4.2 / 7b.5. Request is the spec §10 example verbatim: race is 26 weeks out (11.2 says 16; the §10 and 7b.6 dates win), so base runs 2026-10-16 to 2026-12-27 and peak starts 2027-03-07.",
+    "notes": "Spec 11.2 #3 / 4.2 / 7b.5. Request is the spec §10 example verbatim: race is 26 weeks out (11.2 says 16; the §10 and 7b.6 dates win), so base runs 2026-10-16 to 2026-12-27 and peak starts 2027-03-07. After recovery, fat loss resumes (spec §4.2 '→ resume').",
     "status": "ok",
     "phases": [
       { "name": "base", "energy": ["deficit"] },
       { "name": "peak", "energy": ["maintenance", "surplus"] },
       { "name": "taper", "energy": ["maintenance", "surplus"] },
-      { "name": "race_week", "energy": ["maintenance", "surplus"] }
+      { "name": "race_week", "energy": ["maintenance", "surplus"] },
+      { "name": "resume", "energy": ["deficit"] }
     ],
-    "deficit_only_in": ["base"],
+    "deficit_only_in": ["base", "resume"],
     "required_rule_ids": [
       "COMBO.LOSEFAT_ENDURANCE",
       "PHASE.BASE",

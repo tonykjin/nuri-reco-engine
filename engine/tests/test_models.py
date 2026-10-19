@@ -30,6 +30,7 @@ def spec_response() -> dict[str, Any]:
                 "start": "2026-10-16",
                 "end": "2026-12-27",
                 "energy": "deficit",
+                "energy_owner": "lose_fat",
                 "max_rate_pct_bw": 0.5,
                 "targets_by_day_type": {
                     "rest": {"kcal": 1750, "protein_g": 130, "carb_g": 230, "fat_g": 55},

@@ -7,7 +7,7 @@ from pydantic import Field, model_validator
 
 from .common import DayType, Energy, Recommended, StrictModel
 
-PlanStatus = Literal["ok", "clamped", "rd_review", "blocked"]
+PlanStatus = Literal["ok", "clamped", "rd_review", "blocked", "needs_ordering"]
 FeasibilityStatus = Literal["feasible", "clamped", "blocked"]
 
 
@@ -39,19 +39,33 @@ class DayTargets(StrictModel):
     fat_g: float = Field(ge=0)
 
 
-class Phase(Recommended):
+class PhaseTimeline(Recommended):
+    """A phase's place in the plan. Dates are half-open: [start, end)."""
+
     name: str
-    start: dt.date
-    end: dt.date
+    # None: starts when the previous phase ends (sequenced goals with no date yet).
+    start: dt.date | None
+    # None: open-ended.
+    end: dt.date | None
     energy: Energy
+    # Goal type that holds the energy direction in this phase (spec §7b.2 primary goal).
+    energy_owner: str
     max_rate_pct_bw: float | None = Field(default=None, ge=0)
-    targets_by_day_type: dict[DayType, DayTargets]
+    # Targets ramp in over [ramp_start, ramp_end) instead of jumping (spec §4.1 rule 4).
+    ramp_start: dt.date | None = None
+    ramp_end: dt.date | None = None
 
     @model_validator(mode="after")
-    def _end_not_before_start(self) -> Self:
-        if self.end < self.start:
+    def _dates_ordered(self) -> Self:
+        if self.start and self.end and self.end < self.start:
             raise ValueError("phase end is before start")
+        if self.ramp_start and self.ramp_end and self.ramp_end < self.ramp_start:
+            raise ValueError("ramp end is before ramp start")
         return self
+
+
+class Phase(PhaseTimeline):
+    targets_by_day_type: dict[DayType, DayTargets]
 
 
 class Feasibility(StrictModel):
