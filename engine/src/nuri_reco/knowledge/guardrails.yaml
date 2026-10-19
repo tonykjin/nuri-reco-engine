@@ -1,0 +1,186 @@
+# Matrix F: Guardrails & referrals (Tier 1, always evaluated first). Source: spec §8.
+# Rows tagged "⚠️ verify" or "⚠️ clinical sign-off" are verify: true (the page's legend says ⚠️
+# items need clinical sign-off before they ship). "🧪 bands" is heuristic: true.
+spec_section: "8"
+
+guardrails:
+  - id: GUARD.CALORIE_FLOOR
+    rule: "Calorie floor"
+    trigger: "Always"
+    action: "kcal ≥ max(sex floor: 1,200 women / 1,500 men; EA floor 30 kcal/kg FFM + exercise kcal for active users). Below 800 kcal/day never (medical supervision only)"
+    source: "AHA/ACC/TOS 2013; IOC REDs"
+    text: "Calorie floor | Always | kcal ≥ max(sex floor: 1,200 women / 1,500 men; EA floor 30 kcal/kg FFM + exercise kcal for active users). Below 800 kcal/day never (medical supervision only) | AHA/ACC/TOS 2013; IOC REDs"
+    applies: always
+    sex_floor_kcal: { female: 1200, male: 1500 }
+    ea_floor_kcal_per_kg_ffm: 30
+    ea_floor_adds_exercise_kcal: true
+    absolute_min_kcal_per_day: 800
+    citation_ids: [AHA_ACC_TOS2013, IOC_REDS2023]
+    verify: false
+    heuristic: false
+
+  - id: GUARD.MAX_LOSS_RATE
+    rule: "Max loss rate"
+    trigger: "Deficit goals"
+    action: "BMI ≥30: 1.0% · 25–30: 0.75% · under 25 or lean athlete: 0.5% BW/week 🧪 bands"
+    source: "Helms 2014; Garthe 2011"
+    text: "Max loss rate | Deficit goals | BMI ≥30: 1.0% · 25–30: 0.75% · under 25 or lean athlete: 0.5% BW/week 🧪 bands | Helms 2014; Garthe 2011"
+    applies: deficit_goals
+    # bmi_min inclusive, bmi_below exclusive.
+    bands:
+      - { bmi_min: 30, max_loss_pct_bw_per_week: 1.0 }
+      - { bmi_min: 25, bmi_below: 30, max_loss_pct_bw_per_week: 0.75 }
+      - { bmi_below: 25, max_loss_pct_bw_per_week: 0.5 }
+    lean_athlete_max_loss_pct_bw_per_week: 0.5
+    citation_ids: [HELMS2014, GARTHE2011]
+    verify: false
+    heuristic: true
+
+  - id: GUARD.UNDER_18
+    rule: "Under 18"
+    trigger: "Age"
+    action: "Block deficits; maintenance + family/clinician referral"
+    source: "AAP 2023"
+    text: "Under 18 | Age | Block deficits; maintenance + family/clinician referral | AAP 2023"
+    age_below: 18
+    blocks: [deficit]
+    fallback_energy: maintenance
+    referral_to: [family, clinician]
+    citation_ids: [AAP2023]
+    verify: false
+    heuristic: false
+
+  - id: GUARD.PREGNANCY
+    rule: "Pregnancy / breastfeeding"
+    trigger: "Flag"
+    action: "Block deficits and weight-loss targets; RD referral ⚠️ verify (IOM 2009 / ACOG)"
+    source: "n/a"
+    text: "Pregnancy / breastfeeding | Flag | Block deficits and weight-loss targets; RD referral ⚠️ verify (IOM 2009 / ACOG) | n/a"
+    flags: [pregnant, breastfeeding]
+    blocks: [deficit, weight_loss_targets]
+    referral_to: [rd]
+    citation_ids: [IOM2009, ACOG]
+    verify: true
+    heuristic: false
+
+  - id: GUARD.ED_RISK
+    rule: "Eating-disorder risk"
+    trigger: "SCOFF ≥2, ED history, goal BMI under 18.5, repeated rapid-loss requests"
+    action: "Block deficit and aesthetic modes; offer number-hiding mode; referral resources"
+    source: "Morgan 1999 (SCOFF); PRD §4.7"
+    text: "Eating-disorder risk | SCOFF ≥2, ED history, goal BMI under 18.5, repeated rapid-loss requests | Block deficit and aesthetic modes; offer number-hiding mode; referral resources | Morgan 1999 (SCOFF); PRD §4.7"
+    triggers:
+      scoff_min: 2
+      ed_history: true
+      goal_bmi_below: 18.5
+      repeated_rapid_loss_requests: true
+    blocks: [deficit, aesthetic_modes]
+    offer: [number_hiding_mode]
+    referral_to: [resources]
+    citation_ids: [SCOFF1999, NURI_PRD]
+    verify: false
+    heuristic: false
+
+  - id: GUARD.LOW_EA
+    rule: "Low energy availability"
+    trigger: "EA under 30 kcal/kg FFM, or user reports missed periods, stress fractures, persistent fatigue"
+    action: "Remove deficit; refer to doctor or sports RD"
+    source: "IOC REDs 2023 ⚠️ verify EA wording"
+    text: "Low energy availability | EA under 30 kcal/kg FFM, or user reports missed periods, stress fractures, persistent fatigue | Remove deficit; refer to doctor or sports RD | IOC REDs 2023 ⚠️ verify EA wording"
+    triggers:
+      ea_below_kcal_per_kg_ffm: 30
+      reported_symptoms: [missed_periods, stress_fractures, persistent_fatigue]
+    blocks: [deficit]
+    referral_to: [doctor, sports_rd]
+    citation_ids: [IOC_REDS2023]
+    verify: true
+    heuristic: false
+
+  - id: GUARD.CKD
+    rule: "CKD"
+    trigger: "Flag (stage)"
+    action: "Protein cap overrides goals: 0.55–0.6 g/kg (stage 3–5, no diabetes) or 0.6–0.8 g/kg (with diabetes); DASH potassium caution; RD-gated"
+    source: "KDOQI 2020"
+    text: "CKD | Flag (stage) | Protein cap overrides goals: 0.55–0.6 g/kg (stage 3–5, no diabetes) or 0.6–0.8 g/kg (with diabetes); DASH potassium caution; RD-gated | KDOQI 2020"
+    protein_cap_overrides_goals: true
+    protein_cap_g_per_kg:
+      no_diabetes: { stages: { min: 3, max: 5 }, min: 0.55, max: 0.6 }
+      with_diabetes: { min: 0.6, max: 0.8 }
+    cautions: [dash_potassium]
+    rd_gated: true
+    citation_ids: [KDOQI2020]
+    verify: false
+    heuristic: false
+
+  - id: GUARD.SGLT2
+    rule: "SGLT2 inhibitor"
+    trigger: "Medication"
+    action: "Exclude keto / very-low-carb patterns"
+    source: "Case literature ⚠️ clinical sign-off"
+    text: "SGLT2 inhibitor | Medication | Exclude keto / very-low-carb patterns | Case literature ⚠️ clinical sign-off"
+    medications: [sglt2_inhibitor]
+    exclude_pattern_ids: [PATTERN.LOW_CARB_KETO]
+    citation_ids: [SGLT2_KETO_DKA_CASE]
+    verify: true
+    heuristic: false
+
+  - id: GUARD.INSULIN_SU
+    rule: "Insulin / sulfonylurea"
+    trigger: "Medication"
+    action: "No carb restriction or large deficit without RD; hypoglycemia notice"
+    source: "⚠️ clinical sign-off"
+    text: "Insulin / sulfonylurea | Medication | No carb restriction or large deficit without RD; hypoglycemia notice | ⚠️ clinical sign-off"
+    medications: [insulin, sulfonylurea]
+    blocks_without_rd: [carb_restriction, large_deficit]
+    notice: hypoglycemia
+    citation_ids: []
+    verify: true
+    heuristic: false
+
+  - id: GUARD.WARFARIN
+    rule: "Warfarin"
+    trigger: "Medication"
+    action: "Keep vitamin K intake consistent; don't suddenly boost leafy greens"
+    source: "⚠️ clinical sign-off"
+    text: "Warfarin | Medication | Keep vitamin K intake consistent; don't suddenly boost leafy greens | ⚠️ clinical sign-off"
+    medications: [warfarin]
+    keep_consistent: [vitamin_k]
+    citation_ids: []
+    verify: true
+    heuristic: false
+
+  - id: GUARD.CONDITION_GOALS
+    rule: "Condition goals (T2D, GLP-1, CKD, hypertension on meds)"
+    trigger: "Goal type"
+    action: 'RD-gated on Care; app-only users get general-wellness guidance + "talk to your clinician"'
+    source: "PRD §8.1, §5.8"
+    text: 'Condition goals (T2D, GLP-1, CKD, hypertension on meds) | Goal type | RD-gated on Care; app-only users get general-wellness guidance + "talk to your clinician" | PRD §8.1, §5.8'
+    conditions: [t2d, glp1, ckd, hypertension_on_meds]
+    rd_gated_on: care
+    app_only_fallback: general_wellness
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: false
+
+  - id: GUARD.CLAIMS
+    rule: "Claims guardrail"
+    trigger: "All copy"
+    action: 'No diagnosis, no "treats" or "cures", no food-safety guarantees; all outputs labelled Recommended'
+    source: "PRD §4, §11"
+    text: 'Claims guardrail | All copy | No diagnosis, no "treats" or "cures", no food-safety guarantees; all outputs labelled Recommended | PRD §4, §11'
+    forbidden: [diagnosis, treats, cures, food_safety_guarantees]
+    provenance_label: recommended
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: false
+
+  - id: GUARD.PEAK_WEEK
+    rule: "Peak-week safety"
+    trigger: "Deadline events"
+    action: "Never water restriction, diuretics or extreme sodium manipulation"
+    source: "Helms 2014"
+    text: "Peak-week safety | Deadline events | Never water restriction, diuretics or extreme sodium manipulation | Helms 2014"
+    never: [water_restriction, diuretics, extreme_sodium_manipulation]
+    citation_ids: [HELMS2014]
+    verify: false
+    heuristic: false
