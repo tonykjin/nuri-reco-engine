@@ -50,6 +50,8 @@ class Goal(StrictModel):
     target_weight_kg: float | None = Field(default=None, gt=0)
     event: str | None = None
     event_date: dt.date | None = None
+    # User-chosen weekly loss, % of body weight; never exceeds the Matrix F max (spec §4.4).
+    rate_pct_bw_week: float | None = Field(default=None, gt=0)
 
 
 class Constraints(StrictModel):

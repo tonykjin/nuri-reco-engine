@@ -27,6 +27,9 @@ class PhasePlan(PhaseTimeline):
     deficit_day_types: list[DayType] = Field(default_factory=list)
     # Build phase: maintenance, with a small deficit on rest days at most.
     allow_rest_day_deficit: bool = False
+    # Weight goal for deficit phases and the user-chosen rate, read by feasibility (spec §4.4).
+    target_weight_kg: float | None = None
+    rate_pct_bw_week: float | None = None
     # Modifier rules that apply in this phase (protein position, vegan nutrients, ...).
     modifier_rule_ids: list[str] = Field(default_factory=list)
 
@@ -425,6 +428,27 @@ def resolve(request: PlanRequest, safety: SafetyResult, kb: KnowledgeBase) -> Re
     if safety.restricted("remove") and "deficit" in safety.restricted("remove"):
         phases = _remove_deficits(kb, phases)
     phases = [p.model_copy(update={"modifier_rule_ids": modifiers}) for p in phases]
+    # Feasibility (Stage 3) needs the weight goal and any user-chosen rate on deficit phases.
+    weight_goal = next(
+        (
+            x
+            for x in g.goals
+            if x.target_weight_kg is not None and x.target_weight_kg < request.profile.weight_kg
+        ),
+        None,
+    )
+    if weight_goal:
+        phases = [
+            p.model_copy(
+                update={
+                    "target_weight_kg": weight_goal.target_weight_kg,
+                    "rate_pct_bw_week": weight_goal.rate_pct_bw_week,
+                }
+            )
+            if p.energy == "deficit"
+            else p
+            for p in phases
+        ]
     if safety.max_loss_rate:
         cap = safety.max_loss_rate.max_loss_pct_bw_per_week
         phases = [

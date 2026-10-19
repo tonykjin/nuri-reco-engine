@@ -220,14 +220,20 @@ def _protein_cap(ctx: _Context, rule: Rule) -> ProteinCap | None:
     return ProteinCap(rule_id=rule.id, min_g_per_kg=cap["min"], max_g_per_kg=cap["max"])
 
 
-def _loss_rate_cap(ctx: _Context, rule: Rule) -> LossRateCap:
+def loss_rate_band(bmi: float, kb: KnowledgeBase) -> LossRateCap:
+    """Matrix F max loss rate for a BMI (GUARD.MAX_LOSS_RATE bands)."""
+    rule = kb.rules["GUARD.MAX_LOSS_RATE"]
     # Lean-athlete status isn't modelled yet, so the band comes from BMI alone.
     for band in _extra(rule)["bands"]:
-        if band.get("bmi_min", float("-inf")) <= ctx.bmi < band.get("bmi_below", float("inf")):
+        if band.get("bmi_min", float("-inf")) <= bmi < band.get("bmi_below", float("inf")):
             return LossRateCap(
                 rule_id=rule.id, max_loss_pct_bw_per_week=band["max_loss_pct_bw_per_week"]
             )
-    raise ValueError(f"{rule.id}: no band covers BMI {ctx.bmi:.1f}")
+    raise ValueError(f"{rule.id}: no band covers BMI {bmi:.1f}")
+
+
+def bmi(weight_kg: float, height_cm: float) -> float:
+    return _bmi(weight_kg, height_cm)
 
 
 def _calorie_floor(ctx: _Context, rule: Rule) -> CalorieFloor:
@@ -297,7 +303,7 @@ def check(request: PlanRequest, kb: KnowledgeBase) -> SafetyResult:
         if "sex_floor_kcal" in e:
             calorie_floor = _calorie_floor(ctx, rule)
         if "bands" in e:
-            max_loss_rate = _loss_rate_cap(ctx, rule)
+            max_loss_rate = loss_rate_band(ctx.bmi, kb)
 
     if calorie_floor is None:
         raise ValueError("guardrails.yaml has no calorie floor rule")
