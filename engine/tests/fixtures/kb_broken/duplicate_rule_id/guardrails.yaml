@@ -1,0 +1,7 @@
+# GOAL.LOSE_FAT is already defined in goals.yaml.
+spec_section: "8"
+guardrails:
+  - id: GOAL.LOSE_FAT
+    citation_ids: []
+    verify: false
+    heuristic: false

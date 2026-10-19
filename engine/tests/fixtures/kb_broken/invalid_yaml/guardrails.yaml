@@ -1,0 +1,4 @@
+spec_section: "8"
+guardrails:
+  - id: GUARD.CALORIE_FLOOR
+    citation_ids: [AHA_ACC_TOS2013
