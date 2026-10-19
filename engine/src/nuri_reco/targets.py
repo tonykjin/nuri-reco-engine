@@ -40,6 +40,8 @@ class Targets(StrictModel):
     by_day_type: dict[DayType, DayTargets]
     fiber_g_by_day_type: dict[DayType, float]
     protein_g_per_kg: float
+    # The Matrix A range the protein target sits in (the CKD cap range when capped).
+    protein_range_g_per_kg: tuple[float, float]
     weight_basis: str
     weight_basis_kg: float
     protein_capped: bool = False
@@ -84,7 +86,7 @@ class _Inputs:
         return rule
 
 
-def _protein(inp: _Inputs, safety: SafetyResult | None) -> tuple[float, bool]:
+def _protein(inp: _Inputs, safety: SafetyResult | None) -> tuple[float, bool, tuple[float, float]]:
     """g/kg: a position in the owner's Matrix A range (spec §3), CKD cap overrides."""
     owner = inp.phase.energy_owner
     rule = inp.goal_rule(owner, "protein") or inp.goal_rule("maintain", "protein")
@@ -112,8 +114,9 @@ def _protein(inp: _Inputs, safety: SafetyResult | None) -> tuple[float, bool]:
 
     if safety and safety.protein_cap and g_per_kg > safety.protein_cap.max_g_per_kg:
         inp.use(safety.protein_cap.rule_id)
-        return safety.protein_cap.max_g_per_kg, True
-    return g_per_kg, False
+        cap = safety.protein_cap
+        return cap.max_g_per_kg, True, (cap.min_g_per_kg, cap.max_g_per_kg)
+    return g_per_kg, False, (float(rng["min"]), float(rng["max"]))
 
 
 def _range_keys(rule: Rule) -> bool:
@@ -290,7 +293,7 @@ def compute(
     tdee = exp.tdee(profile)
     inp.use(kb.targets.mifflin_st_jeor.id, kb.targets.activity_factors.id)
 
-    g_per_kg, capped = _protein(inp, safety)
+    g_per_kg, capped, protein_range = _protein(inp, safety)
     protein_g = g_per_kg * profile.weight_kg
     delta = _energy_delta(inp, tdee)
     floor = _floor(inp, safety)
@@ -328,6 +331,7 @@ def compute(
             for d, t in by_day.items()
         },
         protein_g_per_kg=g_per_kg,
+        protein_range_g_per_kg=protein_range,
         weight_basis=_x(kb.targets.protein_position)["weight_basis"],
         weight_basis_kg=profile.weight_kg,
         protein_capped=capped,
