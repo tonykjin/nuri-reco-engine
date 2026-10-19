@@ -1,0 +1,375 @@
+# Citations referenced by citation_ids in the other knowledge files.
+# Source: spec §15 Sources. Entries with in_sources: false are named inline in the
+# matrices but have no link in §15.
+spec_section: "15"
+citations:
+  # Single goals, combinations & timing
+  - {
+      id: ISSN2017,
+      label: "ISSN Protein Position Stand 2017",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5477153/",
+      in_sources: true,
+    }
+  - {
+      id: ISSN2017_DIETS,
+      label: "ISSN Diets & Body Composition 2017",
+      url: "https://pubmed.ncbi.nlm.nih.gov/28630601/",
+      in_sources: true,
+    }
+  - {
+      id: HELMS2014,
+      label: "Helms et al. 2014, JISSN",
+      url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4033492/",
+      in_sources: true,
+    }
+  - {
+      id: SCHOENFELD_ARAGON2018,
+      label: "Schoenfeld & Aragon 2018",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5828430/",
+      in_sources: true,
+    }
+  - {
+      id: MORTON2018,
+      label: "Morton et al. 2018, BJSM",
+      url: "https://bjsm.bmj.com/content/52/6/376",
+      in_sources: true,
+    }
+  - {
+      id: LONGLAND2016,
+      label: "Longland et al. 2016, AJCN",
+      url: "https://pubmed.ncbi.nlm.nih.gov/26817506/",
+      in_sources: true,
+    }
+  - {
+      id: MURPHY_KOEHLER2022,
+      label: "Murphy & Koehler 2022",
+      url: "https://portal.fis.tum.de/en/publications/energy-deficiency-impairs-resistance-training-gains-in-lean-mass-/",
+      in_sources: true,
+    }
+  - {
+      id: BARAKAT2020,
+      label: "Recomposition summary (Barakat 2020)",
+      url: "https://macrofactor.com/recomposition/",
+      in_sources: true,
+    }
+  - {
+      id: IRAKI2019,
+      label: "Iraki et al. 2019",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6680710/",
+      in_sources: true,
+    }
+  - {
+      id: ACSM2016,
+      label: "ACSM/AND/DC 2016 Nutrition and Athletic Performance",
+      url: "https://pubmed.ncbi.nlm.nih.gov/26917108/",
+      in_sources: true,
+    }
+  - {
+      id: IMPEY2018,
+      label: "Impey et al. 2018, Fuel for the Work Required",
+      url: "https://researchonline.ljmu.ac.uk/id/eprint/8142/7/Fuel%20for%20the%20Work%20Require%20A%20Theoretical%20Framework.pdf",
+      in_sources: true,
+    }
+  - {
+      id: BURKE2011,
+      label: "Burke et al. 2011",
+      url: "https://research.birmingham.ac.uk/en/publications/carbohydrates-for-training-and-competition/",
+      in_sources: true,
+    }
+  - {
+      id: JEUKENDRUP2014,
+      label: "Jeukendrup 2014",
+      url: "https://pubmed.ncbi.nlm.nih.gov/24791914/",
+      in_sources: true,
+    }
+  - {
+      id: GSSI_CARB,
+      label: "GSSI carbohydrate recommendations",
+      url: "https://www.gssiweb.org/gssiu_content/pdf/FINAL%20Carbohydrate%20Intake%20Recommendations%20for%20Athletes_6.3.21.pdf",
+      in_sources: true,
+    }
+  - {
+      id: IOC_REDS2023,
+      label: "IOC REDs 2023 summary",
+      url: "https://humanperformancealliance.org/news/2023-international-olympic-committee-consensus-statement-on-reds/",
+      in_sources: true,
+    }
+  - {
+      id: IOC_REDS2018,
+      label: "IOC RED-S 2018",
+      url: "https://bjsm.bmj.com/content/52/11/687",
+      in_sources: true,
+    }
+  - {
+      id: REDS_CAT2,
+      label: "REDs CAT2 validation",
+      url: "https://bjsm.bmj.com/content/59/1/24",
+      in_sources: true,
+    }
+  - {
+      id: GARTHE2011,
+      label: "Garthe et al. 2011",
+      url: "https://www.sponet.de/sponet/Record/4017680",
+      in_sources: true,
+    }
+  - {
+      id: MATADOR,
+      label: "MATADOR",
+      url: "https://www.utas.edu.au/health/news/articles/2017/new-research-reveals-that-taking-a-break-from-your-diet-may-improve-weight-loss",
+      in_sources: true,
+    }
+  - {
+      id: TREXLER2014,
+      label: "Trexler et al. 2014",
+      url: "https://jissn.biomedcentral.com/track/pdf/10.1186/1550-2783-11-7",
+      in_sources: true,
+    }
+  - {
+      id: AHA_ACC_TOS2013,
+      label: "AHA/ACC/TOS 2013 obesity guideline",
+      url: "https://acc.org/Latest-in-Cardiology/Journal-Scans/2014/07/10/16/17/2013-AHA-ACC-TOS-Guideline-for-the-Management-of-Overweight",
+      in_sources: true,
+    }
+  - {
+      id: PEREZ_SCHINDLER2015,
+      label: "Perez-Schindler 2015",
+      url: "https://pubmed.ncbi.nlm.nih.gov/25159707/",
+      in_sources: true,
+    }
+  - {
+      id: CONCURRENT_PROTEIN_META,
+      label: "Protein in concurrent training meta-analysis",
+      url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8145048/",
+      in_sources: true,
+    }
+  - {
+      id: FRONTIERS2024_CONCURRENT,
+      label: "Frontiers 2024 concurrent training",
+      url: "https://www.frontiersin.org/journals/nutrition/articles/10.3389/fnut.2024.1439037/pdf",
+      in_sources: true,
+    }
+  # Diet patterns & dietitian practice
+  - id: DGA2025
+    label: "Dietary Guidelines 2025–2030"
+    url: "https://www.aafp.org/afp/2026/0700/practice-guidelines-dietary-guidelines"
+    alt_urls:
+      [
+        "https://extension.okstate.edu/fact-sheets/the-new-dietary-guidelines-for-americans-2025-2030",
+      ]
+    in_sources: true
+  - {
+      id: ADA2026,
+      label: "ADA Standards of Care 2026 §5",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12690188",
+      in_sources: true,
+    }
+  - {
+      id: CHIAVAROLI2021,
+      label: "Chiavaroli 2021 low-GI meta-analysis",
+      url: "https://pubmed.ncbi.nlm.nih.gov/34348965/",
+      in_sources: true,
+    }
+  - {
+      id: AHA2023,
+      label: "AHA 2023 popular dietary patterns (Gardner, Circulation 2023)",
+      url: "https://pubmed.ncbi.nlm.nih.gov/37128940/",
+      in_sources: true,
+    }
+  - {
+      id: PREDIMED,
+      label: "PREDIMED",
+      url: "https://www.isrctn.com/ISRCTN89898870",
+      in_sources: true,
+    }
+  - {
+      id: DASH_SODIUM,
+      label: "DASH-Sodium",
+      url: "https://www.aafp.org/afp/2001/0915/p1062.html",
+      in_sources: true,
+    }
+  - {
+      id: KETO_MED2022,
+      label: "Keto-Med 2022",
+      url: "https://med.stanford.edu/content/dam/sm/nutrition/documents/KetoMed_nqac154_Am%20J%20Clin%20Nutr_%20Gardner%20July%202022pdf.pdf",
+      in_sources: true,
+    }
+  - {
+      id: DIETFITS,
+      label: "DIETFITS",
+      url: "https://www.tctmd.com/news/diet-draw-no-weight-loss-differences-between-low-carb-low-fat-approaches-dietfits",
+      in_sources: true,
+    }
+  - {
+      id: DANSINGER2005,
+      label: "Dansinger 2005",
+      url: "https://www.aafp.org/afp/2005/0501/p1783.html",
+      in_sources: true,
+    }
+  - {
+      id: GE2020,
+      label: "Ge et al. 2020, BMJ",
+      url: "https://www.bmj.com/content/369/bmj.m696.abstract",
+      in_sources: true,
+    }
+  - {
+      id: TREAT2020,
+      label: "TREAT (TRE) 2020",
+      url: "https://pubmed.ncbi.nlm.nih.gov/32986097/",
+      in_sources: true,
+    }
+  - {
+      id: MIND2023,
+      label: "MIND RCT 2023",
+      url: "https://pubmed.ncbi.nlm.nih.gov/37466280/",
+      in_sources: true,
+    }
+  - {
+      id: AND_VEGETARIAN,
+      label: "Academy position on vegetarian diets",
+      url: "https://pubmed.ncbi.nlm.nih.gov/25911342/",
+      in_sources: true,
+    }
+  - {
+      id: HALL2019,
+      label: "Hall 2019 ultra-processed RCT",
+      url: "https://www.nih.gov/news-events/news-releases/nih-study-finds-heavily-processed-foods-cause-overeating-weight-gain",
+      in_sources: true,
+    }
+  - {
+      id: NCP,
+      label: "Nutrition Care Process overview",
+      url: "https://open-exam-prep.com/study-guides/registered-dietitian/nutrition-care-assessment-diagnosis/nutrition-care-process",
+      in_sources: true,
+    }
+  # Food scoring & recommender systems
+  - {
+      id: NRF93,
+      label: "NRF9.3 review (Drewnowski)",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9879879",
+      in_sources: true,
+    }
+  - {
+      id: HOLT1995,
+      label: "Satiety Index (Holt 1995)",
+      url: "https://agris.fao.org/search/en/records/65dfbe3a63b8185d9cae7996",
+      in_sources: true,
+    }
+  - {
+      id: VOLUMETRICS,
+      label: "Volumetrics (Rolls)",
+      url: "https://sk.sagepub.com/ency/edvol/embed/obesity/chpt/volumetrics",
+      in_sources: true,
+    }
+  - {
+      id: TRATTNER_ELSWEILER2017,
+      label: "Trattner & Elsweiler 2017, Food Recommender Systems",
+      url: "https://arxiv.org/pdf/1711.02760",
+      in_sources: true,
+    }
+  - {
+      id: INTERNET_RECIPES,
+      label: "Healthiness of internet recipes",
+      url: "https://www.frontiersin.org/articles/10.3389/fpubh.2017.00016/pdf",
+      in_sources: true,
+    }
+  - {
+      id: MIN_JIANG_JAIN2019,
+      label: "Min, Jiang & Jain 2019",
+      url: "https://arxiv.org/pdf/1905.06269",
+      in_sources: true,
+    }
+  - {
+      id: NOOM,
+      label: "Noom color system",
+      url: "https://www.noom.com/support/faqs/using-the-app/logging-and-tracking/food-and-water/2025/10/how-nooms-food-color-system-works/",
+      in_sources: true,
+    }
+  - {
+      id: MACROFACTOR,
+      label: "MacroFactor expenditure",
+      url: "https://help.macrofactorapp.com/en/articles/110-how-frequently-do-i-need-to-log-my-nutrition-for-the-expenditure-algorithm-and-weekly-coaching-updates",
+      in_sources: true,
+    }
+  - {
+      id: CRONOMETER,
+      label: "Cronometer Nutrition Scores",
+      url: "https://support.cronometer.com/hc/en-us/articles/44414065586836-How-are-Nutrition-Scores-calculated",
+      in_sources: true,
+    }
+  - {
+      id: LIFESUM,
+      label: "Lifesum plans",
+      url: "https://help.lifesum.com/en/article/2f4krr/",
+      in_sources: true,
+    }
+  - {
+      id: ZOE,
+      label: "ZOE METHOD trial",
+      url: "https://link.springer.com/article/10.1038/s41591-024-02951-6",
+      in_sources: true,
+    }
+  # Guardrails & clinical
+  - {
+      id: SCOFF1999,
+      label: "SCOFF, BMJ 1999 (Morgan 1999)",
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC28290",
+      in_sources: true,
+    }
+  - {
+      id: KDOQI2020,
+      label: "KDOQI 2020",
+      url: "https://pubmed.ncbi.nlm.nih.gov/32737016/",
+      in_sources: true,
+    }
+  - {
+      id: GLP1_ADVISORY2025,
+      label: "GLP-1 joint advisory 2025",
+      url: "https://www.obesity.org/wp-content/uploads/2025/06/Joint_Nutritional-Priorities-to-Support-GLP-1-Therapy-for-Obesity.pdf",
+      in_sources: true,
+    }
+  - {
+      id: AAP2023,
+      label: "AAP healthy weight",
+      url: "https://aap.org/healthyweight",
+      in_sources: true,
+    }
+  - {
+      id: SGLT2_KETO_DKA_CASE,
+      label: "SGLT2i + keto DKA case",
+      url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7443033/",
+      in_sources: true,
+    }
+  - {
+      id: FDA_SESAME,
+      label: "FDA sesame allergen",
+      url: "https://abcnews.go.com/food/story/fda-adds-sesame-major-food-allergen-list-updates-96370328",
+      in_sources: true,
+    }
+  # Named inline in the matrices, no link in §15
+  - {
+      id: DRI,
+      label: "Dietary Reference Intakes (DRIs)",
+      url: null,
+      in_sources: false,
+    }
+  - { id: WHO, label: "WHO", url: null, in_sources: false }
+  - {
+      id: AHA2021,
+      label: "AHA 2021 dietary guidance",
+      url: null,
+      in_sources: false,
+    }
+  - { id: IOM2009, label: "IOM 2009", url: null, in_sources: false }
+  - { id: ACOG, label: "ACOG", url: null, in_sources: false }
+  - {
+      id: NURI_PRD,
+      label: "Nuri — Product Overview & Master PRD",
+      url: "https://app.notion.com/p/3fb6d62bff9781ab8e60d6f5752cae2d",
+      in_sources: false,
+    }
+  - {
+      id: LOAM_SCORE_PAGE,
+      label: "Loam Score page",
+      url: null,
+      in_sources: false,
+    }

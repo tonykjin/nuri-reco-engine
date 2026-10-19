@@ -1,0 +1,132 @@
+# Matrix B (cont.): Event periodization timeline (spec §4.3) and deadline feasibility check (§4.4).
+# "Phase boundaries are 🧪 Loam heuristics synthesized from Impey 2018 and ACSM 2016", so every
+# phase is heuristic: true. Weeks are counted back from the event.
+spec_section: "4.3"
+
+boundary_note:
+  id: PHASE.BOUNDARIES
+  text: "Phase boundaries are 🧪 Loam heuristics synthesized from Impey 2018 and ACSM 2016 (Garthe 2011: 0.7% BW/week loss preserved lean mass and performance in athletes; 1.4%/week did not)."
+  garthe_preserved_loss_pct_bw_per_week: 0.7
+  garthe_failed_loss_pct_bw_per_week: 1.4
+  citation_ids: [IMPEY2018, ACSM2016, GARTHE2011]
+  verify: false
+  heuristic: true
+
+phases:
+  - id: PHASE.BASE
+    name: base
+    text: "Base | More than 16 weeks out (or the first block) | Body-comp goals allowed (deficit ≤0.5% BW/week for athletes) | Day-type tiers; train-low allowed on easy sessions only"
+    weeks_before_event: { min: 16, max: null }
+    or_first_block: true
+    energy: "Body-comp goals allowed (deficit ≤0.5% BW/week for athletes)"
+    deficit_allowed: true
+    athlete_max_loss_pct_bw_per_week: 0.5
+    carbs: "Day-type tiers; train-low allowed on easy sessions only"
+    train_low_day_types: [easy]
+    citation_ids: [IMPEY2018, ACSM2016]
+    verify: false
+    heuristic: true
+  - id: PHASE.BUILD
+    name: build
+    text: "Build | 16 → 6 weeks | Maintenance; small deficit on rest days at most | Day-type tiers"
+    weeks_before_event: { min: 6, max: 16 }
+    energy: "Maintenance; small deficit on rest days at most"
+    energy_direction: maintenance
+    deficit_allowed: small_rest_days_only
+    carbs: "Day-type tiers"
+    citation_ids: [IMPEY2018, ACSM2016]
+    verify: false
+    heuristic: true
+  - id: PHASE.PEAK
+    name: peak
+    text: "Peak | 6 → 3 weeks | Maintenance or above; no deficit | Fuel every quality/long session fully; practise race fueling"
+    weeks_before_event: { min: 3, max: 6 }
+    energy: "Maintenance or above; no deficit"
+    deficit_allowed: false
+    carbs: "Fuel every quality/long session fully; practise race fueling"
+    fully_fueled_day_types: [quality, long]
+    citation_ids: [IMPEY2018, ACSM2016]
+    verify: false
+    heuristic: true
+  - id: PHASE.TAPER
+    name: taper
+    text: "Taper | 3 → 1 weeks | Maintenance (reduce with lower volume; don't cut) | Day-type tiers"
+    weeks_before_event: { min: 1, max: 3 }
+    energy: "Maintenance (reduce with lower volume; don't cut)"
+    energy_direction: maintenance
+    deficit_allowed: false
+    carbs: "Day-type tiers"
+    citation_ids: [IMPEY2018, ACSM2016]
+    verify: false
+    heuristic: true
+  - id: PHASE.RACE_WEEK
+    name: race_week
+    text: "Race week | Final 7 days | Maintenance+ | Carb load 10–12 g/kg for 36–48 h before events over 90 min; low-fiber/low-fat the day before"
+    days_before_event: 7
+    energy: "Maintenance+"
+    deficit_allowed: false
+    carbs: "Carb load 10–12 g/kg for 36–48 h before events over 90 min; low-fiber/low-fat the day before"
+    carb_load_g_per_kg: { min: 10, max: 12 }
+    carb_load_hours: { min: 36, max: 48 }
+    carb_load_min_event_minutes: 90
+    citation_ids: [IMPEY2018, ACSM2016]
+    verify: false
+    heuristic: true
+  - id: PHASE.RECOVERY
+    name: recovery
+    text: "Recovery | 1–2 weeks after | Maintenance | Normal; then the next goal resumes"
+    weeks_after_event: { min: 1, max: 2 }
+    energy: "Maintenance"
+    energy_direction: maintenance
+    carbs: "Normal; then the next goal resumes"
+    citation_ids: [IMPEY2018, ACSM2016]
+    verify: false
+    heuristic: true
+
+feasibility:
+  id: FEAS.DEADLINE
+  spec_section: "4.4"
+  text: |
+    required_rate = (current_kg - goal_kg) / weeks / current_kg      # fraction of BW per week
+    max_rate      = 1.0% if BMI >= 30 | 0.75% if BMI 25-30 | 0.5% if BMI < 25 or lean athlete   # Loam heuristic bands
+
+    if required_rate > max_rate:
+        projected_kg   = current_kg * (1 - max_rate) ** weeks
+        reachable_date = date when goal reached at max_rate
+        status = "clamped"   -> show projected_kg by the event + reachable_date for the full goal
+    else:
+        status = "feasible"
+
+    kcal_target = max(TDEE - deficit, sex_floor, EA_floor)       # see Matrix F
+    if goal_BMI < 18.5: status = "blocked" -> supportive copy + RD referral
+  # The max-rate bands are the same as Matrix F "Max loss rate"; that rule holds the numbers.
+  max_rate_rule_ids: [GUARD.MAX_LOSS_RATE]
+  floor_rule_ids: [GUARD.CALORIE_FLOOR]
+  blocked_goal_bmi_below: 18.5
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+diet_breaks:
+  id: FEAS.DIET_BREAKS
+  text: "Diet breaks (MATADOR: 2 weeks on / 2 weeks at maintenance gave better fat loss and maintenance at 6 months) only fit goals longer than ≈12–16 weeks, or after 8–12 weeks of continuous dieting. They lengthen the timeline, so they're never used inside a deadline."
+  on_weeks: 2
+  maintenance_weeks: 2
+  outcome_months: 6
+  min_goal_weeks: { min: 12, max: 16 }
+  or_after_continuous_dieting_weeks: { min: 8, max: 12 }
+  allowed_inside_deadline: false
+  citation_ids: [MATADOR]
+  verify: false
+  heuristic: false
+
+pre_event:
+  id: FEAS.PRE_EVENT
+  text: "Final 2–3 days before an aesthetic event: mild sodium and fiber moderation and a heads-up that the scale can move ±1–2 kg from water and glycogen. Never water restriction or diuretic advice."
+  final_days: { min: 2, max: 3 }
+  scale_swing_kg: { min: 1, max: 2 }
+  never: [water_restriction, diuretic_advice]
+  guardrail_rule_ids: [GUARD.PEAK_WEEK]
+  citation_ids: []
+  verify: false
+  heuristic: false

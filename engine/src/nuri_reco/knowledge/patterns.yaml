@@ -1,0 +1,204 @@
+# Matrix D: Diet-pattern catalog. Source: spec §6.
+# `pattern` is the id used in PlanResponse.patterns[].id.
+spec_section: "6"
+
+evidence_grades:
+  id: PATTERN.EVIDENCE_GRADES
+  text: "Evidence: A = multiple RCTs/meta-analyses with strong outcomes · B = RCTs on surrogate or mixed outcomes · C = mostly observational or RCT-null. AHA tier = alignment with AHA 2021 guidance (Gardner, Circulation 2023)."
+  grades:
+    A: "multiple RCTs/meta-analyses with strong outcomes"
+    B: "RCTs on surrogate or mixed outcomes"
+    C: "mostly observational or RCT-null"
+  citation_ids: [AHA2021, AHA2023]
+  verify: false
+  heuristic: false
+
+patterns:
+  - id: PATTERN.MEDITERRANEAN
+    pattern: mediterranean
+    name: "Mediterranean"
+    text: "Mediterranean | Heart, T2D, wellness, longevity | Skip the alcohol component (pregnancy, liver, AUD); nut/fish allergens | High, flexible, culturally adaptable | 1 | A (PREDIMED HR ≈0.70)"
+    best_fit: "Heart, T2D, wellness, longevity"
+    cautions: "Skip the alcohol component (pregnancy, liver, AUD); nut/fish allergens"
+    adherence: "High, flexible, culturally adaptable"
+    aha_tier: 1
+    evidence_grade: A
+    evidence: "A (PREDIMED HR ≈0.70)"
+    effect: { predimed_hazard_ratio: 0.70 }
+    offered: true
+    citation_ids: [PREDIMED, AHA2023]
+    verify: false
+    heuristic: false
+  - id: PATTERN.DASH
+    pattern: dash
+    name: "DASH"
+    text: "DASH | Hypertension, heart | High potassium/phosphorus: advanced CKD, potassium-sparing meds | Moderate (sodium is hard) | 1 | A (−11.5 mmHg SBP in hypertension)"
+    best_fit: "Hypertension, heart"
+    cautions: "High potassium/phosphorus: advanced CKD, potassium-sparing meds"
+    adherence: "Moderate (sodium is hard)"
+    aha_tier: 1
+    evidence_grade: A
+    evidence: "A (−11.5 mmHg SBP in hypertension)"
+    effect: { sbp_change_mmhg: -11.5 }
+    offered: true
+    citation_ids: [DASH_SODIUM, AHA2023]
+    verify: false
+    heuristic: false
+  - id: PATTERN.HIGH_PROTEIN
+    pattern: high_protein
+    name: "High-protein"
+    text: "High-protein | Fat loss, recomp, muscle gain, GLP-1, older adults | Advanced CKD (not on dialysis) | High if protein foods are liked; cost | n/a | A (body comp)"
+    best_fit: "Fat loss, recomp, muscle gain, GLP-1, older adults"
+    cautions: "Advanced CKD (not on dialysis)"
+    adherence: "High if protein foods are liked; cost"
+    aha_tier: null
+    evidence_grade: A
+    evidence: "A (body comp)"
+    offered: true
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: PATTERN.LOW_GI
+    pattern: low_gi
+    name: "Low-GI / low-GL"
+    text: "Low-GI / low-GL | T2D, prediabetes, appetite | Wrong cue pre/during endurance events | High (swaps, not eliminations) | n/a | A (HbA1c −0.31%)"
+    best_fit: "T2D, prediabetes, appetite"
+    cautions: "Wrong cue pre/during endurance events"
+    adherence: "High (swaps, not eliminations)"
+    aha_tier: null
+    evidence_grade: A
+    evidence: "A (HbA1c −0.31%)"
+    effect: { hba1c_change_pct: -0.31 }
+    offered: true
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: PATTERN.ENERGY_DENSITY
+    pattern: energy_density
+    name: "Energy density / Volumetrics"
+    text: "Energy density / Volumetrics | Fat loss, hunger management, GLP-1 maintenance | Underweight, poor appetite, frail older adults | High (nothing banned) | n/a | A/B (Hall 2019: ultra-processed diet led to +508 kcal/day)"
+    best_fit: "Fat loss, hunger management, GLP-1 maintenance"
+    cautions: "Underweight, poor appetite, frail older adults"
+    adherence: "High (nothing banned)"
+    aha_tier: null
+    evidence_grade: A/B
+    evidence: "A/B (Hall 2019: ultra-processed diet led to +508 kcal/day)"
+    effect: { ultra_processed_extra_kcal_per_day: 508 }
+    offered: true
+    citation_ids: [HALL2019, VOLUMETRICS]
+    verify: false
+    heuristic: false
+  - id: PATTERN.VEGETARIAN_VEGAN
+    pattern: vegetarian_vegan
+    name: "Vegetarian / vegan"
+    text: "Vegetarian / vegan | Heart, LDL, T2D, weight, ethics | B12 mandatory for vegans; iron, zinc, iodine, calcium, vitamin D, omega-3; lower leucine | Strong if values-driven | 1 (lacto-ovo) / 2 (vegan) | A/B"
+    best_fit: "Heart, LDL, T2D, weight, ethics"
+    cautions: "B12 mandatory for vegans; iron, zinc, iodine, calcium, vitamin D, omega-3; lower leucine"
+    adherence: "Strong if values-driven"
+    aha_tier: { lacto_ovo: 1, vegan: 2 }
+    evidence_grade: A/B
+    evidence: "A/B"
+    offered: true
+    citation_ids: [AHA2023]
+    verify: false
+    heuristic: false
+  - id: PATTERN.FLEXITARIAN_PESCATARIAN
+    pattern: flexitarian_pescatarian
+    name: "Flexitarian / pescatarian"
+    text: "Flexitarian / pescatarian | Wellness, gradual shift | Mercury guidance in pregnancy | High (least restrictive) | 1 (pescatarian) | B"
+    best_fit: "Wellness, gradual shift"
+    cautions: "Mercury guidance in pregnancy"
+    adherence: "High (least restrictive)"
+    aha_tier: { pescatarian: 1 }
+    evidence_grade: B
+    evidence: "B"
+    offered: true
+    citation_ids: [AHA2023]
+    verify: false
+    heuristic: false
+  - id: PATTERN.LOW_CARB_KETO
+    pattern: low_carb_keto
+    name: "Low-carb / keto"
+    text: "Low-carb / keto | T2D glycemic control (RD), short-term loss, high triglycerides | SGLT2 inhibitors (euglycemic DKA), insulin/sulfonylureas, pregnancy, ED history, high-intensity endurance; LDL can rise | Falls off after ≈6 months | 3 / 4 | B"
+    best_fit: "T2D glycemic control (RD), short-term loss, high triglycerides"
+    cautions: "SGLT2 inhibitors (euglycemic DKA), insulin/sulfonylureas, pregnancy, ED history, high-intensity endurance; LDL can rise"
+    excluded_by_rule_ids: [GUARD.SGLT2]
+    adherence: "Falls off after ≈6 months"
+    adherence_drop_months: 6
+    aha_tier: [3, 4]
+    evidence_grade: B
+    evidence: "B"
+    offered: true
+    citation_ids: [AHA2023]
+    verify: false
+    heuristic: false
+  - id: PATTERN.IF_TRE
+    pattern: if_tre
+    name: "IF / time-restricted eating"
+    text: "IF / time-restricted eating | Users who like structure (works only via lower intake) | Glucose-lowering meds, pregnancy, ED history, adolescents, underweight | Polarizing | n/a | B (TREAT: no difference vs control; lean-mass loss)"
+    best_fit: "Users who like structure (works only via lower intake)"
+    cautions: "Glucose-lowering meds, pregnancy, ED history, adolescents, underweight"
+    adherence: "Polarizing"
+    aha_tier: null
+    evidence_grade: B
+    evidence: "B (TREAT: no difference vs control; lean-mass loss)"
+    offered: true
+    citation_ids: [TREAT2020]
+    verify: false
+    heuristic: false
+  - id: PATTERN.HIGH_CARB_PERFORMANCE
+    pattern: high_carb_performance
+    name: "High-carb performance"
+    text: "High-carb performance | Endurance and team sport at high load | T2D without RD; screen for low EA | Needs periodization | n/a | A (performance)"
+    best_fit: "Endurance and team sport at high load"
+    cautions: "T2D without RD; screen for low EA"
+    adherence: "Needs periodization"
+    aha_tier: null
+    evidence_grade: A
+    evidence: "A (performance)"
+    offered: true
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: PATTERN.MIND
+    pattern: mind
+    name: "MIND"
+    text: "MIND | Brain health (hypothesis) | None | As Mediterranean | n/a | C (NEJM 2023 RCT null) → not offered as a goal pattern"
+    best_fit: "Brain health (hypothesis)"
+    cautions: "None"
+    adherence: "As Mediterranean"
+    aha_tier: null
+    evidence_grade: C
+    evidence: "C (NEJM 2023 RCT null) → not offered as a goal pattern"
+    offered: false
+    citation_ids: [MIND2023]
+    verify: false
+    heuristic: false
+
+selection:
+  - id: PATTERN.SELECT.ELIGIBLE
+    step: 1
+    text: "Eligible set: patterns whose best-fit goals intersect the user's resolved goals, minus anything contraindicated by Matrix F or the user's hard constraints."
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: PATTERN.SELECT.EVIDENCE_PRIOR
+    step: 2
+    text: "Evidence prior: score by evidence grade and AHA tier."
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: PATTERN.SELECT.ADHERENCE
+    step: 3
+    text: "Adherence score: fit to the taste profile, cuisines, dislikes, cooking time, budget, and any diet the user already follows. Weighted highest 🧪."
+    weighted_highest: true
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: PATTERN.SELECT.RANK_EXPLAIN
+    step: 4
+    text: 'Rank and explain: show the top pattern and one or two alternates, each with a "why". The pattern is a lens on food ranking (it boosts its food groups); it never replaces the targets.'
+    alternates: { min: 1, max: 2 }
+    citation_ids: []
+    verify: false
+    heuristic: false

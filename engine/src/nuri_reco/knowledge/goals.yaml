@@ -1,0 +1,512 @@
+# Matrix A: Goal catalog (single goals). Source: spec §3.
+# Every rule has id, citation_ids, verify (⚠️ verify on the page) and heuristic (🧪 Loam heuristic).
+# `text` is the page cell verbatim (markdown emphasis removed); structured fields carry its numbers.
+# Units: *_g_per_kg = g per kg body weight; *_g_per_kg_ffm = per kg fat-free mass;
+# *_pct = percent as written on the page (0.5 means 0.5%).
+spec_section: "3"
+
+method:
+  id: GOAL.METHOD
+  text: "W = body weight (kg) · FFM = fat-free mass · TDEE from Mifflin-St Jeor × activity factor until adaptive expenditure takes over (week 3–4, PRD §7.1). Protein is set first in g/kg, fat next, carbs fill the remainder."
+  tdee_equation: mifflin_st_jeor
+  adaptive_expenditure_from_week: { min: 3, max: 4 }
+  macro_order: [protein, fat, carbs]
+  citation_ids: [NURI_PRD]
+  verify: false
+  heuristic: false
+
+goals:
+  - id: GOAL.LOSE_FAT
+    type: lose_fat
+    name: "Lose fat"
+    rd_gated: false
+    citation_ids: [AHA_ACC_TOS2013, ISSN2017, HELMS2014]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.LOSE_FAT.ENERGY
+        text: "Deficit 500–750 kcal/day or 15–25% of TDEE; never below floors (Matrix F)"
+        direction: deficit
+        deficit_kcal_per_day: { min: 500, max: 750 }
+        deficit_pct_tdee: { min: 15, max: 25 }
+        floor_rule_ids: [GUARD.CALORIE_FLOOR]
+        citation_ids: [AHA_ACC_TOS2013, ISSN2017, HELMS2014]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.LOSE_FAT.PROTEIN
+        text: "1.2–1.6 g/kg (no lifting); 1.6–2.2 g/kg with resistance training; lean + training: 2.3–3.1 g/kg FFM"
+        no_resistance_g_per_kg: { min: 1.2, max: 1.6 }
+        resistance_g_per_kg: { min: 1.6, max: 2.2 }
+        lean_resistance_g_per_kg_ffm: { min: 2.3, max: 3.1 }
+        citation_ids: [AHA_ACC_TOS2013, ISSN2017, HELMS2014]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.LOSE_FAT.CARBS_FAT
+        text: "Fat 20–35% (min 0.5 g/kg); carbs fill"
+        fat_pct_kcal: { min: 20, max: 35 }
+        fat_min_g_per_kg: 0.5
+        carbs: fill
+        citation_ids: [AHA_ACC_TOS2013, ISSN2017, HELMS2014]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.LOSE_FAT.RATE
+        text: "0.5–1.0% BW/week by BMI band"
+        loss_pct_bw_per_week: { min: 0.5, max: 1.0 }
+        band_rule_ids: [GUARD.MAX_LOSS_RATE]
+        citation_ids: [AHA_ACC_TOS2013, ISSN2017, HELMS2014]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.LOSE_FAT.FOODS
+        text: "Low energy density, high protein/100 kcal, high fiber, minimally processed"
+        citation_ids: [AHA_ACC_TOS2013, ISSN2017, HELMS2014]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.RECOMP
+    type: recomp
+    name: "Recomposition (lose fat + gain muscle together)"
+    rd_gated: false
+    citation_ids: [LONGLAND2016, MURPHY_KOEHLER2022, BARAKAT2020]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.RECOMP.ENERGY
+        text: "Deficit 0–20% (≤500 kcal/day)"
+        direction: deficit
+        deficit_pct_tdee: { min: 0, max: 20 }
+        deficit_max_kcal_per_day: 500
+        citation_ids: [LONGLAND2016, MURPHY_KOEHLER2022, BARAKAT2020]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.RECOMP.PROTEIN
+        text: "1.6–2.2 g/kg; lean users 2.3–3.1 g/kg FFM"
+        g_per_kg: { min: 1.6, max: 2.2 }
+        lean_g_per_kg_ffm: { min: 2.3, max: 3.1 }
+        citation_ids: [LONGLAND2016, MURPHY_KOEHLER2022, BARAKAT2020]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.RECOMP.CARBS_FAT
+        text: "Fat 20–35%; carbs fill, ≥3 g/kg on lifting days"
+        fat_pct_kcal: { min: 20, max: 35 }
+        carbs: fill
+        carb_min_g_per_kg_lifting_day: 3
+        citation_ids: [LONGLAND2016, MURPHY_KOEHLER2022, BARAKAT2020]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.RECOMP.RATE
+        text: "Scale weight roughly flat to slow loss; judge by waist/strength"
+        citation_ids: [LONGLAND2016, MURPHY_KOEHLER2022, BARAKAT2020]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.RECOMP.FOODS
+        text: "Leucine-rich protein ×4 meals; high fiber"
+        protein_meals_per_day: 4
+        citation_ids: [LONGLAND2016, MURPHY_KOEHLER2022, BARAKAT2020]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.BUILD_MUSCLE
+    type: build_muscle
+    name: "Build muscle"
+    rd_gated: false
+    citation_ids: [IRAKI2019, ISSN2017, MORTON2018]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.BUILD_MUSCLE.ENERGY
+        text: "Surplus 10–20% (novice/intermediate); 5–10% advanced"
+        direction: surplus
+        surplus_pct_tdee:
+          novice_intermediate: { min: 10, max: 20 }
+          advanced: { min: 5, max: 10 }
+        citation_ids: [IRAKI2019, ISSN2017, MORTON2018]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.BUILD_MUSCLE.PROTEIN
+        text: "1.6–2.2 g/kg (plateau ≈1.62, Morton 2018)"
+        g_per_kg: { min: 1.6, max: 2.2 }
+        plateau_g_per_kg: 1.62
+        citation_ids: [MORTON2018]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.BUILD_MUSCLE.CARBS_FAT
+        text: "Fat 0.5–1.5 g/kg; carbs ≥3–5 g/kg"
+        fat_g_per_kg: { min: 0.5, max: 1.5 }
+        carb_min_g_per_kg: { min: 3, max: 5 }
+        citation_ids: [IRAKI2019, ISSN2017, MORTON2018]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.BUILD_MUSCLE.RATE
+        text: "Gain 0.25–0.5% BW/week"
+        gain_pct_bw_per_week: { min: 0.25, max: 0.5 }
+        citation_ids: [IRAKI2019, ISSN2017, MORTON2018]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.BUILD_MUSCLE.FOODS
+        text: "Leucine per serving; energy-dense options if appetite limits"
+        citation_ids: [IRAKI2019, ISSN2017, MORTON2018]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.GAIN_WEIGHT
+    type: gain_weight
+    name: "Gain weight (restore)"
+    rd_gated: false
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.GAIN_WEIGHT.ENERGY
+        text: "TDEE +250–500 kcal 🧪 Loam heuristic"
+        direction: surplus
+        surplus_kcal_per_day: { min: 250, max: 500 }
+        citation_ids: [LOAM_SCORE_PAGE]
+        verify: false
+        heuristic: true
+      protein:
+        id: GOAL.GAIN_WEIGHT.PROTEIN
+        text: "≥1.2 g/kg"
+        min_g_per_kg: 1.2
+        citation_ids: [LOAM_SCORE_PAGE]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.GAIN_WEIGHT.CARBS_FAT
+        text: "Energy-dense unsaturated fats welcome"
+        citation_ids: [LOAM_SCORE_PAGE]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.GAIN_WEIGHT.RATE
+        text: "Gradual; RD review if BMI under 18.5"
+        rd_review_bmi_below: 18.5
+        citation_ids: [LOAM_SCORE_PAGE]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.GAIN_WEIGHT.FOODS
+        text: "Nut butters, whole milk, olive oil, liquid meals"
+        citation_ids: [LOAM_SCORE_PAGE]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.MAINTAIN
+    type: maintain
+    name: "Maintain / general wellness"
+    rd_gated: false
+    citation_ids: [DRI, DGA2025, WHO]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.MAINTAIN.ENERGY
+        text: "≈TDEE; adjust to weight trend"
+        direction: maintenance
+        citation_ids: [DRI, DGA2025, WHO]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.MAINTAIN.PROTEIN
+        text: "1.2–1.6 g/kg (DGA 2025–2030); floor 0.8 g/kg"
+        g_per_kg: { min: 1.2, max: 1.6 }
+        floor_g_per_kg: 0.8
+        citation_ids: [DGA2025]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.MAINTAIN.CARBS_FAT
+        text: "Carbs 45–65%; fat 20–35%"
+        carb_pct_kcal: { min: 45, max: 65 }
+        fat_pct_kcal: { min: 20, max: 35 }
+        citation_ids: [DRI, DGA2025, WHO]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.MAINTAIN.RATE
+        text: "n/a"
+        citation_ids: []
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.MAINTAIN.FOODS
+        text: "Diversity, fiber, produce ≥400 g, HEI gaps"
+        produce_min_g_per_day: 400
+        citation_ids: [DRI, DGA2025, WHO]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.ENDURANCE_EVENT
+    type: endurance_event
+    name: "Endurance event (e.g. marathon)"
+    rd_gated: false
+    citation_ids: [ACSM2016, IMPEY2018, IOC_REDS2023]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.ENDURANCE_EVENT.ENERGY
+        text: "Match training load; no deficit in peak/taper/race week"
+        no_deficit_phases: [peak, taper, race_week]
+        citation_ids: [ACSM2016, IMPEY2018, IOC_REDS2023]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.ENDURANCE_EVENT.PROTEIN
+        text: "1.2–2.0 g/kg"
+        g_per_kg: { min: 1.2, max: 2.0 }
+        citation_ids: [ACSM2016, IMPEY2018, IOC_REDS2023]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.ENDURANCE_EVENT.CARBS_FAT
+        text: "Carbs by day type (Matrix C): 3–12 g/kg; fat 20–35%"
+        carb_g_per_kg: { min: 3, max: 12 }
+        carbs_by_day_type: true
+        fat_pct_kcal: { min: 20, max: 35 }
+        citation_ids: [ACSM2016, IMPEY2018, IOC_REDS2023]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.ENDURANCE_EVENT.RATE
+        text: "Energy availability ≥30 kcal/kg FFM"
+        ea_min_kcal_per_kg_ffm: 30
+        citation_ids: [IOC_REDS2023]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.ENDURANCE_EVENT.FOODS
+        text: "Carb-dense staples; low-fiber/low-fat pre-race"
+        citation_ids: [ACSM2016, IMPEY2018, IOC_REDS2023]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.STRENGTH_HYBRID
+    type: strength_hybrid
+    name: "Strength / hybrid"
+    rd_gated: false
+    citation_ids: [PEREZ_SCHINDLER2015, MORTON2018]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.STRENGTH_HYBRID.ENERGY
+        text: "Maintenance default (hybrids underestimate expenditure)"
+        direction: maintenance
+        citation_ids: [PEREZ_SCHINDLER2015, MORTON2018]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.STRENGTH_HYBRID.PROTEIN
+        text: "1.6–2.2 g/kg; 20–40 g after each session"
+        g_per_kg: { min: 1.6, max: 2.2 }
+        post_session_g: { min: 20, max: 40 }
+        citation_ids: [PEREZ_SCHINDLER2015, MORTON2018]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.STRENGTH_HYBRID.CARBS_FAT
+        text: "Carbs by weekly volume; ≥3–5 g/kg on lifting days"
+        carb_min_g_per_kg_lifting_day: { min: 3, max: 5 }
+        citation_ids: [PEREZ_SCHINDLER2015, MORTON2018]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.STRENGTH_HYBRID.RATE
+        text: "n/a"
+        citation_ids: []
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.STRENGTH_HYBRID.FOODS
+        text: "Leucine-rich protein, carb staples"
+        citation_ids: [PEREZ_SCHINDLER2015, MORTON2018]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.DEADLINE_EVENT
+    type: deadline_event
+    name: "Deadline event (wedding, holiday, photo shoot)"
+    rd_gated: false
+    modifier_of: lose_fat
+    citation_ids: [HELMS2014, AHA_ACC_TOS2013]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.DEADLINE_EVENT.ENERGY
+        text: "A modifier on lose fat: feasibility check + rate clamp (Matrix B)"
+        feasibility_rule_ids: [FEAS.DEADLINE]
+        citation_ids: [HELMS2014, AHA_ACC_TOS2013]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.DEADLINE_EVENT.PROTEIN
+        text: "Top of the lose-fat range (muscle retention)"
+        protein_from: GOAL.LOSE_FAT.PROTEIN
+        position_in_range: top
+        citation_ids: [HELMS2014, AHA_ACC_TOS2013]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.DEADLINE_EVENT.CARBS_FAT
+        text: "As lose fat"
+        same_as: GOAL.LOSE_FAT.CARBS_FAT
+        citation_ids: [HELMS2014, AHA_ACC_TOS2013]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.DEADLINE_EVENT.RATE
+        text: "Clamp to max rate; show projected date"
+        band_rule_ids: [GUARD.MAX_LOSS_RATE]
+        citation_ids: [HELMS2014, AHA_ACC_TOS2013]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.DEADLINE_EVENT.FOODS
+        text: "As lose fat; final 2–3 days mild sodium/fiber moderation only"
+        same_as: GOAL.LOSE_FAT.FOODS
+        final_days_sodium_fiber_moderation: { min: 2, max: 3 }
+        citation_ids: [HELMS2014, AHA_ACC_TOS2013]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.T2D
+    type: t2d
+    name: "T2D / prediabetes"
+    rd_gated: true
+    citation_ids: [ADA2026, CHIAVAROLI2021]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.T2D.ENERGY
+        text: "Maintenance or individualized deficit"
+        citation_ids: [ADA2026, CHIAVAROLI2021]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.T2D.PROTEIN
+        text: "Individualized (diabetes alone doesn't raise needs)"
+        citation_ids: [ADA2026, CHIAVAROLI2021]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.T2D.CARBS_FAT
+        text: "No universal split; carb quality and distribution; fiber ≥14 g/1,000 kcal"
+        fiber_min_g_per_1000_kcal: 14
+        citation_ids: [ADA2026, CHIAVAROLI2021]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.T2D.RATE
+        text: "RD sets"
+        citation_ids: [ADA2026, CHIAVAROLI2021]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.T2D.FOODS
+        text: "Low GI/GL, legumes, intact whole grains, Diabetes Plate Method"
+        citation_ids: [ADA2026, CHIAVAROLI2021]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.GLP1
+    type: glp1
+    name: "GLP-1 user"
+    rd_gated: true
+    prescriber_aligned: true
+    citation_ids: [GLP1_ADVISORY2025]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.GLP1.ENERGY
+        text: "Don't add a large automatic deficit on top of already-low intake"
+        citation_ids: [GLP1_ADVISORY2025]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.GLP1.PROTEIN
+        text: "1.2–1.6 g/kg, or ≈80–120 g/day ⚠️ verify"
+        g_per_kg: { min: 1.2, max: 1.6 }
+        g_per_day: { min: 80, max: 120 }
+        citation_ids: [GLP1_ADVISORY2025]
+        verify: true
+        heuristic: false
+      carbs_fat:
+        id: GOAL.GLP1.CARBS_FAT
+        text: "Remaining energy; smaller fat portions if GI symptoms"
+        carbs: fill
+        citation_ids: [GLP1_ADVISORY2025]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.GLP1.RATE
+        text: "Prescriber-aligned"
+        citation_ids: [GLP1_ADVISORY2025]
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.GLP1.FOODS
+        text: "Protein-forward small portions, bland starches, gradual fiber, hydration"
+        citation_ids: [GLP1_ADVISORY2025]
+        verify: false
+        heuristic: false
+
+  - id: GOAL.HYPERTENSION
+    type: hypertension
+    name: "Hypertension / heart health"
+    rd_gated: false
+    citation_ids: [DASH_SODIUM, AHA2023]
+    verify: false
+    heuristic: false
+    rules:
+      energy:
+        id: GOAL.HYPERTENSION.ENERGY
+        text: "Per weight goal"
+        citation_ids: [DASH_SODIUM, AHA2023]
+        verify: false
+        heuristic: false
+      protein:
+        id: GOAL.HYPERTENSION.PROTEIN
+        text: "Per weight goal"
+        citation_ids: [DASH_SODIUM, AHA2023]
+        verify: false
+        heuristic: false
+      carbs_fat:
+        id: GOAL.HYPERTENSION.CARBS_FAT
+        text: "Sat fat under 10% kcal; sodium ≤2,300 mg (1,500 mg stricter)"
+        sat_fat_max_pct_kcal: 10
+        sodium_max_mg: 2300
+        sodium_strict_max_mg: 1500
+        citation_ids: [DASH_SODIUM, AHA2023]
+        verify: false
+        heuristic: false
+      rate:
+        id: GOAL.HYPERTENSION.RATE
+        text: "n/a"
+        citation_ids: []
+        verify: false
+        heuristic: false
+      food_priorities:
+        id: GOAL.HYPERTENSION.FOODS
+        text: "DASH food groups, potassium-rich foods"
+        citation_ids: [DASH_SODIUM, AHA2023]
+        verify: false
+        heuristic: false

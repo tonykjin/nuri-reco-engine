@@ -1,0 +1,268 @@
+# Matrix B: Goal-combination resolver. Source: spec §4.1 (priority hierarchy, resolver rules)
+# and §4.2 (common combinations). Phases and the deadline check (§4.3, §4.4) are in phases.yaml.
+# `text` is the page wording verbatim (markdown emphasis removed). Combination rows on the page
+# name no sources, so their citation_ids are empty.
+spec_section: "4"
+
+tiers:
+  - id: TIER.SAFETY
+    tier: 1
+    domain: "Safety & medical"
+    text: "1 | Safety & medical | Pregnancy, under 18, CKD, glucose-lowering meds, ED flags, low energy availability override everything (Matrix F)"
+    guardrail_rule_ids:
+      [
+        GUARD.UNDER_18,
+        GUARD.PREGNANCY,
+        GUARD.CKD,
+        GUARD.SGLT2,
+        GUARD.INSULIN_SU,
+        GUARD.ED_RISK,
+        GUARD.LOW_EA,
+      ]
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: TIER.EVENT_WINDOW
+    tier: 2
+    domain: "Performance event window"
+    text: "2 | Performance event window | From ≈6 weeks before the event through race week, performance fueling wins and body-comp deficits stop"
+    weeks_before_event: 6
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: TIER.DEADLINE
+    tier: 3
+    domain: "Deadline aesthetic goal"
+    text: "3 | Deadline aesthetic goal | Pursued only at a safe rate; clamped, never accelerated"
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: TIER.BODY_COMP
+    tier: 4
+    domain: "Body composition"
+    text: "4 | Body composition | Cut / recomp / bulk; one direction per phase"
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: TIER.GENERAL_HEALTH
+    tier: 5
+    domain: "General health"
+    text: "5 | General health | Fiber, micronutrients, diet quality. Always on, never traded away"
+    always_on: true
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+tier_rule:
+  id: TIER.RULE
+  text: "When goals conflict, the higher tier wins the energy direction. Lower tiers become modifiers (protein, carb timing, food priorities) or get sequenced into a later phase."
+  citation_ids: []
+  verify: false
+  heuristic: false
+
+resolver_rules:
+  - id: RESOLVER.ONE_ENERGY_GOAL
+    order: 1
+    text: "One primary energy goal per phase (deficit, maintenance or surplus). Protein stays high across all phases."
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: RESOLVER.CONTRADICTION
+    order: 2
+    text: 'Contradictory energy directions in the same phase (e.g. "gain weight" + "lose fat") → check recomp eligibility. If eligible, use recomp. If not, ask the user to order them and sequence them as phases.'
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: RESOLVER.TIMELINE
+    order: 3
+    text: "Time-bound goals create a timeline; the resolver emits phases with start/end dates (= PRD Seasons)."
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: false
+  - id: RESOLVER.RAMP
+    order: 4
+    text: "Target changes between phases ramp over 7–14 days rather than jump (PRD §5.8) 🧪 Loam heuristic."
+    ramp_days: { min: 7, max: 14 }
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: true
+  - id: RESOLVER.CARE_HOLD
+    order: 5
+    text: "On the Care tier, a direction flip or a condition goal holds for RD confirmation (PRD §5.8 magnitude gating)."
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: false
+
+combinations:
+  - id: COMBO.LOSEFAT_MUSCLE
+    goals: [lose_fat, build_muscle]
+    name: "Lose fat + build muscle"
+    resolved_energy: "Recomp (0–20% deficit) if novice, overweight, or returning lifter"
+    resolves_to: recomp
+    deficit_pct_tdee: { min: 0, max: 20 }
+    modifiers: "Protein 1.6–2.2 g/kg (2.3–3.1 g/kg FFM if lean); resistance training required"
+    protein_g_per_kg: { min: 1.6, max: 2.2 }
+    lean_protein_g_per_kg_ffm: { min: 2.3, max: 3.1 }
+    requires_resistance_training: true
+    sequencing: "If trained and lean (≈ men under 15% BF, women under 25% ⚠️ verify, practitioner convention) or stalled 6–8 weeks → recommend cut then lean bulk"
+    why: '"You can build muscle while losing fat right now. Keep protein high and the deficit small."'
+    text: 'Lose fat + build muscle | Recomp (0–20% deficit) if novice, overweight, or returning lifter | Protein 1.6–2.2 g/kg (2.3–3.1 g/kg FFM if lean); resistance training required | If trained and lean (≈ men under 15% BF, women under 25% ⚠️ verify, practitioner convention) or stalled 6–8 weeks → recommend cut then lean bulk | "You can build muscle while losing fat right now. Keep protein high and the deficit small."'
+    citation_ids: []
+    verify: true
+    heuristic: false
+    rules:
+      - id: COMBO.LOSEFAT_MUSCLE.LEAN_CUTOFF
+        text: "If trained and lean (≈ men under 15% BF, women under 25% ⚠️ verify, practitioner convention) or stalled 6–8 weeks → recommend cut then lean bulk"
+        lean_body_fat_pct_below: { male: 15, female: 25 }
+        stalled_weeks: { min: 6, max: 8 }
+        then: [cut, lean_bulk]
+        citation_ids: []
+        verify: true
+        heuristic: false
+
+  - id: COMBO.LOSEFAT_ENDURANCE
+    goals: [lose_fat, endurance_event]
+    name: "Lose fat + marathon"
+    resolved_energy: "Deficit only in base phase, ≤0.5% BW/week, taken on rest/easy days"
+    deficit_phases: [base]
+    max_loss_pct_bw_per_week: 0.5
+    deficit_day_types: [rest, easy]
+    modifiers: "Quality and long days fully fueled (no deficit that day or the evening before); EA ≥30 kcal/kg FFM"
+    fully_fueled_day_types: [quality, long]
+    ea_min_kcal_per_kg_ffm: 30
+    sequencing: "Base: lose fat → Build: maintenance (small rest-day deficit at most) → Peak/Taper/Race: maintenance+ → Recovery 1–2 weeks → resume"
+    recovery_weeks: { min: 1, max: 2 }
+    why: '"We''ll lose fat in your base block and switch to full fueling 6 weeks out so race day isn''t compromised."'
+    text: 'Lose fat + marathon | Deficit only in base phase, ≤0.5% BW/week, taken on rest/easy days | Quality and long days fully fueled (no deficit that day or the evening before); EA ≥30 kcal/kg FFM | Base: lose fat → Build: maintenance (small rest-day deficit at most) → Peak/Taper/Race: maintenance+ → Recovery 1–2 weeks → resume | "We''ll lose fat in your base block and switch to full fueling 6 weeks out so race day isn''t compromised."'
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+  - id: COMBO.LOSEFAT_DEADLINE
+    goals: [lose_fat, deadline_event]
+    name: "Lose fat + wedding in N weeks"
+    resolved_energy: "Deficit at the clamped rate"
+    modifiers: "Protein at the top of range; no diet breaks if under 12 weeks"
+    no_diet_breaks_under_weeks: 12
+    sequencing: "Feasibility check (§4.4); after the event, step back to maintenance over 2–4 weeks 🧪"
+    why: '"At a safe pace you''ll reach ≈X kg by the wedding; your full goal is realistic by ‹date›."'
+    text: 'Lose fat + wedding in N weeks | Deficit at the clamped rate | Protein at the top of range; no diet breaks if under 12 weeks | Feasibility check (§4.4); after the event, step back to maintenance over 2–4 weeks 🧪 | "At a safe pace you''ll reach ≈X kg by the wedding; your full goal is realistic by ‹date›."'
+    feasibility_rule_ids: [FEAS.DEADLINE]
+    citation_ids: []
+    verify: false
+    heuristic: true
+    rules:
+      - id: COMBO.LOSEFAT_DEADLINE.STEP_BACK
+        text: "after the event, step back to maintenance over 2–4 weeks 🧪"
+        step_back_weeks: { min: 2, max: 4 }
+        citation_ids: []
+        verify: false
+        heuristic: true
+
+  - id: COMBO.MUSCLE_ENDURANCE
+    goals: [build_muscle, endurance_event]
+    name: "Build muscle + endurance (hybrid)"
+    resolved_energy: "Maintenance to small surplus"
+    modifiers: "20–40 g protein after every session; carbs per day type; refuel between double sessions"
+    post_session_protein_g: { min: 20, max: 40 }
+    sequencing: "If an endurance event is set, the event window (Tier 2) takes over"
+    why: '"Two kinds of training need more fuel than either alone. Muscle gain will be slower, and that''s expected."'
+    text: 'Build muscle + endurance (hybrid) | Maintenance to small surplus | 20–40 g protein after every session; carbs per day type; refuel between double sessions | If an endurance event is set, the event window (Tier 2) takes over | "Two kinds of training need more fuel than either alone. Muscle gain will be slower, and that''s expected."'
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+  - id: COMBO.MUSCLE_VEGAN
+    goals: [build_muscle]
+    diet: vegan
+    name: "Build muscle + vegan"
+    resolved_energy: "Per build muscle"
+    modifiers: "Aim at the upper protein range 🧪; blend sources for leucine (soy, seitan, legumes + grains); B12 mandatory; watch iron, zinc, iodine, calcium, omega-3"
+    sequencing: "n/a"
+    why: '"Plant proteins carry less leucine per gram, so we pair sources and go a bit higher."'
+    text: 'Build muscle + vegan | Per build muscle | Aim at the upper protein range 🧪; blend sources for leucine (soy, seitan, legumes + grains); B12 mandatory; watch iron, zinc, iodine, calcium, omega-3 | n/a | "Plant proteins carry less leucine per gram, so we pair sources and go a bit higher."'
+    citation_ids: []
+    verify: false
+    heuristic: true
+    rules:
+      - id: COMBO.MUSCLE_VEGAN.UPPER_PROTEIN
+        text: "Aim at the upper protein range 🧪"
+        position_in_range: upper
+        citation_ids: []
+        verify: false
+        heuristic: true
+      - id: COMBO.MUSCLE_VEGAN.NUTRIENTS
+        text: "blend sources for leucine (soy, seitan, legumes + grains); B12 mandatory; watch iron, zinc, iodine, calcium, omega-3"
+        mandatory: [b12]
+        watch: [iron, zinc, iodine, calcium, omega_3]
+        citation_ids: []
+        verify: false
+        heuristic: false
+
+  - id: COMBO.GLP1_T2D_STRENGTH
+    goals: [glp1, t2d, strength_hybrid]
+    name: "GLP-1 + T2D + strength (PRD example)"
+    rd_gated: true
+    resolved_energy: "Set with prescriber/RD; no automatic large deficit"
+    modifiers: "Protein toward 1.6 g/kg for muscle preservation; low-GI carbs; fiber ramped gradually; insulin/sulfonylurea → hypoglycemia referral"
+    protein_toward_g_per_kg: 1.6
+    sequencing: "Medical constraints override; RD confirms each change"
+    why: '"Your medication lowers appetite, so we focus on protein first to protect muscle."'
+    text: 'GLP-1 + T2D + strength (PRD example) 🔒 | Set with prescriber/RD; no automatic large deficit | Protein toward 1.6 g/kg for muscle preservation; low-GI carbs; fiber ramped gradually; insulin/sulfonylurea → hypoglycemia referral | Medical constraints override; RD confirms each change | "Your medication lowers appetite, so we focus on protein first to protect muscle."'
+    guardrail_rule_ids: [GUARD.INSULIN_SU]
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+  - id: COMBO.LOSEFAT_HYPERTENSION
+    goals: [lose_fat, hypertension]
+    name: "Lose fat + hypertension"
+    resolved_energy: "Per lose fat"
+    modifiers: "DASH pattern ranked first; sodium cap; potassium-rich foods boosted (unless CKD/potassium-sparing meds)"
+    pattern_first: PATTERN.DASH
+    sequencing: "n/a"
+    why: '"This eating style is the best-tested for blood pressure and fits weight loss."'
+    text: 'Lose fat + hypertension | Per lose fat | DASH pattern ranked first; sodium cap; potassium-rich foods boosted (unless CKD/potassium-sparing meds) | n/a | "This eating style is the best-tested for blood pressure and fits weight loss."'
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+  - id: COMBO.ENDURANCE_T2D
+    goals: [endurance_event, t2d]
+    name: "Endurance + T2D"
+    rd_gated: true
+    resolved_energy: "Per event phase"
+    modifiers: "Carb periodization still applies, but RD sets carb distribution; intra-session carbs flagged for glucose monitoring"
+    sequencing: "RD-gated"
+    why: '"Your dietitian will set your training-day carbs."'
+    text: 'Endurance + T2D 🔒 | Per event phase | Carb periodization still applies, but RD sets carb distribution; intra-session carbs flagged for glucose monitoring | RD-gated | "Your dietitian will set your training-day carbs."'
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+  - id: COMBO.GAINWEIGHT_LOSEFAT
+    goals: [gain_weight, lose_fat]
+    name: "Gain weight + lose fat"
+    resolved_energy: "Contradiction → recomp check; else ask the user to order them"
+    modifiers: "n/a"
+    sequencing: "Sequenced phases"
+    why: '"These pull in opposite directions. Which matters most first?"'
+    text: 'Gain weight + lose fat | Contradiction → recomp check; else ask the user to order them | n/a | Sequenced phases | "These pull in opposite directions. Which matters most first?"'
+    resolver_rule_ids: [RESOLVER.CONTRADICTION]
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+  - id: COMBO.DEFICIT_BLOCKED
+    goals: [any_deficit]
+    name: "Any deficit goal + pregnancy, under 18, or ED flag"
+    resolved_energy: "Blocked → maintenance / RD referral"
+    blocked: true
+    modifiers: "n/a"
+    sequencing: "n/a"
+    why: "Supportive copy plus referral; no numbers if number-hiding is on"
+    text: "Any deficit goal + pregnancy, under 18, or ED flag | Blocked → maintenance / RD referral | n/a | n/a | Supportive copy plus referral; no numbers if number-hiding is on"
+    guardrail_rule_ids: [GUARD.PREGNANCY, GUARD.UNDER_18, GUARD.ED_RISK]
+    citation_ids: []
+    verify: false
+    heuristic: false

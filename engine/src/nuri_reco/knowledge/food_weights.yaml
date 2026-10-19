@@ -1,0 +1,384 @@
+# Matrix E: Food scoring. Source: spec §7 (7.1 attributes, 7.2 per-goal weights,
+# 7.3 go-to foods, 7.4 ranking pipeline).
+# 7.2 is headed "🧪 Loam heuristic, to be tuned with RDs", so every weight row is heuristic: true.
+# Weight strengths are the page's own symbols ("++", "+"); the page gives no numeric weights yet.
+spec_section: "7"
+
+attributes:
+  - id: FOOD.ATTR.ENERGY_DENSITY
+    attribute: energy_density
+    name: "Energy density (ED)"
+    text: "Energy density (ED) | kcal/g | Rolls: under 0.6 very low · 0.6–1.5 low · 1.5–4 medium · over 4 high"
+    unit: kcal_per_g
+    bands:
+      - { label: very_low, below: 0.6 }
+      - { label: low, min: 0.6, max: 1.5 }
+      - { label: medium, min: 1.5, max: 4 }
+      - { label: high, above: 4 }
+    citation_ids: [VOLUMETRICS]
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.PROTEIN_DENSITY
+    attribute: protein_density
+    name: "Protein density"
+    text: "Protein density | g protein / 100 kcal | ≥10 protein-forward · ≥15 lean protein"
+    unit: g_protein_per_100_kcal
+    cut_points: { protein_forward_min: 10, lean_protein_min: 15 }
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.FIBER_DENSITY
+    attribute: fiber_density
+    name: "Fiber density"
+    text: "Fiber density | g fiber / 100 kcal | ≥3 high"
+    unit: g_fiber_per_100_kcal
+    cut_points: { high_min: 3 }
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.LEUCINE
+    attribute: leucine_per_serving
+    name: "Leucine per serving"
+    text: "Leucine per serving | g | ≈2–3 g per meal for muscle goals ⚠️ verify"
+    unit: g
+    muscle_goal_g_per_meal: { min: 2, max: 3 }
+    citation_ids: []
+    verify: true
+    heuristic: false
+  - id: FOOD.ATTR.GI_GL
+    attribute: gi_gl
+    name: "GI / GL"
+    text: "GI / GL | GI 0–100; GL = GI × available carbs / 100 | Low GI ≤55, high ≥70 · low GL ≤10, high ≥20 (curated table; varies with ripeness, which NIR can sense)"
+    gi_scale: { min: 0, max: 100 }
+    gl_formula: "GI * available_carbs_g / 100"
+    cut_points:
+      { low_gi_max: 55, high_gi_min: 70, low_gl_max: 10, high_gl_min: 20 }
+    source: curated_table
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.NRF93
+    attribute: nrf9_3
+    name: "NRF9.3"
+    text: "NRF9.3 | Σ %DV of 9 nutrients to encourage − Σ %MRV of 3 to limit, per 100 kcal | Relative ranking within a food category"
+    nutrients_to_encourage: 9
+    nutrients_to_limit: 3
+    per_kcal: 100
+    use: rank_within_category
+    citation_ids: [NRF93]
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.NOVA
+    attribute: nova
+    name: "NOVA level"
+    text: 'NOVA level | 1 unprocessed … 4 ultra-processed | Our working definition of DGA 2025''s "highly processed" = NOVA 4'
+    levels: { unprocessed: 1, ultra_processed: 4 }
+    highly_processed_level: 4
+    citation_ids: [DGA2025]
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.CARB_FAT_FIBER_SERVING
+    attribute: carb_fat_fiber_per_serving
+    name: "Carb density / fat / fiber per serving"
+    text: "Carb density / fat / fiber per serving | g | Pre-race: high carb, low fiber, low fat"
+    unit: g
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.ATTR.NURI_SIGNALS
+    attribute: nuri_signals
+    name: "Nuri signals"
+    text: "Nuri signals | NIR ripeness/freshness window, Virtual Pantry presence, taste dimensions (sweetness, richness, texture, ripeness, umami/bitterness) | Boost pantry items at peak ripeness; re-rank by taste fit"
+    taste_dimensions: [sweetness, richness, texture, ripeness, umami_bitterness]
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+normalization:
+  id: FOOD.W.NORMALIZATION
+  text: "Each attribute is normalized 0–1 within its food category, then combined as a weighted sum."
+  normalize_range: { min: 0, max: 1 }
+  scope: within_food_category
+  combine: weighted_sum
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+weights:
+  - id: FOOD.W.FAT_LOSS
+    goal_context: "Fat loss / deadline"
+    goals: [lose_fat, deadline_event]
+    text: "Fat loss / deadline | Low ED ++ · protein density ++ · fiber density + · NOVA 1 + | ED over 4 only in measured portions; liquid calories penalized"
+    up:
+      - { attribute: energy_density, direction: low, strength: "++" }
+      - { attribute: protein_density, strength: "++" }
+      - { attribute: fiber_density, strength: "+" }
+      - { attribute: nova, value: 1, strength: "+" }
+    down: "ED over 4 only in measured portions; liquid calories penalized"
+    measured_portions_ed_above: 4
+    penalize: [liquid_calories]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.W.MUSCLE
+    goal_context: "Recomp / muscle gain"
+    goals: [recomp, build_muscle]
+    text: "Recomp / muscle gain | Leucine/serving ++ · protein density + · NRF + | In a surplus or with low appetite, ED flips to a positive weight"
+    up:
+      - { attribute: leucine_per_serving, strength: "++" }
+      - { attribute: protein_density, strength: "+" }
+      - { attribute: nrf9_3, strength: "+" }
+    down: "In a surplus or with low appetite, ED flips to a positive weight"
+    energy_density_positive_when: [surplus, low_appetite]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.W.ENDURANCE_DAILY
+    goal_context: "Endurance (daily)"
+    goals: [endurance_event]
+    text: "Endurance (daily) | Carb density · NRF · iron | Avoid chronically low energy availability"
+    up:
+      - { attribute: carb_density }
+      - { attribute: nrf9_3 }
+      - { attribute: iron }
+    down: "Avoid chronically low energy availability"
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.W.ENDURANCE_PRE_RACE
+    goal_context: "Endurance (pre-race 1–4 h / during)"
+    goals: [endurance_event]
+    text: "Endurance (pre-race 1–4 h / during) | Fast carbs (high GI OK) · familiar foods | Exclude high-fiber, high-fat and new foods within 3 h"
+    window_hours_before: { min: 1, max: 4 }
+    up:
+      - { attribute: fast_carbs, note: "high GI OK" }
+      - { attribute: familiar_foods }
+    down: "Exclude high-fiber, high-fat and new foods within 3 h"
+    exclude: [high_fiber, high_fat, new_foods]
+    exclude_within_hours: 3
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.W.RECOVERY
+    goal_context: "Recovery"
+    goals: []
+    text: "Recovery | Carbs + 0.25–0.4 g/kg leucine-rich protein | n/a"
+    up:
+      - { attribute: carbs }
+      - { attribute: leucine_rich_protein }
+    protein_g_per_kg: { min: 0.25, max: 0.4 }
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.W.T2D
+    goal_context: "T2D"
+    goals: [t2d]
+    text: "T2D | Low GI/GL · fiber · unsaturated fat · protein pairing | Sugary drinks, refined grains"
+    up:
+      - { attribute: gi_gl, direction: low }
+      - { attribute: fiber }
+      - { attribute: unsaturated_fat }
+      - { attribute: protein_pairing }
+    down: "Sugary drinks, refined grains"
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.W.GLP1
+    goal_context: "GLP-1"
+    goals: [glp1]
+    text: "GLP-1 | Protein density ++ · NRF ++ · gradual fiber · small portions | Greasy, fried, very spicy, large-volume, carbonated ⚠️ verify"
+    up:
+      - { attribute: protein_density, strength: "++" }
+      - { attribute: nrf9_3, strength: "++" }
+      - { attribute: fiber, note: gradual }
+      - { attribute: small_portions }
+    down: "Greasy, fried, very spicy, large-volume, carbonated ⚠️ verify"
+    citation_ids: []
+    verify: true
+    heuristic: true
+  - id: FOOD.W.HYPERTENSION
+    goal_context: "Hypertension"
+    goals: [hypertension]
+    text: "Hypertension | Potassium · NRF · DASH groups | Sodium per 100 kcal"
+    up:
+      - { attribute: potassium }
+      - { attribute: nrf9_3 }
+      - { attribute: dash_groups }
+    down: "Sodium per 100 kcal"
+    down_attribute: sodium_per_100_kcal
+    per_kcal: 100
+    citation_ids: []
+    verify: false
+    heuristic: true
+
+seed_foods:
+  - id: FOOD.SEED.FAT_LOSS
+    goal_context: "Fat loss"
+    text: "Fat loss: non-starchy vegetables, berries, apples, melon, broth soups, eggs/egg whites, nonfat Greek yogurt, skyr, cottage cheese, chicken/turkey breast, white fish, shrimp, tuna, lentils/beans, boiled potatoes (Satiety Index 323), oats, popcorn."
+    foods:
+      [
+        non-starchy vegetables,
+        berries,
+        apples,
+        melon,
+        broth soups,
+        eggs/egg whites,
+        nonfat Greek yogurt,
+        skyr,
+        cottage cheese,
+        chicken/turkey breast,
+        white fish,
+        shrimp,
+        tuna,
+        lentils/beans,
+        boiled potatoes,
+        oats,
+        popcorn,
+      ]
+    satiety_index: { boiled potatoes: 323 }
+    citation_ids: [HOLT1995]
+    verify: false
+    heuristic: false
+  - id: FOOD.SEED.MUSCLE_GAIN
+    goal_context: "Muscle gain"
+    text: "Muscle gain: whey/milk, Greek yogurt, eggs, lean beef, chicken, salmon, tofu/tempeh, soy milk. Energy-dense add-ons: whole milk, nut butters, trail mix, granola, rice, pasta, bagels, dried fruit, olive oil, liquid meals."
+    foods:
+      [
+        whey/milk,
+        Greek yogurt,
+        eggs,
+        lean beef,
+        chicken,
+        salmon,
+        tofu/tempeh,
+        soy milk,
+      ]
+    energy_dense_add_ons:
+      [
+        whole milk,
+        nut butters,
+        trail mix,
+        granola,
+        rice,
+        pasta,
+        bagels,
+        dried fruit,
+        olive oil,
+        liquid meals,
+      ]
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.SEED.ENDURANCE
+    goal_context: "Endurance"
+    text: "Endurance: daily rice, pasta, potatoes, oats, bread, fruit · pre-race white bagel/toast + honey/jam, banana, white rice, pretzels · during: gels, chews, sports drink, dates."
+    daily: [rice, pasta, potatoes, oats, bread, fruit]
+    pre_race: [white bagel/toast + honey/jam, banana, white rice, pretzels]
+    during: [gels, chews, sports drink, dates]
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.SEED.RECOVERY
+    goal_context: "Recovery"
+    text: "Recovery: chocolate milk, Greek yogurt + fruit + granola, rice bowl + lean protein, whey smoothie."
+    foods:
+      [
+        chocolate milk,
+        Greek yogurt + fruit + granola,
+        rice bowl + lean protein,
+        whey smoothie,
+      ]
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.SEED.GLP1
+    goal_context: "GLP-1"
+    text: "GLP-1: small protein-forward portions (Greek yogurt, cottage cheese, eggs, shakes, fish, tofu), plain starches, bland cooked vegetables, broth, ginger, water spread through the day."
+    protein_forward: [Greek yogurt, cottage cheese, eggs, shakes, fish, tofu]
+    other:
+      [
+        plain starches,
+        bland cooked vegetables,
+        broth,
+        ginger,
+        water spread through the day,
+      ]
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.SEED.T2D
+    goal_context: "T2D"
+    text: "T2D: legumes, rolled/steel-cut oats, barley, bulgur, quinoa, non-starchy vegetables, berries, apples, citrus, nuts, olive oil, fish, plain yogurt; Diabetes Plate Method (½ vegetables, ¼ protein, ¼ carbs)."
+    foods:
+      [
+        legumes,
+        rolled/steel-cut oats,
+        barley,
+        bulgur,
+        quinoa,
+        non-starchy vegetables,
+        berries,
+        apples,
+        citrus,
+        nuts,
+        olive oil,
+        fish,
+        plain yogurt,
+      ]
+    diabetes_plate: { vegetables: "½", protein: "¼", carbs: "¼" }
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+ranking_pipeline:
+  - id: FOOD.RANK.HARD_FILTERS
+    step: 1
+    text: "Hard filters: allergens, medical, religious/ethical (§9)"
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.RANK.PATTERN_LENS
+    step: 2
+    text: "Pattern lens: boost food groups of the selected pattern"
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.RANK.GOAL_SCORE
+    step: 3
+    text: "Goal score: weighted attributes for the current phase and day type"
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.RANK.TASTE_RERANK
+    step: 4
+    text: "Taste re-rank: taste-profile fit; dislikes down-weighted (neutral until the taste profile has enough scans, PRD §7.3)"
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: false
+  - id: FOOD.RANK.CONTEXT_BOOSTS
+    step: 5
+    text: 'Context boosts: Virtual Pantry items, NIR "peaks tonight", gaps in today''s targets, weekly HEI/micronutrient gaps'
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.RANK.DIVERSITY
+    step: 6
+    text: "Diversity: avoid repeating the same item; small novelty slot"
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: FOOD.RANK.EXPLAIN
+    step: 7
+    text: 'Explain: e.g. "21 g protein per 100 kcal · low energy density · in your pantry, peaks tonight"'
+    citation_ids: []
+    verify: false
+    heuristic: false
+
+ranking_note:
+  id: FOOD.RANK.HEALTH_FIRST
+  text: "Pure collaborative filtering drifts toward unhealthy items (Trattner & Elsweiler: only 6 of 5,237 popular online recipes met WHO guidelines). Health must be an explicit objective, which is why taste is a re-rank inside a health-scored set and never the primary sort."
+  recipes_meeting_who: 6
+  recipes_sampled: 5237
+  citation_ids: [TRATTNER_ELSWEILER2017]
+  verify: false
+  heuristic: false
