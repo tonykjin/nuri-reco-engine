@@ -373,3 +373,16 @@ citations:
       url: null,
       in_sources: false,
     }
+  # Targets engine (Loam Score page §2-3)
+  - id: MIFFLIN1990
+    label: "Mifflin–St Jeor original paper"
+    url: "https://pubmed.ncbi.nlm.nih.gov/2305711/"
+    in_sources: false
+  - id: NIH_ODS
+    label: "NIH Office of Dietary Supplements fact sheets"
+    url: "https://ods.od.nih.gov/factsheets/"
+    in_sources: false
+  - id: NIH_BWP
+    label: "NIH Body Weight Planner"
+    url: "https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner"
+    in_sources: false

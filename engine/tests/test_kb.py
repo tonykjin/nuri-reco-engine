@@ -96,7 +96,17 @@ def test_every_broken_fixture_is_tested() -> None:
 def test_cli_summary(capsys: pytest.CaptureFixture[str]) -> None:
     assert main(["--summary"]) == 0
     out = capsys.readouterr().out
-    for name in ["goals", "combos", "phases", "daytypes", "patterns", "food_weights", "guardrails"]:
+    for name in [
+        "goals",
+        "combos",
+        "phases",
+        "daytypes",
+        "patterns",
+        "food_weights",
+        "guardrails",
+        "targets",
+        "micronutrients",
+    ]:
         assert f"{name}.yaml" in out
     assert "total" in out
 

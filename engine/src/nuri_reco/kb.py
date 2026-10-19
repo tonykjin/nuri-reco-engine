@@ -162,6 +162,29 @@ class CitationsFile(FileModel):
     citations: list[Citation]
 
 
+class TargetsFile(FileModel):
+    mifflin_st_jeor: Rule
+    activity_factors: Rule
+    kcal_per_kg: Rule
+    energy_position: Rule
+    protein_position: Rule
+    fat: Rule
+    carb_tiers: Rule
+    deficit_split: Rule
+    fiber: Rule
+
+
+class MicronutrientRule(Rule):
+    nutrient: str
+    unit: str
+    window: str
+    values: list[dict[str, Any]] = Field(min_length=1)
+
+
+class MicronutrientsFile(FileModel):
+    nutrients: list[MicronutrientRule]
+
+
 FILE_MODELS: dict[str, type[FileModel]] = {
     "goals": GoalsFile,
     "combos": CombosFile,
@@ -170,6 +193,8 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "patterns": PatternsFile,
     "food_weights": FoodWeightsFile,
     "guardrails": GuardrailsFile,
+    "targets": TargetsFile,
+    "micronutrients": MicronutrientsFile,
     "citations": CitationsFile,
 }
 
@@ -184,6 +209,8 @@ class KnowledgeBase(BaseModel):
     patterns: PatternsFile
     food_weights: FoodWeightsFile
     guardrails: GuardrailsFile
+    targets: TargetsFile
+    micronutrients: MicronutrientsFile
     citations: CitationsFile
 
     def rules_by_file(self) -> dict[str, list[Rule]]:

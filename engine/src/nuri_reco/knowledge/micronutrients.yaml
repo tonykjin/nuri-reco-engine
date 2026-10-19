@@ -1,0 +1,87 @@
+# Micronutrient panel by age and sex. Source: Loam Score page §2 (Shared holistic nutrition
+# matrix); `text` is the page row verbatim. Adult table: ages below the first band use the
+# youngest adult band. Pregnancy values aren't used (pregnancy plans are blocked or RD-led).
+spec_section: "7b.3"
+
+nutrients:
+  - id: MICRO.IRON
+    nutrient: iron
+    unit: mg
+    window: 7d
+    text: "Iron | Men ≥19: 8 mg/day; women 19–50: 18 mg/day; women ≥51: 8 mg/day; pregnancy: 27 mg/day | 7-day average"
+    values:
+      - { sex: male, age_min: 19, amount: 8 }
+      - { sex: female, age_min: 19, age_max: 50, amount: 18 }
+      - { sex: female, age_min: 51, amount: 8 }
+    pregnancy_amount: 27
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: MICRO.CALCIUM
+    nutrient: calcium
+    unit: mg
+    window: 7d
+    text: "Calcium | Adults 19–50: 1,000 mg/day; women ≥51 and men ≥71: 1,200 mg/day; men 51–70: 1,000 mg/day | 7-day average"
+    values:
+      - { sex: any, age_min: 19, age_max: 50, amount: 1000 }
+      - { sex: female, age_min: 51, amount: 1200 }
+      - { sex: male, age_min: 51, age_max: 70, amount: 1000 }
+      - { sex: male, age_min: 71, amount: 1200 }
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: MICRO.VITAMIN_D
+    nutrient: vitamin_d
+    unit: mcg
+    window: 7d
+    text: "Vitamin D | Ages 19–70: 15 mcg/600 IU daily; ≥71: 20 mcg/800 IU | 7-day average"
+    values:
+      - { sex: any, age_min: 19, age_max: 70, amount: 15 }
+      - { sex: any, age_min: 71, amount: 20 }
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: MICRO.MAGNESIUM
+    nutrient: magnesium
+    unit: mg
+    window: 7d
+    text: "Magnesium | Men 19–30: 400 mg; ≥31: 420 mg. Women 19–30: 310 mg; ≥31: 320 mg | 7-day average"
+    values:
+      - { sex: male, age_min: 19, age_max: 30, amount: 400 }
+      - { sex: male, age_min: 31, amount: 420 }
+      - { sex: female, age_min: 19, age_max: 30, amount: 310 }
+      - { sex: female, age_min: 31, amount: 320 }
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: MICRO.POTASSIUM
+    nutrient: potassium
+    unit: mg
+    window: 7d
+    text: "Potassium | U.S. AI: men 3,400 mg/day; women 2,600 mg/day | 7-day average"
+    values:
+      - { sex: male, amount: 3400 }
+      - { sex: female, amount: 2600 }
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: MICRO.B12
+    nutrient: vitamin_b12
+    unit: mcg
+    window: 7d
+    text: "Vitamin B12 | 2.4 mcg/day for nonpregnant adults | 7-day average"
+    values:
+      - { sex: any, amount: 2.4 }
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: MICRO.FOLATE
+    nutrient: folate
+    unit: mcg_dfe
+    window: 7d
+    text: "Folate | 400 mcg DFE/day for nonpregnant adults | 7-day average"
+    values:
+      - { sex: any, amount: 400 }
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false

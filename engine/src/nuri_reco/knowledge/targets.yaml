@@ -1,0 +1,89 @@
+# Targets engine parameters (Stage 4). Sources: Loam Score page §2-3 (formulas), spec §3 (Matrix A
+# ranges), §5 (Matrix C), PRD §8.1. Where the documents give a range but no single value, the
+# position in the range is a Loam heuristic set here (agreed 2026-10-19), never in Python.
+spec_section: "3"
+
+mifflin_st_jeor:
+  id: ENERGY.MIFFLIN_ST_JEOR
+  text: "RMR = 10×W_kg + 6.25×height_cm − 5×age_years + 5 | RMR = 10×W_kg + 6.25×height_cm − 5×age_years − 161"
+  coefficients: { weight_kg: 10, height_cm: 6.25, age_years: -5 }
+  sex_constant: { male: 5, female: -161 }
+  citation_ids: [MIFFLIN1990, LOAM_SCORE_PAGE]
+  verify: false
+  heuristic: false
+
+activity_factors:
+  id: ENERGY.ACTIVITY_FACTORS
+  text: "TDEE = RMR × activity_factor. Standard multipliers: sedentary 1.2 · light 1.375 · moderate 1.55 · active 1.725 · very_active 1.9"
+  factors:
+    sedentary: 1.2
+    light: 1.375
+    moderate: 1.55
+    active: 1.725
+    very_active: 1.9
+  citation_ids: [LOAM_SCORE_PAGE, NURI_PRD]
+  verify: false
+  heuristic: true
+
+kcal_per_kg:
+  id: ENERGY.KCAL_PER_KG
+  text: "≈7,700 kcal per kg of body-weight change: a fixed-rule approximation used only to cap the deficit at the planned weekly rate (NIH notes its limits for long-term forecasts)"
+  kcal_per_kg: 7700
+  citation_ids: [NIH_BWP]
+  verify: false
+  heuristic: true
+
+energy_position:
+  id: TARGETS.ENERGY_POSITION
+  text: "Deficit and surplus sit at the midpoint (0.5) of the goal's Matrix A range, e.g. 20% of TDEE for lose fat (15–25%), never more than the planned weekly rate implies"
+  range_position: 0.5
+  citation_ids: [AHA_ACC_TOS2013]
+  verify: false
+  heuristic: true
+
+protein_position:
+  id: TARGETS.PROTEIN_POSITION
+  text: "Protein sits 0.67 of the way up the goal's Matrix A g/kg range (Maya: 1.6–2.2 → 2.0 g/kg, the PRD's 140 g at 70 kg); goals marked top or upper use the top (1)"
+  range_position: 0.67
+  top_position: 1
+  weight_basis: actual
+  citation_ids: [NURI_PRD, ISSN2017]
+  verify: false
+  heuristic: true
+
+fat:
+  id: TARGETS.FAT
+  text: "Fat sits at the midpoint (0.5) of the goal's fat % range (20–35% → 27.5%), never below 0.5 g/kg; carbs fill the remainder"
+  range_position: 0.5
+  default_fat_pct_kcal: { min: 20, max: 35 }
+  fat_min_g_per_kg: 0.5
+  citation_ids: [LOAM_SCORE_PAGE, DRI]
+  verify: false
+  heuristic: true
+
+carb_tiers:
+  id: TARGETS.CARB_TIERS
+  text: "Endurance phases and strength/hybrid goals take carbs from the Matrix C day-type tier at its midpoint (0.5) × kg, when the weekly schedule has training sessions. Fueling-first: the day's kcal follows the tier, and a deficit is measured against the fully fueled week"
+  range_position: 0.5
+  owner_goal_types: [endurance_event, strength_hybrid]
+  training_day_types: [easy, quality, long, carb_load]
+  citation_ids: [ACSM2016]
+  verify: false
+  heuristic: true
+
+deficit_split:
+  id: TARGETS.DEFICIT_SPLIT
+  text: "In endurance phases the weekly deficit lands on rest and easy days, weighted 3 : 1 (Matrix C: rest takes most, easy a small share; quality and long days none), taken from carbs but never below the tier minimum"
+  weights: { rest: 3, easy: 1 }
+  citation_ids: [ACSM2016]
+  verify: false
+  heuristic: true
+
+fiber:
+  id: TARGETS.FIBER
+  text: "WHO: ≥25 g/day; ADA diabetes: ≥14 g/1,000 kcal. Proposed combined default: MAX(25,14×E/1000)"
+  min_g_per_day: 25
+  g_per_1000_kcal: 14
+  citation_ids: [WHO, ADA2026, LOAM_SCORE_PAGE]
+  verify: false
+  heuristic: false
