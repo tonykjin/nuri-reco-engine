@@ -1,0 +1,141 @@
+# Matrix C: Day-type fueling and timing. Source: spec §5.
+# The carb table is captioned "ACSM/AND/DC 2016 tiers ⚠️ verify table values against the primary
+# text", so every day-type row is verify: true. Ids match the DayType literal in models/common.py.
+spec_section: "5"
+
+caption:
+  id: DAYTYPE.CAPTION
+  text: "Carb targets in g/kg/day by training day (ACSM/AND/DC 2016 tiers ⚠️ verify table values against the primary text). Fat-loss users take the weekly deficit mostly on rest/easy days."
+  deficit_day_types: [rest, easy]
+  citation_ids: [ACSM2016]
+  verify: true
+  heuristic: false
+
+day_types:
+  - id: DAYTYPE.REST
+    day_type: rest
+    name: "Rest / light skill"
+    text: "Rest / light skill | 3–5 | Yes, most of the weekly deficit lands here"
+    carb_g_per_kg: { min: 3, max: 5 }
+    deficit_allowed: most
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+  - id: DAYTYPE.EASY
+    day_type: easy
+    name: "Easy (≈1 h moderate)"
+    text: "Easy (≈1 h moderate) | 5–7 | Small"
+    session_hours: 1
+    carb_g_per_kg: { min: 5, max: 7 }
+    deficit_allowed: small
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+  - id: DAYTYPE.QUALITY
+    day_type: quality
+    name: "Quality (intervals/tempo)"
+    text: "Quality (intervals/tempo) | 6–10 | No (also the evening before)"
+    carb_g_per_kg: { min: 6, max: 10 }
+    deficit_allowed: none
+    no_deficit_evening_before: true
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+  - id: DAYTYPE.LONG
+    day_type: long
+    name: "Long (1–3 h+)"
+    text: "Long (1–3 h+) | 6–10 (8–12 at very high load) | No, plus intra-session fuel"
+    session_hours: { min: 1, max: 3 }
+    carb_g_per_kg: { min: 6, max: 10 }
+    very_high_load_carb_g_per_kg: { min: 8, max: 12 }
+    deficit_allowed: none
+    intra_session_fuel: true
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+  - id: DAYTYPE.CARB_LOAD
+    day_type: carb_load
+    name: "Carb load"
+    text: "Carb load | 10–12 for 36–48 h | No"
+    carb_g_per_kg: { min: 10, max: 12 }
+    duration_hours: { min: 36, max: 48 }
+    deficit_allowed: none
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+
+timing:
+  - id: TIMING.PROTEIN_PER_MEAL
+    element: "Protein per meal"
+    text: "0.4 g/kg × ≥4 meals (20–40 g, 0.7–3 g leucine per dose ⚠️ verify)"
+    protein_g_per_kg_per_meal: 0.4
+    min_meals: 4
+    protein_g_per_meal: { min: 20, max: 40 }
+    leucine_g_per_dose: { min: 0.7, max: 3 }
+    citation_ids: [SCHOENFELD_ARAGON2018, ISSN2017]
+    verify: true
+    heuristic: false
+  - id: TIMING.AROUND_LIFTING
+    element: "Around lifting"
+    text: "0.4–0.5 g/kg protein in the meals before and after"
+    protein_g_per_kg: { min: 0.4, max: 0.5 }
+    citation_ids: [HELMS2014]
+    verify: false
+    heuristic: false
+  - id: TIMING.PRE_SLEEP
+    element: "Pre-sleep"
+    text: "30–40 g casein (muscle-gain and recomp goals)"
+    casein_g: { min: 30, max: 40 }
+    goals: [build_muscle, recomp]
+    citation_ids: [ISSN2017]
+    verify: false
+    heuristic: false
+  - id: TIMING.PRE_SESSION_CARBS
+    element: "Pre-session carbs"
+    text: "1–4 g/kg, 1–4 h before ⚠️ verify"
+    carb_g_per_kg: { min: 1, max: 4 }
+    hours_before: { min: 1, max: 4 }
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+  - id: TIMING.DURING_SESSION
+    element: "During session"
+    text: "About 1 h: rinse/small · 1–2 h: 30–60 g/h · 2–3 h: ≈60 g/h · over 2.5 h: ≈90 g/h glucose+fructose"
+    bands:
+      - { session_hours: 1, carbs: rinse_or_small }
+      - {
+          session_hours: { min: 1, max: 2 },
+          carb_g_per_hour: { min: 30, max: 60 },
+        }
+      - { session_hours: { min: 2, max: 3 }, carb_g_per_hour: 60 }
+      - {
+          session_hours_over: 2.5,
+          carb_g_per_hour: 90,
+          carb_type: glucose_fructose,
+        }
+    citation_ids: [JEUKENDRUP2014]
+    verify: false
+    heuristic: false
+  - id: TIMING.FAST_RECOVERY
+    element: "Fast recovery"
+    text: "1.0–1.2 g/kg/h carbs for 4 h when the next session is within 8 h ⚠️ verify"
+    carb_g_per_kg_per_hour: { min: 1.0, max: 1.2 }
+    duration_hours: 4
+    next_session_within_hours: 8
+    citation_ids: [ACSM2016]
+    verify: true
+    heuristic: false
+  - id: TIMING.MEAL_FREQUENCY
+    element: "Meal frequency (fat loss)"
+    text: "Little effect; choose for adherence"
+    citation_ids: [HELMS2014, ISSN2017]
+    verify: false
+    heuristic: false
+
+per_meal_note:
+  id: TIMING.GUIDANCE_NOT_CAPS
+  text: "Per-meal targets are guidance, not hard caps."
+  hard_caps: false
+  citation_ids: []
+  verify: false
+  heuristic: false
