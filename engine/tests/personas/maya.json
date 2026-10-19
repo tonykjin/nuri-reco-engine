@@ -1,0 +1,59 @@
+{
+  "profile": {
+    "age": 30,
+    "sex": "female",
+    "height_cm": 168,
+    "weight_kg": 70,
+    "body_fat_pct": null,
+    "activity": "moderate",
+    "training": {
+      "resistance": true,
+      "weekly_schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": false,
+      "ckd_stage": null,
+      "medications": [],
+      "scoff_score": 0
+    }
+  },
+  "goals": [{ "type": "lose_fat", "priority": 1 }],
+  "constraints": { "allergens": [], "diet": null, "religious": [] },
+  "preferences": {},
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #1 / 7b.5: PRD example ≈1,800 kcal / 140 P / 185 C / 55 F. Lifts, so protein is 2.0 g/kg (spec §14 Q1).",
+    "status": "ok",
+    "phases": [
+      {
+        "energy": ["deficit"],
+        "targets": {
+          "kcal": { "min": 1710, "max": 1890 },
+          "protein_g": { "min": 133, "max": 147 }
+        }
+      }
+    ],
+    "required_rule_ids": ["GOAL.LOSE_FAT.ENERGY", "GOAL.LOSE_FAT.PROTEIN"],
+    "loam_score_weights": [
+      {
+        "weights": {
+          "energy": 20,
+          "protein": 20,
+          "carb": 5,
+          "fiber": 15,
+          "micro": 15,
+          "pattern": 15,
+          "moderation": 10
+        }
+      }
+    ]
+  }
+}

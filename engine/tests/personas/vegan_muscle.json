@@ -1,0 +1,43 @@
+{
+  "profile": {
+    "age": 26,
+    "sex": "male",
+    "height_cm": 175,
+    "weight_kg": 68,
+    "body_fat_pct": null,
+    "activity": "moderate",
+    "training": {
+      "resistance": true,
+      "weekly_schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": false,
+      "ckd_stage": null,
+      "medications": [],
+      "scoff_score": 0
+    }
+  },
+  "goals": [{ "type": "build_muscle", "priority": 1 }],
+  "constraints": { "allergens": [], "diet": "vegan", "religious": [] },
+  "preferences": {},
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #7 / 4.2: build muscle + vegan. Upper protein range, leucine blending, B12 mandatory.",
+    "status": "ok",
+    "phases": [{ "energy": ["surplus"] }],
+    "required_rule_ids": [
+      "COMBO.MUSCLE_VEGAN",
+      "COMBO.MUSCLE_VEGAN.UPPER_PROTEIN",
+      "COMBO.MUSCLE_VEGAN.NUTRIENTS"
+    ],
+    "required_warnings": ["COMBO.MUSCLE_VEGAN.NUTRIENTS"]
+  }
+}

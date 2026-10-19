@@ -1,0 +1,39 @@
+{
+  "profile": {
+    "age": 31,
+    "sex": "female",
+    "height_cm": 168,
+    "weight_kg": 70,
+    "body_fat_pct": null,
+    "activity": "light",
+    "training": {
+      "resistance": false,
+      "weekly_schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": true,
+      "ckd_stage": null,
+      "medications": [],
+      "scoff_score": 0
+    }
+  },
+  "goals": [{ "type": "lose_fat", "priority": 1, "target_weight_kg": 65 }],
+  "constraints": { "allergens": [], "diet": null, "religious": [] },
+  "preferences": {},
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #8 / Matrix F: deficits and weight-loss targets are blocked in pregnancy; RD referral.",
+    "status": "blocked",
+    "no_targets": true,
+    "required_rule_ids": ["COMBO.DEFICIT_BLOCKED"],
+    "required_blocks": ["GUARD.PREGNANCY"]
+  }
+}

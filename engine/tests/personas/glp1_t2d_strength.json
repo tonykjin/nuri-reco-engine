@@ -1,0 +1,47 @@
+{
+  "profile": {
+    "age": 52,
+    "sex": "female",
+    "height_cm": 165,
+    "weight_kg": 98,
+    "body_fat_pct": null,
+    "activity": "light",
+    "training": {
+      "resistance": true,
+      "weekly_schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": false,
+      "ckd_stage": null,
+      "medications": ["glp1_agonist", "metformin"],
+      "scoff_score": 0
+    }
+  },
+  "goals": [
+    { "type": "glp1", "priority": 1 },
+    { "type": "t2d", "priority": 2 },
+    { "type": "strength_hybrid", "priority": 3 }
+  ],
+  "constraints": { "allergens": [], "diet": null, "religious": [] },
+  "preferences": {},
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #6 / 4.2 / 7b.2: PRD stacking example, RD-gated. Medical floors: GLP-1 protein >= 25 and micronutrients >= 20; T2D carb >= 20 and fiber >= 20.",
+    "status": "rd_review",
+    "required_rule_ids": ["COMBO.GLP1_T2D_STRENGTH", "GUARD.CONDITION_GOALS"],
+    "loam_score_weight_minimums": {
+      "protein": 25,
+      "micro": 20,
+      "carb": 20,
+      "fiber": 20
+    }
+  }
+}
