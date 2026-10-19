@@ -1,0 +1,46 @@
+{
+  "profile": {
+    "age": 34,
+    "sex": "male",
+    "height_cm": 178,
+    "weight_kg": 92,
+    "body_fat_pct": null,
+    "activity": "light",
+    "training": {
+      "resistance": true,
+      "weekly_schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": false,
+      "ckd_stage": null,
+      "medications": [],
+      "scoff_score": 0
+    }
+  },
+  "goals": [
+    { "type": "lose_fat", "priority": 1 },
+    { "type": "build_muscle", "priority": 2 }
+  ],
+  "constraints": { "allergens": [], "diet": null, "religious": [] },
+  "preferences": {},
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #2 / 4.2: overweight (BMI 29.0) beginner lifter, lose fat + build muscle resolves to recomp, deficit 0-20%.",
+    "status": "ok",
+    "phases": [
+      {
+        "energy": ["deficit"],
+        "targets": { "deficit_pct_tdee": { "min": 0, "max": 20 } }
+      }
+    ],
+    "required_rule_ids": ["COMBO.LOSEFAT_MUSCLE", "GOAL.RECOMP.ENERGY"]
+  }
+}

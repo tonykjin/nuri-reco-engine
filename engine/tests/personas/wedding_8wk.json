@@ -1,0 +1,55 @@
+{
+  "profile": {
+    "age": 29,
+    "sex": "female",
+    "height_cm": 165,
+    "weight_kg": 72,
+    "body_fat_pct": null,
+    "activity": "light",
+    "training": {
+      "resistance": false,
+      "weekly_schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": false,
+      "ckd_stage": null,
+      "medications": [],
+      "scoff_score": 0
+    }
+  },
+  "goals": [
+    { "type": "lose_fat", "priority": 1, "target_weight_kg": 63 },
+    {
+      "type": "deadline_event",
+      "priority": 2,
+      "event": "wedding",
+      "event_date": "2026-12-11"
+    }
+  ],
+  "constraints": { "allergens": [], "diet": null, "religious": [] },
+  "preferences": {},
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #4 / 4.4: -9 kg in 8 weeks from 72 kg needs ≈1.56% BW/week; BMI 26.4 caps it at 0.75% (even the top band is 1.0%), so the plan is clamped. Goal BMI 23.1 is not blocked.",
+    "status": "clamped",
+    "phases": [{ "energy": ["deficit"] }],
+    "feasibility": {
+      "status": "clamped",
+      "projected_kg_present": true,
+      "reachable_date_present": true
+    },
+    "required_rule_ids": [
+      "FEAS.DEADLINE",
+      "GUARD.MAX_LOSS_RATE",
+      "COMBO.LOSEFAT_DEADLINE"
+    ]
+  }
+}

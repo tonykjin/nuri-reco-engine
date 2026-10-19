@@ -1,0 +1,116 @@
+{
+  "profile": {
+    "age": 31,
+    "sex": "female",
+    "height_cm": 168,
+    "weight_kg": 72,
+    "body_fat_pct": null,
+    "activity": "moderate",
+    "training": {
+      "resistance": true,
+      "weekly_schedule": [
+        "rest",
+        "easy",
+        "quality",
+        "rest",
+        "easy",
+        "long",
+        "rest"
+      ]
+    },
+    "flags": {
+      "pregnant": false,
+      "ckd_stage": null,
+      "medications": [],
+      "scoff_score": 0
+    }
+  },
+  "goals": [
+    { "type": "lose_fat", "priority": 1, "target_weight_kg": 66 },
+    {
+      "type": "endurance_event",
+      "priority": 2,
+      "event": "marathon",
+      "event_date": "2027-04-18"
+    }
+  ],
+  "constraints": {
+    "allergens": ["peanuts"],
+    "diet": "pescatarian",
+    "religious": []
+  },
+  "preferences": {
+    "taste": { "sweetness": 0.3, "richness": 0.6, "umami": 0.8 },
+    "dislikes": ["cottage cheese"],
+    "cook_time_min": 30,
+    "budget": "medium",
+    "cuisines": ["mediterranean", "japanese"]
+  },
+  "as_of": "2026-10-16",
+  "expect": {
+    "notes": "Spec 11.2 #3 / 4.2 / 7b.5. Request is the spec §10 example verbatim: race is 26 weeks out (11.2 says 16; the §10 and 7b.6 dates win), so base runs 2026-10-16 to 2026-12-27 and peak starts 2027-03-07.",
+    "status": "ok",
+    "phases": [
+      { "name": "base", "energy": ["deficit"] },
+      { "name": "peak", "energy": ["maintenance", "surplus"] },
+      { "name": "taper", "energy": ["maintenance", "surplus"] },
+      { "name": "race_week", "energy": ["maintenance", "surplus"] }
+    ],
+    "deficit_only_in": ["base"],
+    "required_rule_ids": [
+      "COMBO.LOSEFAT_ENDURANCE",
+      "PHASE.BASE",
+      "PHASE.PEAK"
+    ],
+    "loam_score_weights": [
+      {
+        "phase": "base",
+        "weights": {
+          "energy": 20,
+          "protein": 20,
+          "carb": 13,
+          "fiber": 13,
+          "micro": 13,
+          "pattern": 13,
+          "moderation": 8
+        }
+      },
+      {
+        "phase": "peak",
+        "weights": {
+          "energy": 20,
+          "protein": 20,
+          "carb": 17,
+          "fiber": 12,
+          "micro": 12,
+          "pattern": 12,
+          "moderation": 7
+        }
+      },
+      {
+        "phase": "taper",
+        "weights": {
+          "energy": 20,
+          "protein": 20,
+          "carb": 17,
+          "fiber": 12,
+          "micro": 12,
+          "pattern": 12,
+          "moderation": 7
+        }
+      },
+      {
+        "phase": "race_week",
+        "weights": {
+          "energy": 20,
+          "protein": 20,
+          "carb": 17,
+          "fiber": 12,
+          "micro": 12,
+          "pattern": 12,
+          "moderation": 7
+        }
+      }
+    ]
+  }
+}
