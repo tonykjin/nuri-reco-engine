@@ -30,7 +30,7 @@
   "preferences": {},
   "as_of": "2026-10-16",
   "expect": {
-    "notes": "Spec 11.2 #1 / 7b.5: PRD example ≈1,800 kcal / 140 P / 185 C / 55 F. Lifts, so protein is 2.0 g/kg (spec §14 Q1).",
+    "notes": "Spec 11.2 #1 / 7b.5: PRD example ≈1,800 kcal / 140 P / 185 C / 55 F. Lifts, so protein is 2.0 g/kg (spec §14 Q1). The engine gives 1,845 / 140 / 194 / 56: the Matrix F 0.5%/week cap (BMI 24.8) limits the deficit to ≈385 kcal, so carbs sit +5% vs the PRD (agreed: safety wins).",
     "status": "ok",
     "phases": [
       {

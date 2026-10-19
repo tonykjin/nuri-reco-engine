@@ -20,6 +20,8 @@ RULE_FILES = [
     "patterns.yaml",
     "food_weights.yaml",
     "guardrails.yaml",
+    "targets.yaml",
+    "micronutrients.yaml",
 ]
 ID_RE = re.compile(r"^[A-Z0-9_]+(\.[A-Z0-9_]+)+$")
 NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
