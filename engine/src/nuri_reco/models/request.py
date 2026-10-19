@@ -16,10 +16,17 @@ class Training(StrictModel):
 
 
 class Flags(StrictModel):
+    """Safety inputs for Matrix F. Medication and condition ids are defined in guardrails.yaml."""
+
     pregnant: bool = False
+    breastfeeding: bool = False
     ckd_stage: int | None = Field(default=None, ge=1, le=5)
     medications: list[str] = Field(default_factory=list)
+    conditions: list[str] = Field(default_factory=list)
     scoff_score: int | None = Field(default=None, ge=0, le=5)
+    ed_history: bool = False
+    # Self-reported, e.g. missed_periods, stress_fractures, persistent_fatigue.
+    reported_symptoms: list[str] = Field(default_factory=list)
 
 
 class Profile(StrictModel):
