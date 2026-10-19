@@ -20,7 +20,7 @@ class SafetyFinding(Recommended):
 
 
 class Referral(SafetyFinding):
-    to: str
+    to: list[str] = Field(min_length=1)
 
 
 class Safety(StrictModel):
