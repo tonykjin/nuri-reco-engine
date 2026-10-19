@@ -1,0 +1,8 @@
+spec_section: "8"
+guardrails:
+  - id: GUARD.CKD
+    citation_ids: []
+    verify: false
+    heuristic: false
+    protein_cap_g_per_kg:
+      with_diabetes: { min: 0.8, max: 0.6 }

@@ -1,0 +1,6 @@
+spec_section: "8"
+guardrails:
+  - id: GUARD.CALORIE_FLOOR
+    citation_ids: [XXX]
+    verify: false
+    heuristic: false

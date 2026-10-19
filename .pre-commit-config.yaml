@@ -9,4 +9,5 @@ repos:
     rev: v3.9.10
     hooks:
       - id: prettier
-        exclude: ^(CLAUDE\.md|.*package-lock\.json)$
+        # kb_broken/ holds deliberately invalid YAML for the loader tests.
+        exclude: ^(CLAUDE\.md|.*package-lock\.json|engine/tests/fixtures/kb_broken/.*)$

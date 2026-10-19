@@ -1,0 +1,7 @@
+# Top-level keys are fixed per file; a typo must not be silently ignored.
+spec_section: "8"
+guardrail:
+  - id: GUARD.CALORIE_FLOOR
+    citation_ids: []
+    verify: false
+    heuristic: false

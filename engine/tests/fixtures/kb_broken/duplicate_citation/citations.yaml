@@ -1,0 +1,4 @@
+spec_section: "15"
+citations:
+  - { id: HELMS2014, label: "Helms et al. 2014", url: null, in_sources: true }
+  - { id: HELMS2014, label: "Helms et al. 2014 (again)", url: null, in_sources: true }
