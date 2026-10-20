@@ -1,0 +1,278 @@
+# Copy of knowledge/score_weights.yaml with LSW.ROW.WEIGHTLOSS moderation 10 -> 11 (sums to 101).
+# Matrix G: personal Loam Score profile. Source: spec §7b (7b.1 weight rows, 7b.2 stacking,
+# 7b.3 personal targets, 7b.4 top levers) and the Loam Score page §2-5. Row `text` is the spec
+# table row verbatim. The 7b.1 rows marked 🧪 and all of 7b.2 / 7b.4 are Loam heuristics.
+spec_section: "7b"
+
+# Weight keys, in display order.
+components: [energy, protein, carb, fiber, micro, pattern, moderation]
+
+rows:
+  - id: LSW.ROW.WELLNESS
+    goal_types: [maintain]
+    text: "Maintain / wellness | 10 | 10 | 5 | 15 | 20 | 25 | 15 | General wellness"
+    weights: { energy: 10, protein: 10, carb: 5, fiber: 15, micro: 20, pattern: 25, moderation: 15 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.WEIGHTLOSS
+    goal_types: [lose_fat]
+    text: "Lose fat | 20 | 20 | 5 | 15 | 15 | 15 | 10 | Weight loss"
+    weights: { energy: 20, protein: 20, carb: 5, fiber: 15, micro: 15, pattern: 15, moderation: 11 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.DEADLINE
+    goal_types: [deadline_event]
+    text: "Deadline event | 20 | 20 | 5 | 15 | 15 | 15 | 10 | = Weight loss"
+    weights: { energy: 20, protein: 20, carb: 5, fiber: 15, micro: 15, pattern: 15, moderation: 10 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.MUSCLEGAIN
+    goal_types: [build_muscle]
+    text: "Build muscle | 20 | 25 | 20 | 10 | 10 | 10 | 5 | Muscle gain"
+    weights: { energy: 20, protein: 25, carb: 20, fiber: 10, micro: 10, pattern: 10, moderation: 5 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.WEIGHTGAIN
+    goal_types: [gain_weight]
+    text: "Gain weight | 25 | 15 | 10 | 10 | 20 | 15 | 5 | Weight gain"
+    weights: { energy: 25, protein: 15, carb: 10, fiber: 10, micro: 20, pattern: 15, moderation: 5 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.ATHLETE
+    goal_types: [endurance_event]
+    text: "Endurance event | 20 | 20 | 25 | 10 | 10 | 10 | 5 | Athlete"
+    weights: { energy: 20, protein: 20, carb: 25, fiber: 10, micro: 10, pattern: 10, moderation: 5 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.T2D
+    goal_types: [t2d]
+    text: "T2D / prediabetes 🔒 | 10 | 10 | 20 | 20 | 15 | 15 | 10 | Type 2 diabetes"
+    weights: { energy: 10, protein: 10, carb: 20, fiber: 20, micro: 15, pattern: 15, moderation: 10 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.GLP1
+    goal_types: [glp1]
+    text: "GLP-1 🔒 | 15 | 25 | 5 | 15 | 20 | 10 | 10 | GLP-1 weight loss"
+    weights: { energy: 15, protein: 25, carb: 5, fiber: 15, micro: 20, pattern: 10, moderation: 10 }
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LSW.ROW.RECOMP
+    goal_types: [recomp]
+    text: "Recomp 🧪 | 20 | 22.5 | 12.5 | 12.5 | 12.5 | 12.5 | 7.5 | mean(weight loss, muscle gain)"
+    weights:
+      { energy: 20, protein: 22.5, carb: 12.5, fiber: 12.5, micro: 12.5, pattern: 12.5, moderation: 7.5 }
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: LSW.ROW.HYBRID
+    goal_types: [strength_hybrid]
+    text: "Strength / hybrid 🧪 | 20 | 22.5 | 22.5 | 10 | 10 | 10 | 5 | mean(athlete, muscle gain)"
+    weights: { energy: 20, protein: 22.5, carb: 22.5, fiber: 10, micro: 10, pattern: 10, moderation: 5 }
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: LSW.ROW.HYPERTENSION
+    goal_types: [hypertension]
+    text: "Hypertension / heart 🧪 | 10 | 10 | 5 | 15 | 25 | 10 | 25 | Wellness, moderation +10 (sodium), micronutrients +5 (potassium), pattern −15"
+    weights: { energy: 10, protein: 10, carb: 5, fiber: 15, micro: 25, pattern: 10, moderation: 25 }
+    citation_ids: [DASH_SODIUM]
+    verify: false
+    heuristic: true
+
+stacking:
+  id: LSW.STACK.0604
+  text: "Primary for scoring = the goal that holds the energy direction in the current phase (from Matrix B). weights = 0.6 × primary_row + 0.4 × mean(secondary_rows). With no secondary goals, weights = primary row. Weights are fixed per phase. Weights always sum to 100."
+  primary_share: 0.6
+  # Goals folded into a resolved primary don't also count as secondaries (recomp replaces
+  # lose fat + build muscle, or gain weight + lose fat).
+  merged_into: { recomp: [lose_fat, build_muscle, gain_weight] }
+  secondary_share: 0.4
+  total: 100
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+floors:
+  - id: LSW.FLOOR.T2D
+    goal_types: [t2d]
+    text: "T2D: carb/fueling ≥ 20 and fiber ≥ 20"
+    minimums: { carb: 20, fiber: 20 }
+    citation_ids: [ADA2026]
+    verify: false
+    heuristic: true
+  - id: LSW.FLOOR.GLP1
+    goal_types: [glp1]
+    text: "GLP-1: protein ≥ 25 and micronutrients ≥ 20"
+    minimums: { protein: 25, micro: 20 }
+    citation_ids: [GLP1_ADVISORY2025]
+    verify: false
+    heuristic: true
+  - id: LSW.FLOOR.HYPERTENSION
+    goal_types: [hypertension]
+    text: "hypertension: moderation ≥ 25"
+    minimums: { moderation: 25 }
+    citation_ids: [DASH_SODIUM]
+    verify: false
+    heuristic: true
+
+floor_rule:
+  id: LSW.FLOOR.RULE
+  text: "Medical floors: a condition goal can only raise its signature components, never have them blended down. After floors are applied, the other components are scaled proportionally so the total is 100."
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+floor_conflict:
+  id: LSW.FLOOR.CONFLICT
+  text: "When the medical floors alone add up to more than the total (T2D + GLP-1 + hypertension: 20 + 20 + 25 + 20 + 25 = 110), the floored components are scaled proportionally to fit and the others get no weight. These plans are RD-gated; the dietitian sets final weights."
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+priors:
+  id: LSW.PRIOR
+  text: "lever = weight × shortfall_prior, top 3 shown. Shortfall priors: fiber 0.9 · pattern/produce 0.6 · protein 0.6 (0.3 if the goal row's protein weight is ≤ 10) · energy 0.5 · micronutrients 0.5 · moderation 0.5 · carb/fueling 0.4"
+  priors: { fiber: 0.9, pattern: 0.6, protein: 0.6, energy: 0.5, micro: 0.5, moderation: 0.5, carb: 0.4 }
+  low_protein_prior: 0.3
+  low_protein_weight_max: 10
+  top_n: 3
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+levers:
+  id: LSW.LEVERS
+  text: "Each lever comes with one sentence from a template, e.g. \"Protein counts most for you: aim for about 35 g at each of 4 meals.\""
+  # `first` is used for the top lever, `next` for the others. Placeholders come from the
+  # phase's targets (rest-day values where they vary by day type), rounded for display.
+  templates:
+    energy:
+      first: "Hitting your energy target moves your score most: about {kcal} kcal a day."
+      next: "Staying close to about {kcal} kcal a day helps your score."
+    protein:
+      first: "Protein counts most for you: aim for about {protein_per_meal_g} g at each of {meals} meals."
+      next: "Protein helps too: about {protein_per_meal_g} g at each of {meals} meals."
+    carb:
+      first: "Fueling counts most for you: match your carbs to each day's training."
+      next: "Match your carbs to each day's training."
+    fiber:
+      first: "Fiber is your biggest lever: aim for {fiber_g} g a day."
+      next: "Fiber helps too: aim for {fiber_g} g a day."
+    micro:
+      first: "Nutrient-rich foods move your score most: vegetables, legumes, whole grains, and dairy or fortified alternatives."
+      next: "Mix in nutrient-rich foods like vegetables, legumes and whole grains."
+    pattern:
+      first: "Variety counts most for you: aim for {produce_g} g of fruit and vegetables a day."
+      next: "Aim for {produce_g} g of fruit and vegetables a day."
+    moderation:
+      first: "Easing off saturated fat, added sugar and salt moves your score most."
+      next: "Keep saturated fat, added sugar and salt in check."
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+component_targets:
+  - id: LS.ENERGY
+    why: "Staying close to your calorie target for the day supports your goal."
+    component: energy
+    score_type: range
+    text: "Energy fit | Target range | Phase × day-type kcal (Stage 4) ± 5% 🧪 | Targets engine"
+    tolerance_pct: 5
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: true
+  - id: LS.PROTEIN
+    why: "Enough protein, spread across meals, protects muscle and keeps you full."
+    component: protein
+    score_type: range
+    text: "Protein fit | Target range | Matrix A g/kg range × chosen weight basis; CKD cap overrides | Matrix A, F"
+    citation_ids: [LOAM_SCORE_PAGE]
+    verify: false
+    heuristic: false
+  - id: LS.CARB
+    why: "Carbs matched to your day give you energy where you need it."
+    component: carb
+    score_type: range
+    text: "Carb / fueling fit | Target range | Day-type g/kg (Matrix C) for training goals; otherwise the carb fill ± 10% 🧪; RD-set for T2D | Matrix C"
+    fill_tolerance_pct: 10
+    rd_set_goal_types: [t2d]
+    citation_ids: [ACSM2016]
+    verify: false
+    heuristic: true
+  - id: LS.FIBER
+    why: "Fiber keeps you full and supports digestion."
+    component: fiber
+    score_type: adequacy
+    text: "Fiber | Adequacy | MAX(25, 14 × E / 1000) g; GLP-1 users ramp up gradually | WHO; ADA"
+    # The amount itself comes from TARGETS.FIBER via the Stage 4 targets.
+    citation_ids: [WHO, ADA2026]
+    verify: false
+    heuristic: false
+  - id: LS.MICRO
+    why: "A steady supply of key vitamins and minerals across the week."
+    component: micro
+    score_type: adequacy
+    text: 'Micronutrients | Adequacy (avg of panel) | Iron, calcium, vitamin D, magnesium, potassium, B12, folate by age + sex (Loam Score §2). Vegan: B12 flagged "must supplement". CKD: potassium credit off, RD-gated | NIH ODS'
+    supplement_flags: [{ diet: vegan, nutrient: vitamin_b12, flag: must_supplement }]
+    ckd_disables: [{ nutrient: potassium, disabled_id: potassium_credit, reason: rd_gated }]
+    citation_ids: [NIH_ODS]
+    verify: false
+    heuristic: false
+  - id: LS.PATTERN
+    why: "A varied plate with plenty of fruit and vegetables."
+    component: pattern
+    score_type: pattern
+    text: "Pattern + diversity | Pattern metric + small bonus | Food groups of the selected diet pattern (Matrix D); produce ≥ 400 g/day; plant-diversity bonus kept small | WHO; American Gut"
+    produce_min_g_per_day: 400
+    citation_ids: [WHO]
+    verify: false
+    heuristic: false
+  - id: LS.SATFAT
+    why: "Less saturated fat, with unsaturated fats in its place, is better for your heart."
+    component: moderation
+    score_type: moderation
+    text: "Sat fat ≤ E × 0.10 / 9 g"
+    energy_share: 0.10
+    kcal_per_g: 9
+    citation_ids: [WHO]
+    verify: false
+    heuristic: false
+  - id: LS.FREESUGAR
+    why: "Keeping added and free sugars low leaves room for more filling foods."
+    component: moderation
+    score_type: moderation
+    text: "free sugar < E × 0.10 / 4 g"
+    energy_share: 0.10
+    kcal_per_g: 4
+    citation_ids: [WHO]
+    verify: false
+    heuristic: false
+  - id: LS.SODIUM
+    why: "Less salt supports healthy blood pressure."
+    component: moderation
+    score_type: moderation
+    text: "sodium ≤ 2,300 mg (1,500 mg if hypertension ⚠️ verify)"
+    max_mg: 2300
+    hypertension_max_mg: 1500
+    hypertension_goal_types: [hypertension]
+    citation_ids: [WHO, DRI]
+    verify: true
+    heuristic: false
+
+applies_to:
+  id: LS.APPLIES_TO
+  text: "meal goal fit uses energy portion, protein, carb/fueling, fiber and moderation; daily nourishment uses all components; weekly balance uses micronutrients and pattern + diversity"
+  meal: [energy, protein, carb, fiber, moderation]
+  day: [energy, protein, carb, fiber, micro, pattern, moderation]
+  week: [micro, pattern]
+  citation_ids: [LOAM_SCORE_PAGE]
+  verify: false
+  heuristic: false

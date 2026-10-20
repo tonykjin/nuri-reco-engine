@@ -128,6 +128,10 @@ class ScoreComponent(Recommended):
     type: str
     target: ScoreTarget
     applies_to: list[str] = Field(min_length=1)
+    # Which of the 7 weights this counts toward (moderation has several limits).
+    weight_key: str | None = None
+    # Set when the target varies by day type (energy, carbs, fiber, moderation).
+    day_type: DayType | None = None
 
 
 class MicronutrientTarget(StrictModel):
@@ -135,6 +139,8 @@ class MicronutrientTarget(StrictModel):
     target: float = Field(ge=0)
     unit: str
     window: str
+    # e.g. "must_supplement" (B12 for vegans, spec §7b.3).
+    flag: str | None = None
 
 
 class DisabledComponent(StrictModel):
@@ -144,7 +150,12 @@ class DisabledComponent(StrictModel):
 
 class PhaseScoreProfile(StrictModel):
     phase: str
+    # Goal holding the phase's energy direction (spec §7b.2 rule 1).
+    primary: str | None = None
+    # Whole numbers for display; weights_exact keeps full precision (spec §7b.2 rule 5).
     weights: dict[str, int]
+    weights_exact: dict[str, float] = Field(default_factory=dict)
+    weight_rule_ids: list[str] = Field(default_factory=list)
     components: list[ScoreComponent]
     micronutrients: list[MicronutrientTarget] = Field(default_factory=list)
     disabled: list[DisabledComponent] = Field(default_factory=list)
@@ -155,6 +166,9 @@ class PhaseScoreProfile(StrictModel):
         total = sum(self.weights.values())
         if total != 100:
             raise ValueError(f"score weights for phase {self.phase!r} sum to {total}, not 100")
+        exact = sum(self.weights_exact.values())
+        if self.weights_exact and abs(exact - 100) > 1e-6:
+            raise ValueError(f"exact weights for phase {self.phase!r} sum to {exact}, not 100")
         return self
 
 

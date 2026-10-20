@@ -185,6 +185,48 @@ class MicronutrientsFile(FileModel):
     nutrients: list[MicronutrientRule]
 
 
+class WeightRow(Rule):
+    goal_types: list[str] = Field(min_length=1)
+    weights: dict[str, float]
+
+
+class GoalTypesRule(Rule):
+    goal_types: list[str] = Field(min_length=1)
+
+
+class ComponentTargetRule(Rule):
+    component: str
+    score_type: str
+
+
+class ScoreWeightsFile(FileModel):
+    components: list[str] = Field(min_length=1)
+    rows: list[WeightRow]
+    stacking: Rule
+    floors: list[GoalTypesRule]
+    floor_rule: Rule
+    floor_conflict: Rule
+    priors: Rule
+    levers: Rule
+    component_targets: list[ComponentTargetRule]
+    applies_to: Rule
+
+    @model_validator(mode="after")
+    def _rows_complete(self) -> Self:
+        expected = set(self.components)
+        for row in self.rows:
+            if set(row.weights) != expected:
+                raise ValueError(f"{row.id}: weights must cover exactly {self.components}")
+            total = sum(row.weights.values())
+            if abs(total - 100) > 1e-9:
+                raise ValueError(f"{row.id}: weights sum to {total:g}, not 100")
+        for floor in self.floors:
+            unknown = set((floor.model_extra or {}).get("minimums", {})) - expected
+            if unknown:
+                raise ValueError(f"{floor.id}: unknown components {sorted(unknown)}")
+        return self
+
+
 FILE_MODELS: dict[str, type[FileModel]] = {
     "goals": GoalsFile,
     "combos": CombosFile,
@@ -195,6 +237,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "guardrails": GuardrailsFile,
     "targets": TargetsFile,
     "micronutrients": MicronutrientsFile,
+    "score_weights": ScoreWeightsFile,
     "citations": CitationsFile,
 }
 
@@ -211,6 +254,7 @@ class KnowledgeBase(BaseModel):
     guardrails: GuardrailsFile
     targets: TargetsFile
     micronutrients: MicronutrientsFile
+    score_weights: ScoreWeightsFile
     citations: CitationsFile
 
     def rules_by_file(self) -> dict[str, list[Rule]]:

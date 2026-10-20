@@ -63,6 +63,10 @@ def test_nested_rules_are_indexed() -> None:
         ("unknown_key", r"guardrails\.yaml:.*guardrail\s+Extra inputs are not permitted"),
         ("invalid_yaml", r"guardrails\.yaml: invalid YAML"),
         ("duplicate_citation", r"citations\.yaml: duplicate citation ids: HELMS2014"),
+        (
+            "weight_row_not_100",
+            r"score_weights\.yaml:.*LSW\.ROW\.WEIGHTLOSS: weights sum to 101, not 100",
+        ),
     ],
 )
 def test_broken_kb_fails_loudly(case: str, message: str, tmp_path: Path) -> None:
@@ -89,6 +93,7 @@ def test_every_broken_fixture_is_tested() -> None:
         "unknown_key",
         "invalid_yaml",
         "duplicate_citation",
+        "weight_row_not_100",
     }
     assert cases == tested
 
@@ -106,6 +111,7 @@ def test_cli_summary(capsys: pytest.CaptureFixture[str]) -> None:
         "guardrails",
         "targets",
         "micronutrients",
+        "score_weights",
     ]:
         assert f"{name}.yaml" in out
     assert "total" in out
