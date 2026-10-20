@@ -51,6 +51,7 @@ def spec_response() -> dict[str, Any]:
         ],
         "foods": [
             {
+                "key": "salmon_cooked",
                 "fdc_id": 175168,
                 "name": "Salmon, Atlantic",
                 "score": 0.91,

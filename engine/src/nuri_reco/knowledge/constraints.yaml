@@ -1,0 +1,85 @@
+# Constraint handling (spec §9). Hard constraints filter foods before any ranking; preference
+# models can never override them. Food tags come from engine/data/foods.json (allergens, diet).
+spec_section: "9"
+
+rules:
+  - id: CONSTRAINT.ALLERGENS
+    text: "Top-9 US allergens (milk, egg, fish, crustacean shellfish, tree nuts, peanuts, wheat, soy, sesame) | Hard | Ingredient-level exclusion incl. derived ingredients (whey/casein → milk, tahini → sesame); preference models can never override"
+    # User wording -> foods.json allergen tag. Unknown wording falls back to excluding foods whose
+    # description mentions it.
+    vocabulary:
+      milk: milk
+      dairy: milk
+      egg: egg
+      eggs: egg
+      fish: fish
+      shellfish: crustacean_shellfish
+      crustacean shellfish: crustacean_shellfish
+      crustaceans: crustacean_shellfish
+      shrimp: crustacean_shellfish
+      tree nuts: tree_nuts
+      tree_nuts: tree_nuts
+      nuts: tree_nuts
+      peanut: peanuts
+      peanuts: peanuts
+      wheat: wheat
+      soy: soy
+      soya: soy
+      sesame: sesame
+    citation_ids: [FDA_SESAME]
+    verify: false
+    heuristic: false
+  - id: CONSTRAINT.CELIAC
+    text: "Celiac | Hard | Wheat, barley, rye, non-certified oats"
+    requires_diet_tag: gluten_free
+    # Allergen entries that mean celiac too.
+    allergen_aliases: [gluten, celiac]
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: CONSTRAINT.ETHICAL
+    text: "Ethical (vegan, vegetarian, pescatarian) | Hard | Plus nutrient-gap compensation (B12, leucine blending)"
+    diet_tags:
+      { vegan: vegan, vegetarian: vegetarian, pescatarian: pescatarian }
+    citation_ids: []
+    verify: false
+    heuristic: false
+  - id: CONSTRAINT.RELIGIOUS
+    text: "Religious (halal, kosher, Hindu vegetarian, Jain) incl. time-bound (Ramadan, Lent) | Hard, user-set | Tag-based; time windows for fasting periods"
+    # Food-level rules only. Slaughter certification, meat-and-dairy mixing (a meal-level rule)
+    # and time-bound fasts are deferred.
+    rules:
+      halal:
+        exclude_keywords:
+          [pork, ham, bacon, pepperoni, salami, chorizo, lard, gelatin]
+      kosher:
+        exclude_keywords:
+          [pork, ham, bacon, pepperoni, salami, chorizo, lard, gelatin]
+        exclude_groups: [shellfish]
+      hindu_vegetarian:
+        require_diet_tag: vegetarian
+        exclude_allergens: [egg]
+      jain:
+        require_diet_tag: vegetarian
+        exclude_allergens: [egg]
+        exclude_keywords:
+          [
+            honey,
+            potato,
+            onion,
+            garlic,
+            carrot,
+            beet,
+            radish,
+            ginger,
+            turnip,
+            parsnip,
+            leek,
+            shallot,
+            scallion,
+            rutabaga,
+            sweet potato,
+          ]
+    citation_ids: []
+    verify: true
+    heuristic: true
