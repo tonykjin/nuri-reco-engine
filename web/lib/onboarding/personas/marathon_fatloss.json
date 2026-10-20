@@ -1,0 +1,79 @@
+{
+  "as_of": "2026-10-16",
+  "answers": {
+    "firstName": "Ana",
+    "goals": [
+      "lose_fat",
+      "event"
+    ],
+    "ranking": [
+      "lose_fat",
+      "endurance_event"
+    ],
+    "goalDetails": {
+      "lose_fat": {
+        "targetWeight": 66
+      },
+      "endurance_event": {
+        "event": "marathon",
+        "eventDate": "2027-04-18"
+      }
+    },
+    "units": "metric",
+    "sex": "female",
+    "birthDate": "1995-06-30",
+    "weight": 72,
+    "heightCm": 168,
+    "heightFt": null,
+    "heightIn": null,
+    "bodyFatPct": null,
+    "activity": "on_feet_often",
+    "training": {
+      "type": "mixed",
+      "daysPerWeek": 4,
+      "schedule": [
+        "rest",
+        "easy",
+        "quality",
+        "rest",
+        "easy",
+        "long",
+        "rest"
+      ],
+      "experience": null
+    },
+    "health": {
+      "pregnancy": "no",
+      "ckdStage": null,
+      "medications": [],
+      "conditions": [],
+      "scoff": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    "eatingStyle": "pescatarian",
+    "allergens": [
+      "peanuts"
+    ],
+    "religious": [],
+    "dislikes": [
+      "cottage cheese"
+    ],
+    "taste": {
+      "sweetness": 0.3,
+      "richness": 0.6,
+      "umami": 0.8
+    },
+    "cuisines": [
+      "mediterranean",
+      "japanese"
+    ],
+    "cookTimeMin": 30,
+    "budget": "medium",
+    "pace": null
+  }
+}

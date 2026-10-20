@@ -116,6 +116,15 @@ def test_persona_is_valid(name: str) -> None:
 
 
 @pytest.mark.parametrize("name", PERSONA_NAMES)
+def test_persona_request_is_written_in_full(name: str) -> None:
+    # Every field is explicit, so the web mapper's fixtures can deep-equal the request
+    # (web/lib/onboarding/mapAnswers.test.ts).
+    raw: dict[str, Any] = json.loads((PERSONAS / f"{name}.json").read_text(encoding="utf-8"))
+    raw.pop("expect")
+    assert raw == PlanRequest.model_validate(raw).model_dump(mode="json")
+
+
+@pytest.mark.parametrize("name", PERSONA_NAMES)
 def test_persona_expectations_reference_real_rules(name: str) -> None:
     _, expect = load_persona(name)
     kb = load_kb()

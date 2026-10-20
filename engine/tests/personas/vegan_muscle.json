@@ -16,23 +16,54 @@
         "rest",
         "rest",
         "rest"
-      ]
+      ],
+      "experience": null
     },
     "flags": {
       "pregnant": false,
+      "breastfeeding": false,
       "ckd_stage": null,
       "medications": [],
-      "scoff_score": 0
+      "conditions": [],
+      "scoff_score": 0,
+      "ed_history": false,
+      "reported_symptoms": []
     }
   },
-  "goals": [{ "type": "build_muscle", "priority": 1 }],
-  "constraints": { "allergens": [], "diet": "vegan", "religious": [] },
-  "preferences": {},
+  "goals": [
+    {
+      "type": "build_muscle",
+      "priority": 1,
+      "target_weight_kg": null,
+      "event": null,
+      "event_date": null,
+      "rate_pct_bw_week": null
+    }
+  ],
+  "constraints": {
+    "allergens": [],
+    "diet": "vegan",
+    "religious": [],
+    "celiac": false
+  },
+  "preferences": {
+    "taste": {},
+    "dislikes": [],
+    "cook_time_min": null,
+    "budget": null,
+    "cuisines": [],
+    "pattern_pref": null
+  },
   "as_of": "2026-10-16",
+  "sequence_confirmed": false,
   "expect": {
     "notes": "Spec 11.2 #7 / 4.2: build muscle + vegan. Upper protein range, leucine blending, B12 mandatory.",
     "status": "ok",
-    "phases": [{ "energy": ["surplus"] }],
+    "phases": [
+      {
+        "energy": ["surplus"]
+      }
+    ],
     "required_rule_ids": [
       "COMBO.MUSCLE_VEGAN",
       "COMBO.MUSCLE_VEGAN.UPPER_PROTEIN",

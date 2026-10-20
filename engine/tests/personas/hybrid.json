@@ -16,19 +16,46 @@
         "quality",
         "long",
         "easy"
-      ]
+      ],
+      "experience": null
     },
     "flags": {
       "pregnant": false,
+      "breastfeeding": false,
       "ckd_stage": null,
       "medications": [],
-      "scoff_score": 0
+      "conditions": [],
+      "scoff_score": 0,
+      "ed_history": false,
+      "reported_symptoms": []
     }
   },
-  "goals": [{ "type": "strength_hybrid", "priority": 1 }],
-  "constraints": { "allergens": [], "diet": null, "religious": [] },
-  "preferences": {},
+  "goals": [
+    {
+      "type": "strength_hybrid",
+      "priority": 1,
+      "target_weight_kg": null,
+      "event": null,
+      "event_date": null,
+      "rate_pct_bw_week": null
+    }
+  ],
+  "constraints": {
+    "allergens": [],
+    "diet": null,
+    "religious": [],
+    "celiac": false
+  },
+  "preferences": {
+    "taste": {},
+    "dislikes": [],
+    "cook_time_min": null,
+    "budget": null,
+    "cuisines": [],
+    "pattern_pref": null
+  },
   "as_of": "2026-10-16",
+  "sequence_confirmed": false,
   "expect": {
     "notes": "Spec 11.2 #5: strength + endurance at maintenance, carbs by day type (Matrix C g/kg).",
     "status": "ok",
@@ -36,10 +63,30 @@
       {
         "energy": ["maintenance"],
         "targets_by_day_type": {
-          "rest": { "carb_g_per_kg": { "min": 3, "max": 5 } },
-          "easy": { "carb_g_per_kg": { "min": 5, "max": 7 } },
-          "quality": { "carb_g_per_kg": { "min": 6, "max": 10 } },
-          "long": { "carb_g_per_kg": { "min": 6, "max": 10 } }
+          "rest": {
+            "carb_g_per_kg": {
+              "min": 3,
+              "max": 5
+            }
+          },
+          "easy": {
+            "carb_g_per_kg": {
+              "min": 5,
+              "max": 7
+            }
+          },
+          "quality": {
+            "carb_g_per_kg": {
+              "min": 6,
+              "max": 10
+            }
+          },
+          "long": {
+            "carb_g_per_kg": {
+              "min": 6,
+              "max": 10
+            }
+          }
         }
       }
     ],
