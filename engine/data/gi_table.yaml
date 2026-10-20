@@ -1,0 +1,417 @@
+# Hand-curated glycemic index table (glucose = 100) for build_foods.py. Spec §7.1: GI/GL from a curated
+# table; GI varies with ripeness and preparation. Values were entered from the International Tables of
+# Glycemic Index (Atkinson et al.) and have NOT yet been checked line by line against the papers, so
+# every row is verify: true (agreed 2026-10-19). GL is computed per 100 g as GI x available carbs / 100.
+sources:
+  ATKINSON2008: "Atkinson FS, Foster-Powell K, Brand-Miller JC. International tables of glycemic index and glycemic load values: 2008. Diabetes Care 2008;31(12):2281-2283 (supplementary tables)."
+  ATKINSON2021: "Atkinson FS, Brand-Miller JC, Foster-Powell K, Buyken AE, Goletzke J. International tables of glycemic index and glycemic load values 2021: a systematic review. Am J Clin Nutr 2021;114(5):1625-1632."
+
+rows:
+  - {
+      key: rice_white_cooked,
+      gi: 73,
+      source: ATKINSON2021,
+      verify: true,
+      note: "white rice, boiled",
+    }
+  - {
+      key: rice_brown_cooked,
+      gi: 68,
+      source: ATKINSON2021,
+      verify: true,
+      note: "brown rice, boiled",
+    }
+  - {
+      key: pasta_cooked,
+      gi: 49,
+      source: ATKINSON2008,
+      verify: true,
+      note: "spaghetti, white, boiled",
+    }
+  - {
+      key: pasta_whole_wheat_cooked,
+      gi: 48,
+      source: ATKINSON2008,
+      verify: true,
+      note: "spaghetti, wholemeal, boiled",
+    }
+  - {
+      key: oatmeal_cooked,
+      gi: 55,
+      source: ATKINSON2008,
+      verify: true,
+      note: "porridge, rolled oats",
+    }
+  - {
+      key: oats_instant_prepared,
+      gi: 79,
+      source: ATKINSON2008,
+      verify: true,
+      note: "instant oat porridge",
+    }
+  - {
+      key: potato_boiled,
+      gi: 78,
+      source: ATKINSON2008,
+      verify: true,
+      note: "potato, boiled",
+    }
+  - {
+      key: potato_baked,
+      gi: 85,
+      source: ATKINSON2008,
+      verify: true,
+      note: "potato, baked",
+    }
+  - {
+      key: quinoa_cooked,
+      gi: 53,
+      source: ATKINSON2021,
+      verify: true,
+      note: "quinoa, boiled",
+    }
+  - {
+      key: bulgur_cooked,
+      gi: 47,
+      source: ATKINSON2008,
+      verify: true,
+      note: "bulgur, boiled",
+    }
+  - {
+      key: barley_pearled_cooked,
+      gi: 28,
+      source: ATKINSON2008,
+      verify: true,
+      note: "pearled barley, boiled",
+    }
+  - {
+      key: couscous_cooked,
+      gi: 65,
+      source: ATKINSON2008,
+      verify: true,
+      note: "couscous",
+    }
+  - {
+      key: lentils_cooked,
+      gi: 32,
+      source: ATKINSON2008,
+      verify: true,
+      note: "lentils",
+    }
+  - {
+      key: chickpeas_cooked,
+      gi: 28,
+      source: ATKINSON2008,
+      verify: true,
+      note: "chickpeas",
+    }
+  - {
+      key: black_beans_cooked,
+      gi: 30,
+      source: ATKINSON2008,
+      verify: true,
+      note: "black beans",
+    }
+  - {
+      key: kidney_beans_cooked,
+      gi: 24,
+      source: ATKINSON2008,
+      verify: true,
+      note: "kidney beans",
+    }
+  - {
+      key: corn_flakes,
+      gi: 81,
+      source: ATKINSON2008,
+      verify: true,
+      note: "cornflakes",
+    }
+  - {
+      key: bread_white_commercially_prepared,
+      gi: 75,
+      source: ATKINSON2008,
+      verify: true,
+      note: "white wheat bread",
+    }
+  - {
+      key: bread_white_commercial,
+      gi: 75,
+      source: ATKINSON2008,
+      verify: true,
+      note: "white wheat bread",
+    }
+  - {
+      key: white_bread_sr,
+      gi: 75,
+      source: ATKINSON2008,
+      verify: true,
+      note: "white wheat bread",
+    }
+  - {
+      key: bread_whole_wheat_commercially_prepared,
+      gi: 74,
+      source: ATKINSON2008,
+      verify: true,
+      note: "whole wheat bread",
+    }
+  - {
+      key: bread_100_whole_wheat_commercial,
+      gi: 74,
+      source: ATKINSON2008,
+      verify: true,
+      note: "whole wheat bread",
+    }
+  - {
+      key: bagel_plain,
+      gi: 69,
+      source: ATKINSON2008,
+      verify: true,
+      note: "white bagel",
+    }
+  - {
+      key: rice_cakes,
+      gi: 82,
+      source: ATKINSON2008,
+      verify: true,
+      note: "puffed rice cakes",
+    }
+  - {
+      key: popcorn_air_popped,
+      gi: 65,
+      source: ATKINSON2008,
+      verify: true,
+      note: "popcorn",
+    }
+  - {
+      key: pretzels,
+      gi: 83,
+      source: ATKINSON2008,
+      verify: true,
+      note: "pretzels",
+    }
+  - {
+      key: saltine_crackers,
+      gi: 74,
+      source: ATKINSON2008,
+      verify: true,
+      note: "soda crackers",
+    }
+  - { key: honey, gi: 61, source: ATKINSON2008, verify: true, note: "honey" }
+  - {
+      key: sugars_granulated,
+      gi: 65,
+      source: ATKINSON2008,
+      verify: true,
+      note: "sucrose",
+    }
+  - {
+      key: dates_medjool,
+      gi: 42,
+      source: ATKINSON2008,
+      verify: true,
+      note: "dates",
+    }
+  - {
+      key: dates_deglet_noor,
+      gi: 42,
+      source: ATKINSON2008,
+      verify: true,
+      note: "dates",
+    }
+  - {
+      key: raisins,
+      gi: 64,
+      source: ATKINSON2008,
+      verify: true,
+      note: "raisins",
+    }
+  - {
+      key: bananas_ripe_and_slightly_ripe_raw,
+      gi: 51,
+      source: ATKINSON2008,
+      verify: true,
+      note: "banana, ripe",
+    }
+  - {
+      key: apple,
+      gi: 36,
+      source: ATKINSON2008,
+      verify: true,
+      note: "apple, raw",
+    }
+  - {
+      key: apples_gala_with_skin_raw,
+      gi: 36,
+      source: ATKINSON2008,
+      verify: true,
+      note: "apple, raw",
+    }
+  - {
+      key: apples_fuji_with_skin_raw,
+      gi: 36,
+      source: ATKINSON2008,
+      verify: true,
+      note: "apple, raw",
+    }
+  - {
+      key: apples_honeycrisp_with_skin_raw,
+      gi: 36,
+      source: ATKINSON2008,
+      verify: true,
+      note: "apple, raw",
+    }
+  - {
+      key: apples_granny_smith_with_skin_raw,
+      gi: 36,
+      source: ATKINSON2008,
+      verify: true,
+      note: "apple, raw",
+    }
+  - {
+      key: apples_red_delicious_with_skin_raw,
+      gi: 36,
+      source: ATKINSON2008,
+      verify: true,
+      note: "apple, raw",
+    }
+  - {
+      key: orange,
+      gi: 43,
+      source: ATKINSON2008,
+      verify: true,
+      note: "orange, raw",
+    }
+  - {
+      key: oranges_raw_navels,
+      gi: 43,
+      source: ATKINSON2008,
+      verify: true,
+      note: "orange, raw",
+    }
+  - {
+      key: grapes_red_seedless_raw,
+      gi: 59,
+      source: ATKINSON2008,
+      verify: true,
+      note: "grapes",
+    }
+  - {
+      key: grapes_green_seedless_raw,
+      gi: 59,
+      source: ATKINSON2008,
+      verify: true,
+      note: "grapes",
+    }
+  - {
+      key: strawberries,
+      gi: 40,
+      source: ATKINSON2008,
+      verify: true,
+      note: "strawberries, fresh",
+    }
+  - {
+      key: watermelon,
+      gi: 76,
+      source: ATKINSON2008,
+      verify: true,
+      note: "watermelon",
+    }
+  - {
+      key: watermelon_seedless_flesh_only_raw,
+      gi: 76,
+      source: ATKINSON2008,
+      verify: true,
+      note: "watermelon",
+    }
+  - {
+      key: pineapple,
+      gi: 59,
+      source: ATKINSON2008,
+      verify: true,
+      note: "pineapple",
+    }
+  - {
+      key: pineapple_raw,
+      gi: 59,
+      source: ATKINSON2008,
+      verify: true,
+      note: "pineapple",
+    }
+  - {
+      key: mango_tommy_atkins_peeled_raw,
+      gi: 51,
+      source: ATKINSON2008,
+      verify: true,
+      note: "mango",
+    }
+  - {
+      key: carrots_boiled,
+      gi: 39,
+      source: ATKINSON2008,
+      verify: true,
+      note: "carrots, boiled",
+    }
+  - {
+      key: corn_boiled,
+      gi: 52,
+      source: ATKINSON2008,
+      verify: true,
+      note: "sweet corn, boiled",
+    }
+  - {
+      key: peas_boiled,
+      gi: 51,
+      source: ATKINSON2008,
+      verify: true,
+      note: "green peas",
+    }
+  - {
+      key: milk_whole_3_25_milkfat_with_added_vitamin_d,
+      gi: 39,
+      source: ATKINSON2008,
+      verify: true,
+      note: "full-fat milk",
+    }
+  - {
+      key: milk_nonfat_fluid_with_added_vitamin_a_and_vitamin_d_fat_fre,
+      gi: 37,
+      source: ATKINSON2008,
+      verify: true,
+      note: "skim milk",
+    }
+  - {
+      key: ice_cream_vanilla,
+      gi: 51,
+      source: ATKINSON2008,
+      verify: true,
+      note: "ice cream, regular",
+    }
+  - {
+      key: soymilk,
+      gi: 34,
+      source: ATKINSON2008,
+      verify: true,
+      note: "soy milk",
+    }
+  - {
+      key: sports_drink,
+      gi: 78,
+      source: ATKINSON2008,
+      verify: true,
+      note: "Gatorade",
+    }
+  - { key: cola, gi: 63, source: ATKINSON2008, verify: true, note: "cola" }
+  - {
+      key: doughnut,
+      gi: 76,
+      source: ATKINSON2008,
+      verify: true,
+      note: "doughnut, cake type",
+    }
+  - {
+      key: potato_chips,
+      gi: 56,
+      source: ATKINSON2008,
+      verify: true,
+      note: "potato crisps",
+    }

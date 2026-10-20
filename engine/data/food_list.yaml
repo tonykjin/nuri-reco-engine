@@ -1,0 +1,2949 @@
+# Curated food list for build_foods.py (runbook Task 12). Each food points at a USDA FoodData Central
+# record: Foundation (preferred), SR Legacy, or a Branded product fetched from the FDC API where the
+# spec 7.3 food isn't in either (energy gel, sport chews, skyr). `nova` is hand-tagged (1 unprocessed
+# ... 4 ultra-processed). `contains` adds allergens a name can't reveal (composite foods); other
+# allergens come from keyword rules in allergens.yaml. `gluten_free: false` overrides the rules.
+# `fallback_fdc_id` (Foundation foods): an SR Legacy record for the same food; any nutrient the
+# Foundation record doesn't report is taken from it (foods.json lists which in nutrient_sources).
+datasets:
+  foundation: FoodData_Central_foundation_food_csv_2026-04-30
+  sr_legacy: FoodData_Central_sr_legacy_food_csv_2018-04
+
+foods:
+  - key: dressing_ranch
+    fdc_id: 2758988
+    source: foundation
+    fallback_fdc_id: 173592
+    description: "Dressing, Ranch"
+    group: condiments
+    nova: 4
+    contains: [milk, egg]
+  - key: mayonnaise_regular
+    fdc_id: 2758986
+    source: foundation
+    fallback_fdc_id: 171009
+    description: "Mayonnaise, Regular"
+    group: condiments
+    nova: 4
+  - key: mustard_prepared_yellow
+    fdc_id: 326698
+    source: foundation
+    fallback_fdc_id: 172234
+    description: "Mustard, prepared, yellow"
+    group: condiments
+    nova: 3
+  - key: salad_dressing_italian_dressing_commercial_regular
+    fdc_id: 2758987
+    source: foundation
+    fallback_fdc_id: 171019
+    description: "Salad dressing, Italian dressing, commercial, regular"
+    group: condiments
+    nova: 4
+  - key: sauce_pasta_spaghetti_marinara_ready_to_serve
+    fdc_id: 332282
+    source: foundation
+    fallback_fdc_id: 171192
+    description: "Sauce, pasta, spaghetti/marinara, ready-to-serve"
+    group: condiments
+    nova: 4
+  - key: sauce_salsa_ready_to_serve
+    fdc_id: 746777
+    source: foundation
+    fallback_fdc_id: 174524
+    description: "Sauce, salsa, ready-to-serve"
+    group: condiments
+    nova: 3
+  - key: tomato_sauce_canned_with_salt_added
+    fdc_id: 2685579
+    source: foundation
+    fallback_fdc_id: 170054
+    description: "Tomato, sauce, canned, with salt added"
+    group: condiments
+    nova: 3
+  - key: butter_stick_salted
+    fdc_id: 790508
+    source: foundation
+    fallback_fdc_id: 173410
+    description: "Butter, stick, salted"
+    group: dairy
+    nova: 2
+  - key: butter_stick_unsalted
+    fdc_id: 789828
+    source: foundation
+    fallback_fdc_id: 173430
+    description: "Butter, stick, unsalted"
+    group: dairy
+    nova: 2
+  - key: buttermilk_low_fat
+    fdc_id: 2259792
+    source: foundation
+    fallback_fdc_id: 170874
+    description: "Buttermilk, low fat"
+    group: dairy
+    nova: 1
+  - key: cheese_cheddar
+    fdc_id: 328637
+    source: foundation
+    fallback_fdc_id: 173414
+    description: "Cheese, cheddar"
+    group: dairy
+    nova: 3
+  - key: cheese_cottage_lowfat_2_milkfat
+    fdc_id: 328841
+    source: foundation
+    fallback_fdc_id: 172182
+    description: "Cheese, cottage, lowfat, 2% milkfat"
+    group: dairy
+    nova: 3
+  - key: cheese_feta_whole_milk_crumbled
+    fdc_id: 2259796
+    source: foundation
+    fallback_fdc_id: 173420
+    description: "Cheese, feta, whole milk, crumbled"
+    group: dairy
+    nova: 3
+  - key: cheese_monterey_jack_solid
+    fdc_id: 2647438
+    source: foundation
+    fallback_fdc_id: 170844
+    description: "Cheese, monterey jack, solid"
+    group: dairy
+    nova: 3
+  - key: cheese_mozzarella_low_moisture_part_skim
+    fdc_id: 329370
+    source: foundation
+    fallback_fdc_id: 171244
+    description: "Cheese, mozzarella, low moisture, part-skim"
+    group: dairy
+    nova: 3
+  - key: cheese_parmesan_grated
+    fdc_id: 325036
+    source: foundation
+    fallback_fdc_id: 171247
+    description: "Cheese, parmesan, grated"
+    group: dairy
+    nova: 3
+  - key: cheese_parmesan_grated_refrigerated
+    fdc_id: 2259795
+    source: foundation
+    fallback_fdc_id: 171247
+    description: "Cheese, parmesan, grated, refrigerated"
+    group: dairy
+    nova: 3
+  - key: cheese_provolone_sliced
+    fdc_id: 2647440
+    source: foundation
+    fallback_fdc_id: 170850
+    description: "Cheese, provolone, sliced"
+    group: dairy
+    nova: 3
+  - key: cheese_ricotta_whole_milk
+    fdc_id: 746766
+    source: foundation
+    fallback_fdc_id: 170851
+    description: "Cheese, ricotta, whole milk"
+    group: dairy
+    nova: 3
+  - key: cheese_swiss
+    fdc_id: 746767
+    source: foundation
+    fallback_fdc_id: 171251
+    description: "Cheese, swiss"
+    group: dairy
+    nova: 3
+  - key: cottage_cheese_full_fat_large_or_small_curd
+    fdc_id: 2346384
+    source: foundation
+    fallback_fdc_id: 172179
+    description: "Cottage cheese, full fat, large or small curd"
+    group: dairy
+    nova: 3
+  - key: cream_cheese_full_fat_block
+    fdc_id: 2346385
+    source: foundation
+    fallback_fdc_id: 173418
+    description: "Cream cheese, full fat, block"
+    group: dairy
+    nova: 3
+  - key: cream_heavy
+    fdc_id: 2346386
+    source: foundation
+    fallback_fdc_id: 170859
+    description: "Cream, heavy"
+    group: dairy
+    nova: 2
+  - key: cream_sour_full_fat
+    fdc_id: 2346387
+    source: foundation
+    fallback_fdc_id: 171257
+    description: "Cream, sour, full fat"
+    group: dairy
+    nova: 2
+  - key: milk_lowfat_fluid_1_milkfat_with_added_vitamin_a_and_vitamin
+    fdc_id: 746772
+    source: foundation
+    fallback_fdc_id: 170872
+    description: "Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D"
+    group: dairy
+    nova: 1
+  - key: milk_nonfat_fluid_with_added_vitamin_a_and_vitamin_d_fat_fre
+    fdc_id: 746776
+    source: foundation
+    fallback_fdc_id: 171269
+    description: "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)"
+    group: dairy
+    nova: 1
+  - key: milk_reduced_fat_fluid_2_milkfat_with_added_vitamin_a_and_vi
+    fdc_id: 746778
+    source: foundation
+    fallback_fdc_id: 171267
+    description: "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D"
+    group: dairy
+    nova: 1
+  - key: milk_whole_3_25_milkfat_with_added_vitamin_d
+    fdc_id: 746782
+    source: foundation
+    fallback_fdc_id: 171265
+    description: "Milk, whole, 3.25% milkfat, with added vitamin D"
+    group: dairy
+    nova: 1
+  - key: yogurt_greek_plain_nonfat
+    fdc_id: 330137
+    source: foundation
+    fallback_fdc_id: 170894
+    description: "Yogurt, Greek, plain, nonfat"
+    group: dairy
+    nova: 1
+  - key: yogurt_greek_plain_whole_milk
+    fdc_id: 2259794
+    source: foundation
+    fallback_fdc_id: 171304
+    description: "Yogurt, Greek, plain, whole milk"
+    group: dairy
+    nova: 1
+  - key: yogurt_greek_strawberry_nonfat
+    fdc_id: 330415
+    source: foundation
+    fallback_fdc_id: 170901
+    description: "Yogurt, Greek, strawberry, nonfat"
+    group: dairy
+    nova: 4
+  - key: yogurt_plain_nonfat
+    fdc_id: 2647437
+    source: foundation
+    fallback_fdc_id: 170887
+    description: "Yogurt, plain, nonfat"
+    group: dairy
+    nova: 1
+  - key: yogurt_plain_whole_milk
+    fdc_id: 2259793
+    source: foundation
+    fallback_fdc_id: 171284
+    description: "Yogurt, plain, whole milk"
+    group: dairy
+    nova: 1
+  - key: egg_white_raw_frozen_pasteurized
+    fdc_id: 323697
+    source: foundation
+    fallback_fdc_id: 172203
+    description: "Egg, white, raw, frozen, pasteurized"
+    group: eggs
+    nova: 1
+  - key: egg_whole_raw_frozen_pasteurized
+    fdc_id: 323604
+    source: foundation
+    fallback_fdc_id: 172202
+    description: "Egg, whole, raw, frozen, pasteurized"
+    group: eggs
+    nova: 1
+  - key: egg_yolk_raw_frozen_pasteurized
+    fdc_id: 329596
+    source: foundation
+    fallback_fdc_id: 173421
+    description: "Egg, yolk, raw, frozen, pasteurized"
+    group: eggs
+    nova: 1
+  - key: eggs_grade_a_large_egg_white
+    fdc_id: 747997
+    source: foundation
+    fallback_fdc_id: 172183
+    description: "Eggs, Grade A, Large, egg white"
+    group: eggs
+    nova: 1
+  - key: eggs_grade_a_large_egg_whole
+    fdc_id: 748967
+    source: foundation
+    fallback_fdc_id: 171287
+    description: "Eggs, Grade A, Large, egg whole"
+    group: eggs
+    nova: 1
+  - key: eggs_grade_a_large_egg_yolk
+    fdc_id: 748236
+    source: foundation
+    fallback_fdc_id: 172184
+    description: "Eggs, Grade A, Large, egg yolk"
+    group: eggs
+    nova: 1
+  - key: oil_canola
+    fdc_id: 748278
+    source: foundation
+    fallback_fdc_id: 172336
+    description: "Oil, canola"
+    group: fats_oils
+    nova: 2
+  - key: oil_coconut
+    fdc_id: 330458
+    source: foundation
+    fallback_fdc_id: 171412
+    description: "Oil, coconut"
+    group: fats_oils
+    nova: 2
+  - key: oil_corn
+    fdc_id: 748323
+    source: foundation
+    fallback_fdc_id: 171029
+    description: "Oil, corn"
+    group: fats_oils
+    nova: 2
+  - key: oil_olive_extra_light
+    fdc_id: 1750351
+    source: foundation
+    fallback_fdc_id: 171413
+    description: "Oil, olive, extra light"
+    group: fats_oils
+    nova: 2
+  - key: oil_olive_extra_virgin
+    fdc_id: 748608
+    source: foundation
+    fallback_fdc_id: 171413
+    description: "Oil, olive, extra virgin"
+    group: fats_oils
+    nova: 2
+  - key: oil_peanut
+    fdc_id: 1750348
+    source: foundation
+    fallback_fdc_id: 171410
+    description: "Oil, peanut"
+    group: fats_oils
+    nova: 2
+  - key: oil_safflower
+    fdc_id: 1750350
+    source: foundation
+    fallback_fdc_id: 171027
+    description: "Oil, safflower"
+    group: fats_oils
+    nova: 2
+  - key: oil_soybean
+    fdc_id: 748366
+    source: foundation
+    fallback_fdc_id: 171411
+    description: "Oil, soybean"
+    group: fats_oils
+    nova: 2
+  - key: oil_sunflower
+    fdc_id: 1750349
+    source: foundation
+    fallback_fdc_id: 171025
+    description: "Oil, sunflower"
+    group: fats_oils
+    nova: 2
+  - key: alaska_pollock_raw
+    fdc_id: 2768188
+    source: foundation
+    fallback_fdc_id: 173725
+    description: "Alaska Pollock, raw"
+    group: fish
+    nova: 1
+  - key: anchovies_canned_in_olive_oil_with_salt_drained
+    fdc_id: 2747652
+    source: foundation
+    fallback_fdc_id: 174183
+    description: "Anchovies, canned in olive oil, with salt, drained"
+    group: fish
+    nova: 3
+  - key: cod_pacific_or_alaskan_frozen_wild_caught
+    fdc_id: 2747654
+    source: foundation
+    fallback_fdc_id: 174191
+    description: "Cod, Pacific or Alaskan, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: fish_catfish_farm_raised_raw
+    fdc_id: 2684445
+    source: foundation
+    fallback_fdc_id: 174186
+    description: "Fish, catfish, farm raised, raw"
+    group: fish
+    nova: 1
+  - key: fish_cod_atlantic_wild_caught_raw
+    fdc_id: 2684444
+    source: foundation
+    fallback_fdc_id: 171955
+    description: "Fish, cod, Atlantic, wild caught, raw"
+    group: fish
+    nova: 1
+  - key: fish_haddock_raw
+    fdc_id: 333374
+    source: foundation
+    fallback_fdc_id: 171964
+    description: "Fish, haddock, raw"
+    group: fish
+    nova: 1
+  - key: fish_pollock_raw
+    fdc_id: 333476
+    source: foundation
+    fallback_fdc_id: 173725
+    description: "Fish, pollock, raw"
+    group: fish
+    nova: 1
+  - key: fish_salmon_atlantic_farm_raised_raw
+    fdc_id: 2684441
+    source: foundation
+    fallback_fdc_id: 175167
+    description: "Fish, salmon, Atlantic, farm raised, raw"
+    group: fish
+    nova: 1
+  - key: fish_salmon_sockeye_wild_caught_raw
+    fdc_id: 2684440
+    source: foundation
+    fallback_fdc_id: 173691
+    description: "Fish, salmon, sockeye, wild caught, raw"
+    group: fish
+    nova: 1
+  - key: fish_tilapia_farm_raised_raw
+    fdc_id: 2684442
+    source: foundation
+    fallback_fdc_id: 175176
+    description: "Fish, tilapia, farm raised, raw"
+    group: fish
+    nova: 1
+  - key: fish_tuna_light_canned_in_water_drained_solids
+    fdc_id: 334194
+    source: foundation
+    fallback_fdc_id: 173709
+    description: "Fish, tuna, light, canned in water, drained solids"
+    group: fish
+    nova: 3
+  - key: halibut_frozen_wild_caught
+    fdc_id: 2747656
+    source: foundation
+    fallback_fdc_id: 174200
+    description: "Halibut, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: mahi_mahi_frozen_wild_caught
+    fdc_id: 2747658
+    source: foundation
+    fallback_fdc_id: 171959
+    description: "Mahi mahi, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: sea_bass_chilean_frozen_wild_caught
+    fdc_id: 2747668
+    source: foundation
+    fallback_fdc_id: 175142
+    description: "Sea bass, Chilean, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: snapper_frozen_wild_caught
+    fdc_id: 2747669
+    source: foundation
+    fallback_fdc_id: 173698
+    description: "Snapper, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: swordfish_frozen_wild_caught
+    fdc_id: 2747672
+    source: foundation
+    fallback_fdc_id: 173703
+    description: "Swordfish, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: tuna_ahi_or_yellowfin_frozen_wild_caught
+    fdc_id: 2747673
+    source: foundation
+    fallback_fdc_id: 175159
+    description: "Tuna, ahi or yellowfin, frozen, wild caught"
+    group: fish
+    nova: 1
+  - key: apple_juice_with_added_vitamin_c_from_concentrate_shelf_stab
+    fdc_id: 2003590
+    source: foundation
+    fallback_fdc_id: 167771
+    description: "Apple juice, with added vitamin C, from concentrate, shelf stable"
+    group: fruit_juice
+    nova: 1
+  - key: grape_juice_purple_with_added_vitamin_c_from_concentrate_she
+    fdc_id: 2003592
+    source: foundation
+    fallback_fdc_id: 168207
+    description: "Grape juice, purple, with added vitamin C, from concentrate, shelf stable"
+    group: fruit_juice
+    nova: 1
+  - key: grapefruit_juice_red_not_fortified_not_from_concentrate_refr
+    fdc_id: 2003595
+    source: foundation
+    fallback_fdc_id: 167774
+    description: "Grapefruit juice, red, not fortified, not from concentrate, refrigerated"
+    group: fruit_juice
+    nova: 1
+  - key: juice_pomegranate_from_concentrate_shelf_stable
+    fdc_id: 2727588
+    source: foundation
+    fallback_fdc_id: 167787
+    description: "Juice, pomegranate, from concentrate, shelf-stable"
+    group: fruit_juice
+    nova: 1
+  - key: orange_juice_no_pulp_not_fortified_from_concentrate_refriger
+    fdc_id: 2003591
+    source: foundation
+    fallback_fdc_id: 169100
+    description: "Orange juice, no pulp, not fortified, from concentrate, refrigerated"
+    group: fruit_juice
+    nova: 1
+  - key: orange_juice_no_pulp_not_fortified_not_from_concentrate_refr
+    fdc_id: 2003597
+    source: foundation
+    fallback_fdc_id: 169100
+    description: "Orange juice, no pulp, not fortified, not from concentrate, refrigerated"
+    group: fruit_juice
+    nova: 1
+  - key: tomato_juice_with_added_ingredients_from_concentrate_shelf_s
+    fdc_id: 2003596
+    source: foundation
+    fallback_fdc_id: 170458
+    description: "Tomato juice, with added ingredients, from concentrate, shelf stable"
+    group: fruit_juice
+    nova: 3
+  - key: apples_fuji_with_skin_raw
+    fdc_id: 1750340
+    source: foundation
+    fallback_fdc_id: 167793
+    description: "Apples, fuji, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: apples_gala_with_skin_raw
+    fdc_id: 1750341
+    source: foundation
+    fallback_fdc_id: 168204
+    description: "Apples, gala, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: apples_granny_smith_with_skin_raw
+    fdc_id: 1750342
+    source: foundation
+    fallback_fdc_id: 168203
+    description: "Apples, granny smith, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: apples_honeycrisp_with_skin_raw
+    fdc_id: 1750343
+    source: foundation
+    fallback_fdc_id: 171688
+    description: "Apples, honeycrisp, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: apples_red_delicious_with_skin_raw
+    fdc_id: 1750339
+    source: foundation
+    fallback_fdc_id: 168201
+    description: "Apples, red delicious, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: applesauce_unsweetened_with_added_vitamin_c
+    fdc_id: 2346414
+    source: foundation
+    fallback_fdc_id: 167772
+    description: "Applesauce, unsweetened, with added vitamin C"
+    group: fruits
+    nova: 3
+  - key: apricot_with_skin_raw
+    fdc_id: 2710815
+    source: foundation
+    fallback_fdc_id: 171697
+    description: "Apricot, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: avocado_hass_peeled_raw
+    fdc_id: 2710824
+    source: foundation
+    fallback_fdc_id: 171705
+    description: "Avocado, Hass, peeled, raw"
+    group: fruits
+    nova: 1
+  - key: bananas_overripe_raw
+    fdc_id: 1105073
+    source: foundation
+    fallback_fdc_id: 173944
+    description: "Bananas, overripe, raw"
+    group: fruits
+    nova: 1
+  - key: bananas_ripe_and_slightly_ripe_raw
+    fdc_id: 1105314
+    source: foundation
+    fallback_fdc_id: 173944
+    description: "Bananas, ripe and slightly ripe, raw"
+    group: fruits
+    nova: 1
+  - key: blackberries_raw
+    fdc_id: 2727581
+    source: foundation
+    fallback_fdc_id: 173946
+    description: "Blackberries, raw"
+    group: fruits
+    nova: 1
+  - key: blueberries_raw
+    fdc_id: 2346411
+    source: foundation
+    fallback_fdc_id: 171711
+    description: "Blueberries, raw"
+    group: fruits
+    nova: 1
+  - key: cherries_sweet_dark_red_raw
+    fdc_id: 2346399
+    source: foundation
+    fallback_fdc_id: 171719
+    description: "Cherries, sweet, dark red, raw"
+    group: fruits
+    nova: 1
+  - key: cranberries_dried_sweetened
+    fdc_id: 2758976
+    source: foundation
+    fallback_fdc_id: 171723
+    description: "Cranberries, dried, sweetened"
+    group: fruits
+    nova: 3
+  - key: figs_dried_uncooked
+    fdc_id: 746768
+    source: foundation
+    fallback_fdc_id: 174665
+    description: "Figs, dried, uncooked"
+    group: fruits
+    nova: 1
+  - key: grapefruit_raw
+    fdc_id: 2758977
+    source: foundation
+    fallback_fdc_id: 174673
+    description: "Grapefruit, raw"
+    group: fruits
+    nova: 1
+  - key: grapes_green_seedless_raw
+    fdc_id: 2346413
+    source: foundation
+    fallback_fdc_id: 174683
+    description: "Grapes, green, seedless, raw"
+    group: fruits
+    nova: 1
+  - key: grapes_red_seedless_raw
+    fdc_id: 2346412
+    source: foundation
+    fallback_fdc_id: 174683
+    description: "Grapes, red, seedless, raw"
+    group: fruits
+    nova: 1
+  - key: kiwifruit_green_raw
+    fdc_id: 327046
+    source: foundation
+    fallback_fdc_id: 168153
+    description: "Kiwifruit, green, raw"
+    group: fruits
+    nova: 1
+  - key: kiwifruit_kiwi_green_peeled_raw
+    fdc_id: 2710831
+    source: foundation
+    fallback_fdc_id: 168153
+    description: "Kiwifruit (kiwi), green, peeled, raw"
+    group: fruits
+    nova: 1
+  - key: mandarin_seedless_peeled_raw
+    fdc_id: 2710832
+    source: foundation
+    fallback_fdc_id: 169105
+    description: "Mandarin, seedless, peeled, raw"
+    group: fruits
+    nova: 1
+  - key: mango_tommy_atkins_peeled_raw
+    fdc_id: 2710833
+    source: foundation
+    fallback_fdc_id: 169910
+    description: "Mango, Tommy Atkins, peeled, raw"
+    group: fruits
+    nova: 1
+  - key: melons_cantaloupe_raw
+    fdc_id: 746770
+    source: foundation
+    fallback_fdc_id: 169092
+    description: "Melons, cantaloupe, raw"
+    group: fruits
+    nova: 1
+  - key: melons_honeydew_raw
+    fdc_id: 2710816
+    source: foundation
+    fallback_fdc_id: 169911
+    description: "Melons, honeydew, raw"
+    group: fruits
+    nova: 1
+  - key: nectarines_raw
+    fdc_id: 327357
+    source: foundation
+    fallback_fdc_id: 169914
+    description: "Nectarines, raw"
+    group: fruits
+    nova: 1
+  - key: oranges_raw_navels
+    fdc_id: 746771
+    source: foundation
+    fallback_fdc_id: 169917
+    description: "Oranges, raw, navels"
+    group: fruits
+    nova: 1
+  - key: peaches_yellow_raw
+    fdc_id: 325430
+    source: foundation
+    fallback_fdc_id: 169928
+    description: "Peaches, yellow, raw"
+    group: fruits
+    nova: 1
+  - key: pear_anjou_green_with_skin_raw
+    fdc_id: 2710836
+    source: foundation
+    fallback_fdc_id: 167779
+    description: "Pear, Anjou, green, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: pears_raw_bartlett
+    fdc_id: 746773
+    source: foundation
+    fallback_fdc_id: 167776
+    description: "Pears, raw, bartlett"
+    group: fruits
+    nova: 1
+  - key: pineapple_raw
+    fdc_id: 2346398
+    source: foundation
+    fallback_fdc_id: 169124
+    description: "Pineapple, raw"
+    group: fruits
+    nova: 1
+  - key: plantains_overripe_raw
+    fdc_id: 2710843
+    source: foundation
+    fallback_fdc_id: 169130
+    description: "Plantains, overripe, raw"
+    group: fruits
+    nova: 1
+  - key: plantains_ripe_raw
+    fdc_id: 2710817
+    source: foundation
+    fallback_fdc_id: 169130
+    description: "Plantains, ripe, raw"
+    group: fruits
+    nova: 1
+  - key: plantains_underripe_raw
+    fdc_id: 2710818
+    source: foundation
+    fallback_fdc_id: 168215
+    description: "Plantains, underripe, raw"
+    group: fruits
+    nova: 1
+  - key: plum_black_with_skin_raw
+    fdc_id: 2710837
+    source: foundation
+    fallback_fdc_id: 169949
+    description: "Plum, black, with skin, raw"
+    group: fruits
+    nova: 1
+  - key: plums_dried_prunes_uncooked
+    fdc_id: 2758978
+    source: foundation
+    fallback_fdc_id: 168162
+    description: "Plums, dried (prunes), uncooked"
+    group: fruits
+    nova: 1
+  - key: raisins_dark_seedless
+    fdc_id: 2758980
+    source: foundation
+    fallback_fdc_id: 168165
+    description: "Raisins, dark, seedless"
+    group: fruits
+    nova: 1
+  - key: raisins_golden_seedless
+    fdc_id: 2758979
+    source: foundation
+    fallback_fdc_id: 168164
+    description: "Raisins, golden, seedless"
+    group: fruits
+    nova: 1
+  - key: raspberries_raw
+    fdc_id: 2346410
+    source: foundation
+    fallback_fdc_id: 167755
+    description: "Raspberries, raw"
+    group: fruits
+    nova: 1
+  - key: rhubarb_stalk_raw
+    fdc_id: 2758975
+    source: foundation
+    fallback_fdc_id: 167758
+    description: "Rhubarb, stalk, raw"
+    group: fruits
+    nova: 1
+  - key: strawberries_raw
+    fdc_id: 2346409
+    source: foundation
+    fallback_fdc_id: 167762
+    description: "Strawberries, raw"
+    group: fruits
+    nova: 1
+  - key: watermelon_seedless_flesh_only_raw
+    fdc_id: 2747675
+    source: foundation
+    fallback_fdc_id: 167765
+    description: "Watermelon, seedless, flesh only, raw"
+    group: fruits
+    nova: 1
+  - key: bread_100_whole_wheat_commercial
+    fdc_id: 2758994
+    source: foundation
+    fallback_fdc_id: 172688
+    description: "Bread, 100% whole wheat, commercial"
+    group: grains
+    nova: 4
+  - key: bread_mulitgrain_commercial
+    fdc_id: 2758995
+    source: foundation
+    fallback_fdc_id: 168013
+    description: "Bread, mulitgrain, commercial"
+    group: grains
+    nova: 4
+  - key: bread_white_commercial
+    fdc_id: 2758993
+    source: foundation
+    fallback_fdc_id: 174924
+    description: "Bread, white, commercial"
+    group: grains
+    nova: 4
+  - key: bread_white_commercially_prepared
+    fdc_id: 325871
+    source: foundation
+    fallback_fdc_id: 174924
+    description: "Bread, white, commercially prepared"
+    group: grains
+    nova: 4
+  - key: bread_whole_wheat_commercially_prepared
+    fdc_id: 335240
+    source: foundation
+    fallback_fdc_id: 172688
+    description: "Bread, whole-wheat, commercially prepared"
+    group: grains
+    nova: 4
+  - key: buckwheat_whole_grain
+    fdc_id: 2512378
+    source: foundation
+    fallback_fdc_id: 170286
+    description: "Buckwheat, whole grain"
+    group: grains
+    nova: 1
+  - key: bulgur_dry_raw
+    fdc_id: 2710820
+    source: foundation
+    fallback_fdc_id: 170688
+    description: "Bulgur, dry, raw"
+    group: grains
+    nova: 1
+  - key: farro_pearled_dry_raw
+    fdc_id: 2710828
+    source: foundation
+    description: "Farro, pearled, dry, raw"
+    group: grains
+    nova: 1
+  - key: millet_whole_grain
+    fdc_id: 2512379
+    source: foundation
+    fallback_fdc_id: 169702
+    description: "Millet, whole grain"
+    group: grains
+    nova: 1
+  - key: oats_whole_grain_rolled_old_fashioned
+    fdc_id: 2346396
+    source: foundation
+    fallback_fdc_id: 173904
+    description: "Oats, whole grain, rolled, old fashioned"
+    group: grains
+    nova: 1
+  - key: oats_whole_grain_steel_cut
+    fdc_id: 2346397
+    source: foundation
+    fallback_fdc_id: 169705
+    description: "Oats, whole grain, steel cut"
+    group: grains
+    nova: 1
+  - key: pasta_dry_enriched_spaghetti
+    fdc_id: 2758998
+    source: foundation
+    fallback_fdc_id: 169736
+    description: "Pasta, dry, enriched, spaghetti"
+    group: grains
+    nova: 1
+  - key: pasta_dry_whole_grain_spaghetti
+    fdc_id: 2759000
+    source: foundation
+    fallback_fdc_id: 169738
+    description: "Pasta, dry, whole grain, spaghetti"
+    group: grains
+    nova: 1
+  - key: rice_black_unenriched_raw
+    fdc_id: 2710825
+    source: foundation
+    description: "Rice, black, unenriched, raw"
+    group: grains
+    nova: 1
+  - key: rice_brown_long_grain_unenriched_raw
+    fdc_id: 2512380
+    source: foundation
+    fallback_fdc_id: 169703
+    description: "Rice, brown, long grain, unenriched, raw"
+    group: grains
+    nova: 1
+  - key: rice_red_unenriched_dry_raw
+    fdc_id: 2710838
+    source: foundation
+    description: "Rice, red, unenriched, dry, raw"
+    group: grains
+    nova: 1
+  - key: rice_white_long_grain_unenriched_raw
+    fdc_id: 2512381
+    source: foundation
+    fallback_fdc_id: 169756
+    description: "Rice, white, long grain, unenriched, raw"
+    group: grains
+    nova: 1
+  - key: sorghum_whole_grain_white_dry_raw
+    fdc_id: 2710842
+    source: foundation
+    fallback_fdc_id: 169716
+    description: "Sorghum, whole grain, white, dry, raw"
+    group: grains
+    nova: 1
+  - key: tortilla_corn_shelf_stable
+    fdc_id: 2758997
+    source: foundation
+    fallback_fdc_id: 175036
+    description: "Tortilla, corn, shelf stable"
+    group: grains
+    nova: 4
+  - key: tortilla_wheat_flour_shelf_stable
+    fdc_id: 2758996
+    source: foundation
+    fallback_fdc_id: 167535
+    description: "Tortilla, wheat flour, shelf stable"
+    group: grains
+    nova: 4
+  - key: wild_rice_dry_raw
+    fdc_id: 2710821
+    source: foundation
+    fallback_fdc_id: 169726
+    description: "Wild rice, dry, raw"
+    group: grains
+    nova: 1
+  - key: baked_beans_original_canned_with_pork
+    fdc_id: 2758982
+    source: foundation
+    fallback_fdc_id: 175185
+    description: "Baked beans, Original, canned, with pork"
+    group: legumes
+    nova: 4
+  - key: beans_baked_canned_vegetarian
+    fdc_id: 2758983
+    source: foundation
+    fallback_fdc_id: 175182
+    description: "Beans, baked, canned, vegetarian"
+    group: legumes
+    nova: 4
+  - key: beans_black_canned_sodium_added_drained_and_rinsed
+    fdc_id: 2644285
+    source: foundation
+    fallback_fdc_id: 175238
+    description: "Beans, black, canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: beans_cannellini_canned_sodium_added_drained_and_rinsed
+    fdc_id: 2644287
+    source: foundation
+    fallback_fdc_id: 175204
+    description: "Beans, cannellini, canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: beans_cannellini_dry
+    fdc_id: 2644281
+    source: foundation
+    fallback_fdc_id: 175202
+    description: "Beans, cannellini, dry"
+    group: legumes
+    nova: 1
+  - key: beans_great_northern_canned_sodium_added_drained_and_rinsed
+    fdc_id: 2644294
+    source: foundation
+    fallback_fdc_id: 173791
+    description: "Beans, great northern, canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: beans_navy_canned_sodium_added_drained_and_rinsed
+    fdc_id: 2644286
+    source: foundation
+    fallback_fdc_id: 173747
+    description: "Beans, navy, canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: beans_pinto_canned_sodium_added_drained_and_rinsed
+    fdc_id: 2644292
+    source: foundation
+    fallback_fdc_id: 174286
+    description: "Beans, pinto, canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: blackeye_pea_canned_sodium_added_drained_and_rinsed
+    fdc_id: 2644293
+    source: foundation
+    fallback_fdc_id: 173760
+    description: "Blackeye pea, canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: blackeye_pea_dry
+    fdc_id: 2644284
+    source: foundation
+    fallback_fdc_id: 173758
+    description: "Blackeye pea, dry"
+    group: legumes
+    nova: 1
+  - key: chickpeas_garbanzo_beans_bengal_gram_canned_sodium_added_dra
+    fdc_id: 2644288
+    source: foundation
+    fallback_fdc_id: 173801
+    description: "Chickpeas (garbanzo beans, bengal gram), canned, sodium added, drained and rinsed"
+    group: legumes
+    nova: 3
+  - key: chickpeas_garbanzo_beans_bengal_gram_dry
+    fdc_id: 2644282
+    source: foundation
+    fallback_fdc_id: 173756
+    description: "Chickpeas, (garbanzo beans, bengal gram), dry"
+    group: legumes
+    nova: 1
+  - key: edamame_frozen_prepared
+    fdc_id: 2758981
+    source: foundation
+    fallback_fdc_id: 168411
+    description: "Edamame, frozen, prepared"
+    group: legumes
+    nova: 1
+  - key: hummus_commercial
+    fdc_id: 321358
+    source: foundation
+    fallback_fdc_id: 174289
+    description: "Hummus, commercial"
+    group: legumes
+    nova: 3
+    contains: [sesame]
+  - key: lentils_dry
+    fdc_id: 2644283
+    source: foundation
+    fallback_fdc_id: 172420
+    description: "Lentils, dry"
+    group: legumes
+    nova: 1
+  - key: refried_beans_canned_pinto
+    fdc_id: 2758984
+    source: foundation
+    fallback_fdc_id: 172438
+    description: "Refried beans, canned (pinto)"
+    group: legumes
+    nova: 3
+  - key: refried_beans_canned_vegetarian
+    fdc_id: 2758985
+    source: foundation
+    fallback_fdc_id: 174296
+    description: "Refried beans, canned, vegetarian"
+    group: legumes
+    nova: 3
+  - key: beef_chuck_roast_boneless_choice_raw
+    fdc_id: 2646174
+    source: foundation
+    fallback_fdc_id: 169566
+    description: "Beef, chuck, roast, boneless, choice, raw"
+    group: meat
+    nova: 1
+  - key: beef_flank_steak_boneless_choice_raw
+    fdc_id: 2646175
+    source: foundation
+    fallback_fdc_id: 168609
+    description: "Beef, flank, steak, boneless, choice, raw"
+    group: meat
+    nova: 1
+  - key: beef_ground_80_lean_meat_20_fat_raw
+    fdc_id: 2514744
+    source: foundation
+    fallback_fdc_id: 174036
+    description: "Beef, ground, 80% lean meat / 20% fat, raw"
+    group: meat
+    nova: 1
+  - key: beef_ground_90_lean_meat_10_fat_raw
+    fdc_id: 2514743
+    source: foundation
+    fallback_fdc_id: 174030
+    description: "Beef, ground, 90% lean meat / 10% fat, raw"
+    group: meat
+    nova: 1
+  - key: beef_loin_tenderloin_roast_separable_lean_only_boneless_trim
+    fdc_id: 746758
+    source: foundation
+    fallback_fdc_id: 174006
+    description: 'Beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0" fat, select, cooked, roasted'
+    group: meat
+    nova: 1
+  - key: beef_loin_top_loin_steak_boneless_lip_on_separable_lean_only
+    fdc_id: 746759
+    source: foundation
+    fallback_fdc_id: 174010
+    description: 'Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8" fat, choice, raw'
+    group: meat
+    nova: 1
+  - key: beef_ribeye_steak_boneless_choice_raw
+    fdc_id: 2646172
+    source: foundation
+    fallback_fdc_id: 173403
+    description: "Beef, ribeye, steak, boneless, choice, raw"
+    group: meat
+    nova: 1
+  - key: beef_round_eye_of_round_roast_boneless_separable_lean_only_t
+    fdc_id: 746760
+    source: foundation
+    fallback_fdc_id: 171761
+    description: 'Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0" fat, select, raw'
+    group: meat
+    nova: 1
+  - key: beef_round_top_round_boneless_choice_raw
+    fdc_id: 2646173
+    source: foundation
+    fallback_fdc_id: 171758
+    description: "Beef, round, top round, boneless, choice, raw"
+    group: meat
+    nova: 1
+  - key: beef_round_top_round_roast_boneless_separable_lean_only_trim
+    fdc_id: 746761
+    source: foundation
+    fallback_fdc_id: 173997
+    description: 'Beef, round, top round roast, boneless, separable lean only, trimmed to 0" fat, select, raw'
+    group: meat
+    nova: 1
+  - key: beef_short_loin_ny_strip_steak_raw
+    fdc_id: 2727572
+    source: foundation
+    fallback_fdc_id: 169538
+    description: "Beef, short loin (NY strip steak), raw"
+    group: meat
+    nova: 1
+  - key: beef_short_loin_porterhouse_steak_separable_lean_only_trimme
+    fdc_id: 746762
+    source: foundation
+    fallback_fdc_id: 168640
+    description: 'Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8" fat, select, raw'
+    group: meat
+    nova: 1
+  - key: beef_short_loin_t_bone_steak_bone_in_separable_lean_only_tri
+    fdc_id: 746763
+    source: foundation
+    fallback_fdc_id: 168620
+    description: 'Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8" fat, choice, cooked, grilled'
+    group: meat
+    nova: 1
+  - key: beef_tenderloin_steak_raw
+    fdc_id: 2727573
+    source: foundation
+    fallback_fdc_id: 171768
+    description: "Beef, tenderloin steak, raw"
+    group: meat
+    nova: 1
+  - key: beef_top_sirloin_steak_raw
+    fdc_id: 2727574
+    source: foundation
+    fallback_fdc_id: 171804
+    description: "Beef, top sirloin steak, raw"
+    group: meat
+    nova: 1
+  - key: bison_ground_raw
+    fdc_id: 2727571
+    source: foundation
+    fallback_fdc_id: 175293
+    description: "Bison, ground, raw"
+    group: meat
+    nova: 1
+  - key: lamb_ground_raw
+    fdc_id: 2727570
+    source: foundation
+    fallback_fdc_id: 174370
+    description: "Lamb, ground, raw"
+    group: meat
+    nova: 1
+  - key: pork_belly_with_skin_raw
+    fdc_id: 2727576
+    source: foundation
+    fallback_fdc_id: 167812
+    description: "Pork, belly, with skin, raw"
+    group: meat
+    nova: 1
+  - key: pork_chop_center_cut_raw
+    fdc_id: 2727575
+    source: foundation
+    fallback_fdc_id: 167829
+    description: "Pork, chop, center cut, raw"
+    group: meat
+    nova: 1
+  - key: pork_ground_raw
+    fdc_id: 2514745
+    source: foundation
+    fallback_fdc_id: 167902
+    description: "Pork, ground, raw"
+    group: meat
+    nova: 1
+  - key: pork_loin_boneless_raw
+    fdc_id: 2646168
+    source: foundation
+    fallback_fdc_id: 168251
+    description: "Pork, loin, boneless, raw"
+    group: meat
+    nova: 1
+  - key: pork_loin_tenderloin_boneless_raw
+    fdc_id: 2646169
+    source: foundation
+    fallback_fdc_id: 168249
+    description: "Pork, loin, tenderloin, boneless, raw"
+    group: meat
+    nova: 1
+  - key: almond_butter_creamy
+    fdc_id: 2262074
+    source: foundation
+    fallback_fdc_id: 168588
+    description: "Almond butter, creamy"
+    group: nuts_seeds
+    nova: 3
+  - key: chia_seeds_dry_raw
+    fdc_id: 2710819
+    source: foundation
+    fallback_fdc_id: 170554
+    description: "Chia seeds, dry, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: flaxseed_ground
+    fdc_id: 2262075
+    source: foundation
+    fallback_fdc_id: 169414
+    description: "Flaxseed, ground"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_almonds_dry_roasted_with_salt_added
+    fdc_id: 323294
+    source: foundation
+    fallback_fdc_id: 168596
+    description: "Nuts, almonds, dry roasted, with salt added"
+    group: nuts_seeds
+    nova: 3
+  - key: nuts_almonds_whole_raw
+    fdc_id: 2346393
+    source: foundation
+    fallback_fdc_id: 170567
+    description: "Nuts, almonds, whole, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_brazilnuts_raw
+    fdc_id: 2515373
+    source: foundation
+    fallback_fdc_id: 170569
+    description: "Nuts, brazilnuts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_cashew_nuts_raw
+    fdc_id: 2515374
+    source: foundation
+    fallback_fdc_id: 170162
+    description: "Nuts, cashew nuts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_hazelnuts_or_filberts_raw
+    fdc_id: 2515375
+    source: foundation
+    fallback_fdc_id: 170581
+    description: "Nuts, hazelnuts or filberts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_macadamia_nuts_raw
+    fdc_id: 2515378
+    source: foundation
+    fallback_fdc_id: 170178
+    description: "Nuts, macadamia nuts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_pecans_halves_raw
+    fdc_id: 2346395
+    source: foundation
+    fallback_fdc_id: 170182
+    description: "Nuts, pecans, halves, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_pine_nuts_raw
+    fdc_id: 2346392
+    source: foundation
+    fallback_fdc_id: 170591
+    description: "Nuts, pine nuts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_pistachio_nuts_raw
+    fdc_id: 2515379
+    source: foundation
+    fallback_fdc_id: 170184
+    description: "Nuts, pistachio nuts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: nuts_walnuts_english_halves_raw
+    fdc_id: 2346394
+    source: foundation
+    fallback_fdc_id: 170187
+    description: "Nuts, walnuts, English, halves, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: peanut_butter_creamy
+    fdc_id: 2758989
+    source: foundation
+    fallback_fdc_id: 174266
+    description: "Peanut butter, Creamy"
+    group: nuts_seeds
+    nova: 3
+  - key: peanut_butter_smooth_style_with_salt
+    fdc_id: 324860
+    source: foundation
+    fallback_fdc_id: 174266
+    description: "Peanut butter, smooth style, with salt"
+    group: nuts_seeds
+    nova: 3
+  - key: peanuts_raw
+    fdc_id: 2515376
+    source: foundation
+    fallback_fdc_id: 172430
+    description: "Peanuts, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: seeds_pumpkin_seeds_pepitas_raw
+    fdc_id: 2515380
+    source: foundation
+    fallback_fdc_id: 170556
+    description: "Seeds, pumpkin seeds (pepitas), raw"
+    group: nuts_seeds
+    nova: 1
+  - key: seeds_sunflower_seed_kernel_raw
+    fdc_id: 2515381
+    source: foundation
+    fallback_fdc_id: 170562
+    description: "Seeds, sunflower seed, kernel, raw"
+    group: nuts_seeds
+    nova: 1
+  - key: seeds_sunflower_seed_kernels_dry_roasted_with_salt_added
+    fdc_id: 325524
+    source: foundation
+    fallback_fdc_id: 169418
+    description: "Seeds, sunflower seed kernels, dry roasted, with salt added"
+    group: nuts_seeds
+    nova: 3
+  - key: sesame_butter_creamy
+    fdc_id: 2262073
+    source: foundation
+    fallback_fdc_id: 168604
+    description: "Sesame butter, creamy"
+    group: nuts_seeds
+    nova: 3
+  - key: almond_milk_unsweetened_plain_refrigerated
+    fdc_id: 2257045
+    source: foundation
+    fallback_fdc_id: 174832
+    description: "Almond milk, unsweetened, plain, refrigerated"
+    group: plant_milk
+    nova: 4
+  - key: almond_milk_unsweetened_plain_shelf_stable
+    fdc_id: 1999631
+    source: foundation
+    fallback_fdc_id: 174832
+    description: "Almond milk, unsweetened, plain, shelf stable"
+    group: plant_milk
+    nova: 4
+  - key: oat_milk_unsweetened_plain_refrigerated
+    fdc_id: 2257046
+    source: foundation
+    description: "Oat milk, unsweetened, plain, refrigerated"
+    group: plant_milk
+    nova: 4
+  - key: soy_milk_sweetened_plain_refrigerated
+    fdc_id: 2257044
+    source: foundation
+    fallback_fdc_id: 172456
+    description: "Soy milk, sweetened, plain, refrigerated"
+    group: plant_milk
+    nova: 4
+  - key: soy_milk_unsweetened_plain_shelf_stable
+    fdc_id: 1999630
+    source: foundation
+    fallback_fdc_id: 173768
+    description: "Soy milk, unsweetened, plain, shelf stable"
+    group: plant_milk
+    nova: 4
+  - key: chicken_breast_boneless_skinless_raw
+    fdc_id: 2646170
+    source: foundation
+    fallback_fdc_id: 171077
+    description: "Chicken, breast, boneless, skinless, raw"
+    group: poultry
+    nova: 1
+  - key: chicken_breast_meat_and_skin_raw
+    fdc_id: 2727569
+    source: foundation
+    fallback_fdc_id: 171474
+    description: "Chicken, breast, meat and skin, raw"
+    group: poultry
+    nova: 1
+  - key: chicken_broiler_or_fryers_breast_skinless_boneless_meat_only
+    fdc_id: 331960
+    source: foundation
+    fallback_fdc_id: 171140
+    description: "Chicken, broiler or fryers, breast, skinless, boneless, meat only, cooked, braised"
+    group: poultry
+    nova: 1
+  - key: chicken_broilers_or_fryers_drumstick_meat_only_cooked_braise
+    fdc_id: 331897
+    source: foundation
+    fallback_fdc_id: 172852
+    description: "Chicken, broilers or fryers, drumstick, meat only, cooked, braised"
+    group: poultry
+    nova: 1
+  - key: chicken_drumstick_meat_and_skin_raw
+    fdc_id: 2727566
+    source: foundation
+    fallback_fdc_id: 172373
+    description: "Chicken, drumstick, meat and skin, raw"
+    group: poultry
+    nova: 1
+  - key: chicken_ground_with_additives_raw
+    fdc_id: 2514746
+    source: foundation
+    fallback_fdc_id: 171116
+    description: "Chicken, ground, with additives, raw"
+    group: poultry
+    nova: 1
+  - key: chicken_thigh_boneless_skinless_raw
+    fdc_id: 2646171
+    source: foundation
+    fallback_fdc_id: 173627
+    description: "Chicken, thigh, boneless, skinless, raw"
+    group: poultry
+    nova: 1
+  - key: chicken_thigh_meat_and_skin_raw
+    fdc_id: 2727567
+    source: foundation
+    fallback_fdc_id: 172385
+    description: "Chicken, thigh, meat and skin, raw"
+    group: poultry
+    nova: 1
+  - key: chicken_wing_meat_and_skin_raw
+    fdc_id: 2727568
+    source: foundation
+    fallback_fdc_id: 172390
+    description: "Chicken, wing, meat and skin, raw"
+    group: poultry
+    nova: 1
+  - key: turkey_ground_93_lean_7_fat_pan_broiled_crumbles
+    fdc_id: 746785
+    source: foundation
+    fallback_fdc_id: 172851
+    description: "Turkey, ground, 93% lean, 7% fat, pan-broiled crumbles"
+    group: poultry
+    nova: 1
+  - key: turkey_ground_93_lean_7_fat_raw
+    fdc_id: 2514747
+    source: foundation
+    fallback_fdc_id: 172850
+    description: "Turkey, ground, 93% lean/ 7% fat, raw"
+    group: poultry
+    nova: 1
+  - key: bologna_beef
+    fdc_id: 2758991
+    source: foundation
+    fallback_fdc_id: 172012
+    description: "Bologna, beef"
+    group: processed_meat
+    nova: 4
+  - key: ham_sliced_pre_packaged_deli_meat_96_fat_free_water_added
+    fdc_id: 332397
+    source: foundation
+    fallback_fdc_id: 173863
+    description: "Ham, sliced, pre-packaged, deli meat (96%fat free, water added)"
+    group: processed_meat
+    nova: 4
+  - key: lunchmeat_chicken_breast_sliced
+    fdc_id: 2759004
+    source: foundation
+    fallback_fdc_id: 173874
+    description: "Lunchmeat, chicken breast, sliced"
+    group: processed_meat
+    nova: 4
+  - key: lunchmeat_ham_black_forest_sliced
+    fdc_id: 2759002
+    source: foundation
+    fallback_fdc_id: 173864
+    description: "Lunchmeat, ham, black forest, sliced"
+    group: processed_meat
+    nova: 4
+  - key: lunchmeat_roast_beef_sliced_prepackaged
+    fdc_id: 2759003
+    source: foundation
+    fallback_fdc_id: 174570
+    description: "Lunchmeat, roast beef, sliced, prepackaged"
+    group: processed_meat
+    nova: 4
+  - key: lunchmeat_turkey_oven_roasted_sliced
+    fdc_id: 2759001
+    source: foundation
+    fallback_fdc_id: 172941
+    description: "Lunchmeat, turkey, oven roasted, sliced"
+    group: processed_meat
+    nova: 4
+  - key: pepperoni_beef_and_pork_sliced
+    fdc_id: 2759006
+    source: foundation
+    fallback_fdc_id: 174575
+    description: "Pepperoni, beef and pork, sliced"
+    group: processed_meat
+    nova: 4
+  - key: salami_hard_sliced
+    fdc_id: 2759005
+    source: foundation
+    fallback_fdc_id: 174582
+    description: "Salami, hard, sliced"
+    group: processed_meat
+    nova: 4
+  - key: sausage_breakfast_sausage_beef_pre_cooked_unprepared
+    fdc_id: 746779
+    source: foundation
+    fallback_fdc_id: 174616
+    description: "Sausage, breakfast sausage, beef, pre-cooked, unprepared"
+    group: processed_meat
+    nova: 4
+  - key: sausage_italian_pork_mild_cooked_pan_fried
+    fdc_id: 746780
+    source: foundation
+    fallback_fdc_id: 174586
+    description: "Sausage, Italian, pork, mild, cooked, pan-fried"
+    group: processed_meat
+    nova: 4
+  - key: sausage_pork_chorizo_link_or_ground_cooked_pan_fried
+    fdc_id: 746781
+    source: foundation
+    description: "Sausage, pork, chorizo, link or ground, cooked, pan-fried"
+    group: processed_meat
+    nova: 4
+  - key: sausage_turkey_breakfast_links_mild_raw
+    fdc_id: 746783
+    source: foundation
+    fallback_fdc_id: 174600
+    description: "Sausage, turkey, breakfast links, mild, raw"
+    group: processed_meat
+    nova: 4
+  - key: crustaceans_crab_blue_swimming_lump_pasteurized_refrigerated
+    fdc_id: 2684446
+    source: foundation
+    fallback_fdc_id: 171966
+    description: "Crustaceans, crab, blue swimming, lump, pasteurized, refrigerated"
+    group: shellfish
+    nova: 3
+  - key: crustaceans_shrimp_farm_raised_raw
+    fdc_id: 2684443
+    source: foundation
+    fallback_fdc_id: 175179
+    description: "Crustaceans, shrimp, farm raised, raw"
+    group: shellfish
+    nova: 1
+  - key: lobster_tail_only_frozen_wild_caught
+    fdc_id: 2747657
+    source: foundation
+    fallback_fdc_id: 174208
+    description: "Lobster, tail only, frozen, wild caught"
+    group: shellfish
+    nova: 1
+  - key: scallops_bay_patagonian_frozen_wild_caught
+    fdc_id: 2747666
+    source: foundation
+    fallback_fdc_id: 174220
+    description: "Scallops, bay, Patagonian, frozen, wild caught"
+    group: shellfish
+    nova: 1
+  - key: scallops_sea_frozen_wild_caught
+    fdc_id: 2747667
+    source: foundation
+    fallback_fdc_id: 174220
+    description: "Scallops, sea, frozen, wild caught"
+    group: shellfish
+    nova: 1
+  - key: snow_crab_legs_only_frozen
+    fdc_id: 2747670
+    source: foundation
+    fallback_fdc_id: 171969
+    description: "Snow crab, legs only, frozen"
+    group: shellfish
+    nova: 1
+  - key: squid_calamari_frozen_tubes_only
+    fdc_id: 2747671
+    source: foundation
+    fallback_fdc_id: 174223
+    description: "Squid (calamari), frozen, tubes only"
+    group: shellfish
+    nova: 1
+  - key: cookies_oatmeal_soft_with_raisins
+    fdc_id: 333008
+    source: foundation
+    fallback_fdc_id: 174963
+    description: "Cookies, oatmeal, soft, with raisins"
+    group: sweets
+    nova: 4
+    contains: [wheat, milk, egg]
+  - key: sugars_granulated
+    fdc_id: 746784
+    source: foundation
+    fallback_fdc_id: 169655
+    description: "Sugars, granulated"
+    group: sweets
+    nova: 2
+  - key: arugula_baby_raw
+    fdc_id: 2710822
+    source: foundation
+    fallback_fdc_id: 169387
+    description: "Arugula, baby, raw"
+    group: vegetables
+    nova: 1
+  - key: asparagus_green_raw
+    fdc_id: 2710823
+    source: foundation
+    fallback_fdc_id: 168389
+    description: "Asparagus, green, raw"
+    group: vegetables
+    nova: 1
+  - key: beans_snap_green_canned_regular_pack_drained_solids
+    fdc_id: 321611
+    source: foundation
+    fallback_fdc_id: 169143
+    description: "Beans, snap, green, canned, regular pack, drained solids"
+    group: vegetables
+    nova: 3
+  - key: beans_snap_green_raw
+    fdc_id: 2346400
+    source: foundation
+    fallback_fdc_id: 169961
+    description: "Beans, snap, green, raw"
+    group: vegetables
+    nova: 1
+  - key: beet_greens_raw
+    fdc_id: 2747653
+    source: foundation
+    fallback_fdc_id: 170375
+    description: "Beet greens, raw"
+    group: vegetables
+    nova: 1
+  - key: beets_raw
+    fdc_id: 2685576
+    source: foundation
+    fallback_fdc_id: 169145
+    description: "Beets, raw"
+    group: vegetables
+    nova: 1
+  - key: broccoli_raw
+    fdc_id: 747447
+    source: foundation
+    fallback_fdc_id: 170379
+    description: "Broccoli, raw"
+    group: vegetables
+    nova: 1
+  - key: brussels_sprouts_raw
+    fdc_id: 2685575
+    source: foundation
+    fallback_fdc_id: 170383
+    description: "Brussels sprouts, raw"
+    group: vegetables
+    nova: 1
+  - key: cabbage_bok_choy_raw
+    fdc_id: 2685572
+    source: foundation
+    fallback_fdc_id: 170390
+    description: "Cabbage, bok choy, raw"
+    group: vegetables
+    nova: 1
+  - key: cabbage_green_raw
+    fdc_id: 2346407
+    source: foundation
+    fallback_fdc_id: 169975
+    description: "Cabbage, green, raw"
+    group: vegetables
+    nova: 1
+  - key: cabbage_red_raw
+    fdc_id: 2346408
+    source: foundation
+    fallback_fdc_id: 169977
+    description: "Cabbage, red, raw"
+    group: vegetables
+    nova: 1
+  - key: carrots_baby_raw
+    fdc_id: 2258587
+    source: foundation
+    fallback_fdc_id: 168568
+    description: "Carrots, baby, raw"
+    group: vegetables
+    nova: 1
+  - key: carrots_frozen_unprepared
+    fdc_id: 746764
+    source: foundation
+    fallback_fdc_id: 169983
+    description: "Carrots, frozen, unprepared"
+    group: vegetables
+    nova: 1
+  - key: carrots_mature_raw
+    fdc_id: 2258586
+    source: foundation
+    fallback_fdc_id: 170393
+    description: "Carrots, mature, raw"
+    group: vegetables
+    nova: 1
+  - key: cauliflower_raw
+    fdc_id: 2685573
+    source: foundation
+    fallback_fdc_id: 169986
+    description: "Cauliflower, raw"
+    group: vegetables
+    nova: 1
+  - key: celery_raw
+    fdc_id: 2346405
+    source: foundation
+    fallback_fdc_id: 169988
+    description: "Celery, raw"
+    group: vegetables
+    nova: 1
+  - key: collards_raw
+    fdc_id: 2685574
+    source: foundation
+    fallback_fdc_id: 170406
+    description: "Collards, raw"
+    group: vegetables
+    nova: 1
+  - key: corn_sweet_yellow_and_white_kernels_fresh_raw
+    fdc_id: 2710826
+    source: foundation
+    fallback_fdc_id: 169998
+    description: "Corn, sweet, yellow and white kernels, fresh, raw"
+    group: vegetables
+    nova: 1
+  - key: cucumber_with_peel_raw
+    fdc_id: 2346406
+    source: foundation
+    fallback_fdc_id: 168409
+    description: "Cucumber, with peel, raw"
+    group: vegetables
+    nova: 1
+  - key: eggplant_raw
+    fdc_id: 2685577
+    source: foundation
+    fallback_fdc_id: 169228
+    description: "Eggplant, raw"
+    group: vegetables
+    nova: 1
+  - key: fennel_bulb_raw
+    fdc_id: 2747655
+    source: foundation
+    fallback_fdc_id: 169385
+    description: "Fennel, bulb, raw"
+    group: vegetables
+    nova: 1
+  - key: garlic_raw
+    fdc_id: 1104647
+    source: foundation
+    fallback_fdc_id: 169230
+    description: "Garlic, raw"
+    group: vegetables
+    nova: 1
+  - key: green_onion_scallion_bulb_and_greens_root_removed_raw
+    fdc_id: 2727585
+    source: foundation
+    fallback_fdc_id: 170005
+    description: "Green onion, (scallion), bulb and greens, root removed, raw"
+    group: vegetables
+    nova: 1
+  - key: kale_frozen_cooked_boiled_drained_without_salt
+    fdc_id: 326196
+    source: foundation
+    fallback_fdc_id: 169240
+    description: "Kale, frozen, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: kale_raw
+    fdc_id: 323505
+    source: foundation
+    fallback_fdc_id: 168421
+    description: "Kale, raw"
+    group: vegetables
+    nova: 1
+  - key: leeks_bulb_and_greens_root_removed_raw
+    fdc_id: 2727584
+    source: foundation
+    fallback_fdc_id: 169246
+    description: "Leeks, bulb and greens, root removed, raw"
+    group: vegetables
+    nova: 1
+  - key: lettuce_cos_or_romaine_raw
+    fdc_id: 746769
+    source: foundation
+    fallback_fdc_id: 169247
+    description: "Lettuce, cos or romaine, raw"
+    group: vegetables
+    nova: 1
+  - key: lettuce_iceberg_raw
+    fdc_id: 2346388
+    source: foundation
+    fallback_fdc_id: 169248
+    description: "Lettuce, iceberg, raw"
+    group: vegetables
+    nova: 1
+  - key: lettuce_leaf_green_raw
+    fdc_id: 2346391
+    source: foundation
+    fallback_fdc_id: 169249
+    description: "Lettuce, leaf, green, raw"
+    group: vegetables
+    nova: 1
+  - key: lettuce_leaf_red_raw
+    fdc_id: 2346390
+    source: foundation
+    fallback_fdc_id: 168431
+    description: "Lettuce, leaf, red, raw"
+    group: vegetables
+    nova: 1
+  - key: lettuce_romaine_green_raw
+    fdc_id: 2346389
+    source: foundation
+    fallback_fdc_id: 169247
+    description: "Lettuce, romaine, green, raw"
+    group: vegetables
+    nova: 1
+  - key: mushroom_crimini
+    fdc_id: 2003601
+    source: foundation
+    fallback_fdc_id: 168434
+    description: "Mushroom, crimini"
+    group: vegetables
+    nova: 1
+  - key: mushroom_oyster
+    fdc_id: 1999627
+    source: foundation
+    fallback_fdc_id: 168580
+    description: "Mushroom, oyster"
+    group: vegetables
+    nova: 1
+  - key: mushroom_portabella
+    fdc_id: 2003598
+    source: foundation
+    fallback_fdc_id: 169255
+    description: "Mushroom, portabella"
+    group: vegetables
+    nova: 1
+  - key: mushrooms_shiitake
+    fdc_id: 1999628
+    source: foundation
+    fallback_fdc_id: 169242
+    description: "Mushrooms, shiitake"
+    group: vegetables
+    nova: 1
+  - key: mushrooms_white_button
+    fdc_id: 1999629
+    source: foundation
+    fallback_fdc_id: 169251
+    description: "Mushrooms, white button"
+    group: vegetables
+    nova: 1
+  - key: onions_red_raw
+    fdc_id: 790577
+    source: foundation
+    fallback_fdc_id: 170000
+    description: "Onions, red, raw"
+    group: vegetables
+    nova: 1
+  - key: onions_white_raw
+    fdc_id: 1104962
+    source: foundation
+    fallback_fdc_id: 170000
+    description: "Onions, white, raw"
+    group: vegetables
+    nova: 1
+  - key: onions_yellow_raw
+    fdc_id: 790646
+    source: foundation
+    fallback_fdc_id: 170000
+    description: "Onions, yellow, raw"
+    group: vegetables
+    nova: 1
+  - key: parsnips_raw
+    fdc_id: 2747659
+    source: foundation
+    fallback_fdc_id: 170417
+    description: "Parsnips, raw"
+    group: vegetables
+    nova: 1
+  - key: peppers_bell_green_raw
+    fdc_id: 2258588
+    source: foundation
+    fallback_fdc_id: 170427
+    description: "Peppers, bell, green, raw"
+    group: vegetables
+    nova: 1
+  - key: peppers_bell_orange_raw
+    fdc_id: 2258591
+    source: foundation
+    description: "Peppers, bell, orange, raw"
+    group: vegetables
+    nova: 1
+  - key: peppers_bell_red_raw
+    fdc_id: 2258590
+    source: foundation
+    fallback_fdc_id: 170108
+    description: "Peppers, bell, red, raw"
+    group: vegetables
+    nova: 1
+  - key: peppers_bell_yellow_raw
+    fdc_id: 2258589
+    source: foundation
+    fallback_fdc_id: 169383
+    description: "Peppers, bell, yellow, raw"
+    group: vegetables
+    nova: 1
+  - key: peppers_jalapeno_seeded_raw
+    fdc_id: 2747661
+    source: foundation
+    fallback_fdc_id: 168576
+    description: "Peppers, jalapeno, seeded, raw"
+    group: vegetables
+    nova: 1
+  - key: peppers_serrano_seeded_raw
+    fdc_id: 2747663
+    source: foundation
+    fallback_fdc_id: 169395
+    description: "Peppers, serrano, seeded, raw"
+    group: vegetables
+    nova: 1
+  - key: pickles_cucumber_dill_or_kosher_dill
+    fdc_id: 324653
+    source: foundation
+    fallback_fdc_id: 168558
+    description: "Pickles, cucumber, dill or kosher dill"
+    group: vegetables
+    nova: 3
+  - key: potatoes_gold_without_skin_raw
+    fdc_id: 2346403
+    source: foundation
+    fallback_fdc_id: 170026
+    description: "Potatoes, gold, without skin, raw"
+    group: vegetables
+    nova: 1
+  - key: potatoes_red_without_skin_raw
+    fdc_id: 2346402
+    source: foundation
+    fallback_fdc_id: 170029
+    description: "Potatoes, red, without skin, raw"
+    group: vegetables
+    nova: 1
+  - key: potatoes_russet_without_skin_raw
+    fdc_id: 2346401
+    source: foundation
+    fallback_fdc_id: 170027
+    description: "Potatoes, russet, without skin, raw"
+    group: vegetables
+    nova: 1
+  - key: radicchio_raw
+    fdc_id: 2747664
+    source: foundation
+    fallback_fdc_id: 168564
+    description: "Radicchio, raw"
+    group: vegetables
+    nova: 1
+  - key: radishes_red_raw
+    fdc_id: 2747665
+    source: foundation
+    fallback_fdc_id: 169276
+    description: "Radishes, red, raw"
+    group: vegetables
+    nova: 1
+  - key: rutabaga_peeled_raw
+    fdc_id: 2727580
+    source: foundation
+    fallback_fdc_id: 168454
+    description: "Rutabaga, peeled, raw"
+    group: vegetables
+    nova: 1
+  - key: shallots_bulb_peeled_root_removed_raw
+    fdc_id: 2727586
+    source: foundation
+    fallback_fdc_id: 170499
+    description: "Shallots, bulb, peeled, root removed, raw"
+    group: vegetables
+    nova: 1
+  - key: spinach_baby
+    fdc_id: 1999632
+    source: foundation
+    fallback_fdc_id: 168462
+    description: "Spinach, baby"
+    group: vegetables
+    nova: 1
+  - key: spinach_mature
+    fdc_id: 1999633
+    source: foundation
+    fallback_fdc_id: 168462
+    description: "Spinach, mature"
+    group: vegetables
+    nova: 1
+  - key: squash_pie_pumpkin_peeled_seeded_raw
+    fdc_id: 2727578
+    source: foundation
+    fallback_fdc_id: 168448
+    description: "Squash, pie pumpkin, peeled, seeded, raw"
+    group: vegetables
+    nova: 1
+  - key: squash_spaghetti_peeled_seeded_raw
+    fdc_id: 2727579
+    source: foundation
+    fallback_fdc_id: 169298
+    description: "Squash, spaghetti, peeled, seeded, raw"
+    group: vegetables
+    nova: 1
+  - key: squash_summer_green_zucchini_includes_skin_raw
+    fdc_id: 2685568
+    source: foundation
+    fallback_fdc_id: 169291
+    description: "Squash, summer, green, zucchini, includes skin, raw"
+    group: vegetables
+    nova: 1
+  - key: squash_summer_yellow_includes_skin_raw
+    fdc_id: 2685569
+    source: foundation
+    fallback_fdc_id: 168464
+    description: "Squash, summer, yellow, includes skin, raw"
+    group: vegetables
+    nova: 1
+  - key: squash_winter_acorn_raw
+    fdc_id: 2685571
+    source: foundation
+    fallback_fdc_id: 168472
+    description: "Squash, winter, acorn, raw"
+    group: vegetables
+    nova: 1
+  - key: squash_winter_butternut_raw
+    fdc_id: 2685570
+    source: foundation
+    fallback_fdc_id: 169295
+    description: "Squash, winter, butternut, raw"
+    group: vegetables
+    nova: 1
+  - key: sweet_potatoes_orange_flesh_without_skin_raw
+    fdc_id: 2346404
+    source: foundation
+    fallback_fdc_id: 168482
+    description: "Sweet potatoes, orange flesh, without skin, raw"
+    group: vegetables
+    nova: 1
+  - key: tomatillos_dehusked_raw
+    fdc_id: 2727582
+    source: foundation
+    fallback_fdc_id: 168566
+    description: "Tomatillos, dehusked, raw"
+    group: vegetables
+    nova: 1
+  - key: tomato_paste_canned_without_salt_added
+    fdc_id: 2685580
+    source: foundation
+    fallback_fdc_id: 170459
+    description: "Tomato, paste, canned, without salt added"
+    group: vegetables
+    nova: 3
+  - key: tomato_puree_canned
+    fdc_id: 2685582
+    source: foundation
+    fallback_fdc_id: 170546
+    description: "Tomato, puree, canned"
+    group: vegetables
+    nova: 3
+  - key: tomato_roma
+    fdc_id: 1999634
+    source: foundation
+    fallback_fdc_id: 170457
+    description: "Tomato, roma"
+    group: vegetables
+    nova: 1
+  - key: tomatoes_canned_red_ripe_diced
+    fdc_id: 333281
+    source: foundation
+    fallback_fdc_id: 170051
+    description: "Tomatoes, canned, red, ripe, diced"
+    group: vegetables
+    nova: 3
+  - key: tomatoes_crushed_canned
+    fdc_id: 2685581
+    source: foundation
+    fallback_fdc_id: 170501
+    description: "Tomatoes, crushed, canned"
+    group: vegetables
+    nova: 3
+  - key: tomatoes_grape_raw
+    fdc_id: 321360
+    source: foundation
+    fallback_fdc_id: 170457
+    description: "Tomatoes, grape, raw"
+    group: vegetables
+    nova: 1
+  - key: tomatoes_whole_canned_solids_and_liquids_with_salt_added
+    fdc_id: 2685578
+    source: foundation
+    fallback_fdc_id: 170051
+    description: "Tomatoes, whole, canned, solids and liquids, with salt added"
+    group: vegetables
+    nova: 3
+  - key: turnips_raw
+    fdc_id: 2747674
+    source: foundation
+    fallback_fdc_id: 170465
+    description: "Turnips, raw"
+    group: vegetables
+    nova: 1
+  - key: coffee_brewed
+    fdc_id: 171890
+    source: sr_legacy
+    description: "Beverages, coffee, brewed, prepared with tap water"
+    group: beverages
+    nova: 1
+  - key: cola
+    fdc_id: 174852
+    source: sr_legacy
+    description: "Beverages, carbonated, cola, regular"
+    group: beverages
+    nova: 4
+  - key: tea_black
+    fdc_id: 173227
+    source: sr_legacy
+    description: "Beverages, tea, black, brewed, prepared with tap water"
+    group: beverages
+    nova: 1
+  - key: water_tap
+    fdc_id: 173647
+    source: sr_legacy
+    description: "Beverages, water, tap, drinking"
+    group: beverages
+    nova: 1
+  - key: chocolate_milk
+    fdc_id: 170880
+    source: sr_legacy
+    description: "Milk, chocolate, fluid, commercial, reduced fat, with added vitamin A and vitamin D"
+    group: dairy
+    nova: 4
+  - key: cottage_cheese_nonfat
+    fdc_id: 172181
+    source: sr_legacy
+    description: "Cheese, cottage, nonfat, uncreamed, dry, large or small curd"
+    group: dairy
+    nova: 3
+  - key: kefir
+    fdc_id: 170904
+    source: sr_legacy
+    description: "Kefir, lowfat, plain, LIFEWAY"
+    group: dairy
+    nova: 1
+  - key: egg_hard_boiled
+    fdc_id: 173424
+    source: sr_legacy
+    description: "Egg, whole, cooked, hard-boiled"
+    group: eggs
+    nova: 1
+  - key: cod_cooked
+    fdc_id: 171956
+    source: sr_legacy
+    description: "Fish, cod, Atlantic, cooked, dry heat"
+    group: fish
+    nova: 1
+  - key: salmon_cooked
+    fdc_id: 175168
+    source: sr_legacy
+    description: "Fish, salmon, Atlantic, farmed, cooked, dry heat"
+    group: fish
+    nova: 1
+  - key: sardines_canned
+    fdc_id: 175139
+    source: sr_legacy
+    description: "Fish, sardine, Atlantic, canned in oil, drained solids with bone"
+    group: fish
+    nova: 3
+  - key: tilapia_cooked
+    fdc_id: 175177
+    source: sr_legacy
+    description: "Fish, tilapia, cooked, dry heat"
+    group: fish
+    nova: 1
+  - key: dates_deglet_noor
+    fdc_id: 171726
+    source: sr_legacy
+    description: "Dates, deglet noor"
+    group: fruits
+    nova: 1
+  - key: dates_medjool
+    fdc_id: 168191
+    source: sr_legacy
+    description: "Dates, medjool"
+    group: fruits
+    nova: 1
+  - key: dried_apricots
+    fdc_id: 173941
+    source: sr_legacy
+    description: "Apricots, dried, sulfured, uncooked"
+    group: fruits
+    nova: 1
+  - key: lemon
+    fdc_id: 167746
+    source: sr_legacy
+    description: "Lemons, raw, without peel"
+    group: fruits
+    nova: 1
+  - key: orange
+    fdc_id: 169097
+    source: sr_legacy
+    description: "Oranges, raw, all commercial varieties"
+    group: fruits
+    nova: 1
+  - key: pineapple
+    fdc_id: 169124
+    source: sr_legacy
+    description: "Pineapple, raw, all varieties"
+    group: fruits
+    nova: 1
+  - key: prunes
+    fdc_id: 168162
+    source: sr_legacy
+    description: "Plums, dried (prunes), uncooked"
+    group: fruits
+    nova: 1
+  - key: raisins
+    fdc_id: 168165
+    source: sr_legacy
+    description: "Raisins, dark, seedless"
+    group: fruits
+    nova: 1
+  - key: raspberries
+    fdc_id: 167755
+    source: sr_legacy
+    description: "Raspberries, raw"
+    group: fruits
+    nova: 1
+  - key: strawberries
+    fdc_id: 167762
+    source: sr_legacy
+    description: "Strawberries, raw"
+    group: fruits
+    nova: 1
+  - key: watermelon
+    fdc_id: 167765
+    source: sr_legacy
+    description: "Watermelon, raw"
+    group: fruits
+    nova: 1
+  - key: bagel_plain
+    fdc_id: 174899
+    source: sr_legacy
+    description: "Bagels, plain, enriched, with calcium propionate (includes onion, poppy, sesame)"
+    group: grains
+    nova: 4
+  - key: barley_pearled_cooked
+    fdc_id: 170285
+    source: sr_legacy
+    description: "Barley, pearled, cooked"
+    group: grains
+    nova: 1
+  - key: bulgur_cooked
+    fdc_id: 170287
+    source: sr_legacy
+    description: "Bulgur, cooked"
+    group: grains
+    nova: 1
+  - key: corn_flakes
+    fdc_id: 174648
+    source: sr_legacy
+    description: "Cereals ready-to-eat, RALSTON Corn Flakes"
+    group: grains
+    nova: 4
+    gluten_free: false
+  - key: couscous_cooked
+    fdc_id: 169700
+    source: sr_legacy
+    description: "Couscous, cooked"
+    group: grains
+    nova: 1
+  - key: granola
+    fdc_id: 171646
+    source: sr_legacy
+    description: "Cereals ready-to-eat, granola, homemade"
+    group: grains
+    nova: 3
+    contains: [tree_nuts, wheat]
+  - key: oatmeal_cooked
+    fdc_id: 173905
+    source: sr_legacy
+    description: "Cereals, oats, regular and quick, unenriched, cooked with water (includes boiling and microwaving), without salt"
+    group: grains
+    nova: 1
+  - key: oats_instant_prepared
+    fdc_id: 171662
+    source: sr_legacy
+    description: "Cereals, oats, instant, fortified, plain, prepared with water (boiling water added or microwaved)"
+    group: grains
+    nova: 1
+  - key: pasta_cooked
+    fdc_id: 169737
+    source: sr_legacy
+    description: "Pasta, cooked, enriched, without added salt"
+    group: grains
+    nova: 1
+  - key: pasta_whole_wheat_cooked
+    fdc_id: 168910
+    source: sr_legacy
+    description: "Pasta, whole-wheat, cooked"
+    group: grains
+    nova: 1
+  - key: quinoa_cooked
+    fdc_id: 168917
+    source: sr_legacy
+    description: "Quinoa, cooked"
+    group: grains
+    nova: 1
+  - key: rice_brown_cooked
+    fdc_id: 169704
+    source: sr_legacy
+    description: "Rice, brown, long-grain, cooked"
+    group: grains
+    nova: 1
+  - key: rice_white_cooked
+    fdc_id: 168878
+    source: sr_legacy
+    description: "Rice, white, long-grain, regular, enriched, cooked"
+    group: grains
+    nova: 1
+  - key: toast_white
+    fdc_id: 174925
+    source: sr_legacy
+    description: "Bread, white, commercially prepared, toasted"
+    group: grains
+    nova: 4
+  - key: white_bread_sr
+    fdc_id: 167532
+    source: sr_legacy
+    description: "Bread, white wheat"
+    group: grains
+    nova: 4
+  - key: black_beans_cooked
+    fdc_id: 173735
+    source: sr_legacy
+    description: "Beans, black, mature seeds, cooked, boiled, without salt"
+    group: legumes
+    nova: 1
+  - key: chickpeas_cooked
+    fdc_id: 173757
+    source: sr_legacy
+    description: "Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt"
+    group: legumes
+    nova: 1
+  - key: hummus
+    fdc_id: 174289
+    source: sr_legacy
+    description: "Hummus, commercial"
+    group: legumes
+    nova: 3
+    contains: [sesame]
+  - key: kidney_beans_cooked
+    fdc_id: 175194
+    source: sr_legacy
+    description: "Beans, kidney, red, mature seeds, cooked, boiled, without salt"
+    group: legumes
+    nova: 1
+  - key: lentils_cooked
+    fdc_id: 172421
+    source: sr_legacy
+    description: "Lentils, mature seeds, cooked, boiled, without salt"
+    group: legumes
+    nova: 1
+  - key: miso
+    fdc_id: 172442
+    source: sr_legacy
+    description: "Miso"
+    group: legumes
+    nova: 3
+  - key: tempeh
+    fdc_id: 174272
+    source: sr_legacy
+    description: "Tempeh"
+    group: legumes
+    nova: 3
+  - key: tofu_firm
+    fdc_id: 172448
+    source: sr_legacy
+    description: "Tofu, firm, prepared with calcium sulfate and magnesium chloride (nigari)"
+    group: legumes
+    nova: 3
+  - key: beef_ground_93_cooked
+    fdc_id: 174752
+    source: sr_legacy
+    description: "Beef, ground, 93% lean meat / 7% fat, patty, cooked, broiled"
+    group: meat
+    nova: 1
+  - key: beef_sirloin_cooked
+    fdc_id: 173118
+    source: sr_legacy
+    description: 'Beef, top sirloin, steak, separable lean only, trimmed to 1/8" fat, choice, cooked, broiled'
+    group: meat
+    nova: 1
+  - key: french_fries
+    fdc_id: 169264
+    source: sr_legacy
+    description: "Potatoes, french fried, all types, salt added in processing, frozen, home-prepared, oven heated"
+    group: mixed_dishes
+    nova: 4
+  - key: pizza_cheese
+    fdc_id: 170317
+    source: sr_legacy
+    description: "Pizza, cheese topping, regular crust, frozen, cooked"
+    group: mixed_dishes
+    nova: 4
+    contains: [wheat]
+  - key: mixed_nuts
+    fdc_id: 170585
+    source: sr_legacy
+    description: "Nuts, mixed nuts, dry roasted, with peanuts, without salt added"
+    group: nuts_seeds
+    nova: 1
+    contains: [tree_nuts]
+  - key: peanut_butter
+    fdc_id: 172470
+    source: sr_legacy
+    description: "Peanut butter, smooth style, without salt"
+    group: nuts_seeds
+    nova: 3
+  - key: peanuts_dry_roasted
+    fdc_id: 173806
+    source: sr_legacy
+    description: "Peanuts, all types, dry-roasted, without salt"
+    group: nuts_seeds
+    nova: 1
+  - key: tahini
+    fdc_id: 170189
+    source: sr_legacy
+    description: "Seeds, sesame butter, tahini, from roasted and toasted kernels (most common type)"
+    group: nuts_seeds
+    nova: 3
+  - key: soymilk
+    fdc_id: 172456
+    source: sr_legacy
+    description: "Soymilk, original and vanilla, with added calcium, vitamins A and D"
+    group: plant_milk
+    nova: 4
+  - key: chicken_breast_roasted
+    fdc_id: 171477
+    source: sr_legacy
+    description: "Chicken, broilers or fryers, breast, meat only, cooked, roasted"
+    group: poultry
+    nova: 1
+  - key: turkey_breast_roasted
+    fdc_id: 171496
+    source: sr_legacy
+    description: "Turkey, whole, breast, meat only, cooked, roasted"
+    group: poultry
+    nova: 1
+  - key: shrimp_cooked
+    fdc_id: 175180
+    source: sr_legacy
+    description: "Crustaceans, shrimp, cooked"
+    group: shellfish
+    nova: 1
+  - key: granola_bar
+    fdc_id: 167542
+    source: sr_legacy
+    description: "Snacks, granola bars, hard, plain"
+    group: snacks
+    nova: 4
+  - key: popcorn_air_popped
+    fdc_id: 167959
+    source: sr_legacy
+    description: "Snacks, popcorn, air-popped"
+    group: snacks
+    nova: 1
+  - key: potato_chips
+    fdc_id: 169677
+    source: sr_legacy
+    description: "Snacks, potato chips, plain, salted"
+    group: snacks
+    nova: 4
+  - key: pretzels
+    fdc_id: 167555
+    source: sr_legacy
+    description: "Snacks, pretzels, hard, plain, salted"
+    group: snacks
+    nova: 4
+  - key: rice_cakes
+    fdc_id: 170250
+    source: sr_legacy
+    description: "Snacks, rice cakes, brown rice, plain, unsalted"
+    group: snacks
+    nova: 3
+  - key: saltine_crackers
+    fdc_id: 172746
+    source: sr_legacy
+    description: "Crackers, saltines (includes oyster, soda, soup)"
+    group: snacks
+    nova: 4
+    contains: [wheat]
+  - key: trail_mix
+    fdc_id: 167561
+    source: sr_legacy
+    description: "Snacks, trail mix, regular"
+    group: snacks
+    nova: 3
+    contains: [peanuts, tree_nuts]
+  - key: broth_beef
+    fdc_id: 171538
+    source: sr_legacy
+    description: "Soup, beef broth or bouillon canned, ready-to-serve"
+    group: soups
+    nova: 4
+  - key: broth_chicken
+    fdc_id: 174536
+    source: sr_legacy
+    description: "Soup, chicken broth, ready-to-serve"
+    group: soups
+    nova: 4
+  - key: broth_vegetable
+    fdc_id: 171583
+    source: sr_legacy
+    description: "Soup, vegetable broth, ready to serve"
+    group: soups
+    nova: 4
+  - key: nutrition_shake
+    fdc_id: 174823
+    source: sr_legacy
+    description: "Beverages, ABBOTT, ENSURE, Nutritional Shake, Ready-to-Drink"
+    group: sports_nutrition
+    nova: 4
+    contains: [milk, soy]
+  - key: protein_shake_rtd
+    fdc_id: 174814
+    source: sr_legacy
+    description: "Beverages, CYTOSPORT, Muscle Milk, ready-to-drink"
+    group: sports_nutrition
+    nova: 4
+  - key: sports_drink
+    fdc_id: 173660
+    source: sr_legacy
+    description: "Beverages, PEPSICO QUAKER, Gatorade, G performance O 2, ready-to-drink."
+    group: sports_nutrition
+    nova: 4
+  - key: whey_protein_isolate
+    fdc_id: 173177
+    source: sr_legacy
+    description: "Beverages, Whey protein powder isolate"
+    group: sports_nutrition
+    nova: 4
+  - key: cookies_chocolate_chip
+    fdc_id: 172716
+    source: sr_legacy
+    description: "Cookies, chocolate chip, commercially prepared, regular, higher fat, enriched"
+    group: sweets
+    nova: 4
+    contains: [wheat, milk, egg, soy]
+  - key: dark_chocolate
+    fdc_id: 170273
+    source: sr_legacy
+    description: "Chocolate, dark, 70-85% cacao solids"
+    group: sweets
+    nova: 3
+  - key: doughnut
+    fdc_id: 174990
+    source: sr_legacy
+    description: "Doughnuts, cake-type, plain (includes unsugared, old-fashioned)"
+    group: sweets
+    nova: 4
+    contains: [wheat, milk, egg, soy]
+  - key: gummy_candy
+    fdc_id: 167989
+    source: sr_legacy
+    description: "Candies, gumdrops, starch jelly pieces"
+    group: sweets
+    nova: 4
+  - key: honey
+    fdc_id: 169640
+    source: sr_legacy
+    description: "Honey"
+    group: sweets
+    nova: 2
+  - key: ice_cream_vanilla
+    fdc_id: 167575
+    source: sr_legacy
+    description: "Ice creams, vanilla"
+    group: sweets
+    nova: 4
+    contains: [egg]
+  - key: jam
+    fdc_id: 169641
+    source: sr_legacy
+    description: "Jams and preserves"
+    group: sweets
+    nova: 3
+  - key: maple_syrup
+    fdc_id: 169661
+    source: sr_legacy
+    description: "Syrups, maple"
+    group: sweets
+    nova: 2
+  - key: broccoli_boiled
+    fdc_id: 169967
+    source: sr_legacy
+    description: "Broccoli, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: carrots_boiled
+    fdc_id: 170394
+    source: sr_legacy
+    description: "Carrots, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: corn_boiled
+    fdc_id: 169999
+    source: sr_legacy
+    description: "Corn, sweet, yellow, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: ginger_raw
+    fdc_id: 169231
+    source: sr_legacy
+    description: "Ginger root, raw"
+    group: vegetables
+    nova: 1
+  - key: green_beans_boiled
+    fdc_id: 169141
+    source: sr_legacy
+    description: "Beans, snap, green, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: peas_boiled
+    fdc_id: 170017
+    source: sr_legacy
+    description: "Peas, green, frozen, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: potato_baked
+    fdc_id: 170093
+    source: sr_legacy
+    description: "Potatoes, baked, flesh and skin, without salt"
+    group: vegetables
+    nova: 1
+  - key: potato_boiled
+    fdc_id: 170440
+    source: sr_legacy
+    description: "Potatoes, boiled, cooked without skin, flesh, without salt"
+    group: vegetables
+    nova: 1
+  - key: spinach_boiled
+    fdc_id: 168463
+    source: sr_legacy
+    description: "Spinach, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: spinach_raw
+    fdc_id: 168462
+    source: sr_legacy
+    description: "Spinach, raw"
+    group: vegetables
+    nova: 1
+  - key: sweet_potato_baked
+    fdc_id: 168483
+    source: sr_legacy
+    description: "Sweet potato, cooked, baked in skin, flesh, without salt"
+    group: vegetables
+    nova: 1
+  - key: zucchini_boiled
+    fdc_id: 169292
+    source: sr_legacy
+    description: "Squash, summer, zucchini, includes skin, cooked, boiled, drained, without salt"
+    group: vegetables
+    nova: 1
+  - key: skyr_plain
+    fdc_id: 2664809
+    source: branded
+    description: "Icelandic Provisions Plain Traditional Icelandic Skyr"
+    group: dairy
+    nova: 1
+  - key: energy_chews
+    fdc_id: 2586196
+    source: branded
+    description: "CLIF Bloks Energy Chews, Tropical Punch (Clif Bar and Company)"
+    group: sports_nutrition
+    nova: 4
+  - key: energy_gel
+    fdc_id: 1908087
+    source: branded
+    description: "GU Energy Gel, Lemon Sublime (Advanced Food Concepts Inc.)"
+    group: sports_nutrition
+    nova: 4
+
+  # Generic apple (SR Legacy): the reference values most apple lookups expect.
+  - key: apple
+    fdc_id: 171688
+    source: sr_legacy
+    description: "Apples, raw, with skin"
+    group: fruits
+    nova: 1
+
+# Spec 7.3 seed lists (knowledge FOOD.SEED.*): every term maps to at least one food key.
+seed_terms:
+  "non-starchy vegetables":
+    [
+      broccoli_raw,
+      broccoli_boiled,
+      spinach_raw,
+      spinach_boiled,
+      kale_raw,
+      cauliflower_raw,
+      zucchini_boiled,
+      green_beans_boiled,
+      peppers_bell_red_raw,
+      cucumber_with_peel_raw,
+      lettuce_cos_or_romaine_raw,
+      asparagus_green_raw,
+      mushrooms_white_button,
+      tomato_roma,
+      cabbage_green_raw,
+      brussels_sprouts_raw,
+    ]
+  "berries": [blueberries_raw, strawberries, raspberries, blackberries_raw]
+  "apples":
+    [
+      apple,
+      apples_gala_with_skin_raw,
+      apples_fuji_with_skin_raw,
+      apples_honeycrisp_with_skin_raw,
+      apples_granny_smith_with_skin_raw,
+      apples_red_delicious_with_skin_raw,
+    ]
+  "melon":
+    [
+      melons_cantaloupe_raw,
+      melons_honeydew_raw,
+      watermelon,
+      watermelon_seedless_flesh_only_raw,
+    ]
+  "broth soups": [broth_chicken, broth_beef, broth_vegetable]
+  "eggs/egg whites":
+    [
+      eggs_grade_a_large_egg_whole,
+      eggs_grade_a_large_egg_white,
+      egg_hard_boiled,
+    ]
+  "nonfat Greek yogurt": [yogurt_greek_plain_nonfat]
+  "skyr": [skyr_plain]
+  "cottage cheese":
+    [
+      cottage_cheese_nonfat,
+      cheese_cottage_lowfat_2_milkfat,
+      cottage_cheese_full_fat_large_or_small_curd,
+    ]
+  "chicken/turkey breast":
+    [
+      chicken_breast_roasted,
+      chicken_breast_boneless_skinless_raw,
+      turkey_breast_roasted,
+    ]
+  "white fish":
+    [
+      cod_cooked,
+      tilapia_cooked,
+      fish_cod_atlantic_wild_caught_raw,
+      fish_haddock_raw,
+      fish_pollock_raw,
+      halibut_frozen_wild_caught,
+    ]
+  "shrimp": [shrimp_cooked, crustaceans_shrimp_farm_raised_raw]
+  "tuna":
+    [
+      fish_tuna_light_canned_in_water_drained_solids,
+      tuna_ahi_or_yellowfin_frozen_wild_caught,
+    ]
+  "lentils/beans":
+    [
+      lentils_cooked,
+      black_beans_cooked,
+      kidney_beans_cooked,
+      chickpeas_cooked,
+      beans_pinto_canned_sodium_added_drained_and_rinsed,
+    ]
+  "boiled potatoes": [potato_boiled]
+  "oats":
+    [
+      oatmeal_cooked,
+      oats_whole_grain_rolled_old_fashioned,
+      oats_whole_grain_steel_cut,
+      oats_instant_prepared,
+    ]
+  "popcorn": [popcorn_air_popped]
+  "whey/milk":
+    [
+      whey_protein_isolate,
+      milk_nonfat_fluid_with_added_vitamin_a_and_vitamin_d_fat_fre,
+      milk_lowfat_fluid_1_milkfat_with_added_vitamin_a_and_vitamin,
+    ]
+  "Greek yogurt": [yogurt_greek_plain_nonfat, yogurt_greek_plain_whole_milk]
+  "eggs": [eggs_grade_a_large_egg_whole, egg_hard_boiled]
+  "lean beef":
+    [
+      beef_sirloin_cooked,
+      beef_ground_93_cooked,
+      beef_round_eye_of_round_roast_boneless_separable_lean_only_t,
+    ]
+  "chicken": [chicken_breast_roasted, chicken_thigh_boneless_skinless_raw]
+  "salmon":
+    [
+      salmon_cooked,
+      fish_salmon_atlantic_farm_raised_raw,
+      fish_salmon_sockeye_wild_caught_raw,
+    ]
+  "tofu/tempeh": [tofu_firm, tempeh]
+  "soy milk": [soymilk, soy_milk_unsweetened_plain_shelf_stable]
+  "whole milk": [milk_whole_3_25_milkfat_with_added_vitamin_d]
+  "nut butters":
+    [
+      peanut_butter,
+      peanut_butter_creamy,
+      almond_butter_creamy,
+      tahini,
+      sesame_butter_creamy,
+    ]
+  "trail mix": [trail_mix]
+  "granola": [granola]
+  "rice": [rice_white_cooked, rice_brown_cooked]
+  "pasta": [pasta_cooked, pasta_whole_wheat_cooked]
+  "bagels": [bagel_plain]
+  "dried fruit":
+    [
+      raisins,
+      raisins_golden_seedless,
+      dates_medjool,
+      dried_apricots,
+      prunes,
+      figs_dried_uncooked,
+    ]
+  "olive oil": [oil_olive_extra_virgin, oil_olive_extra_light]
+  "liquid meals": [nutrition_shake, protein_shake_rtd]
+  "potatoes": [potato_boiled, potato_baked, sweet_potato_baked]
+  "bread":
+    [
+      bread_white_commercially_prepared,
+      bread_whole_wheat_commercially_prepared,
+      bread_100_whole_wheat_commercial,
+      white_bread_sr,
+    ]
+  "fruit":
+    [
+      bananas_ripe_and_slightly_ripe_raw,
+      apple,
+      apples_gala_with_skin_raw,
+      orange,
+      strawberries,
+      grapes_red_seedless_raw,
+      mango_tommy_atkins_peeled_raw,
+      pineapple,
+    ]
+  "white bagel/toast + honey/jam": [bagel_plain, toast_white, honey, jam]
+  "banana": [bananas_ripe_and_slightly_ripe_raw, bananas_overripe_raw]
+  "white rice": [rice_white_cooked]
+  "pretzels": [pretzels]
+  "gels": [energy_gel]
+  "chews": [energy_chews]
+  "sports drink": [sports_drink]
+  "dates": [dates_medjool, dates_deglet_noor]
+  "chocolate milk": [chocolate_milk]
+  "Greek yogurt + fruit + granola":
+    [yogurt_greek_plain_nonfat, blueberries_raw, granola]
+  "rice bowl + lean protein": [rice_white_cooked, chicken_breast_roasted]
+  "whey smoothie":
+    [
+      whey_protein_isolate,
+      bananas_ripe_and_slightly_ripe_raw,
+      milk_nonfat_fluid_with_added_vitamin_a_and_vitamin_d_fat_fre,
+    ]
+  "shakes": [protein_shake_rtd, nutrition_shake]
+  "fish":
+    [
+      salmon_cooked,
+      cod_cooked,
+      tilapia_cooked,
+      fish_tuna_light_canned_in_water_drained_solids,
+      sardines_canned,
+    ]
+  "tofu": [tofu_firm]
+  "plain starches":
+    [
+      rice_white_cooked,
+      potato_boiled,
+      pasta_cooked,
+      oatmeal_cooked,
+      saltine_crackers,
+      toast_white,
+    ]
+  "bland cooked vegetables":
+    [carrots_boiled, zucchini_boiled, green_beans_boiled, spinach_boiled]
+  "broth": [broth_chicken, broth_vegetable]
+  "ginger": [ginger_raw]
+  "water spread through the day": [water_tap]
+  "legumes":
+    [
+      lentils_cooked,
+      chickpeas_cooked,
+      black_beans_cooked,
+      kidney_beans_cooked,
+      edamame_frozen_prepared,
+    ]
+  "rolled/steel-cut oats":
+    [
+      oats_whole_grain_rolled_old_fashioned,
+      oats_whole_grain_steel_cut,
+      oatmeal_cooked,
+    ]
+  "barley": [barley_pearled_cooked]
+  "bulgur": [bulgur_cooked, bulgur_dry_raw]
+  "quinoa": [quinoa_cooked]
+  "citrus":
+    [
+      orange,
+      oranges_raw_navels,
+      grapefruit_raw,
+      mandarin_seedless_peeled_raw,
+      lemon,
+    ]
+  "nuts":
+    [
+      nuts_almonds_whole_raw,
+      nuts_walnuts_english_halves_raw,
+      nuts_cashew_nuts_raw,
+      nuts_pistachio_nuts_raw,
+      mixed_nuts,
+      peanuts_dry_roasted,
+    ]
+  "plain yogurt":
+    [yogurt_plain_nonfat, yogurt_plain_whole_milk, yogurt_greek_plain_nonfat]
