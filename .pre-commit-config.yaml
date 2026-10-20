@@ -9,5 +9,6 @@ repos:
     rev: v3.9.10
     hooks:
       - id: prettier
-        # kb_broken/ holds deliberately invalid YAML for the loader tests.
-        exclude: ^(CLAUDE\.md|.*package-lock\.json|engine/tests/fixtures/kb_broken/.*)$
+        # kb_broken/ holds deliberately invalid YAML for the loader tests; foods.json is generated
+        # by data/build_foods.py and must stay byte-identical to its output.
+        exclude: ^(CLAUDE\.md|.*package-lock\.json|engine/tests/fixtures/kb_broken/.*|engine/data/foods\.json)$

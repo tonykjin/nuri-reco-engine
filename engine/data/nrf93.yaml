@@ -1,0 +1,24 @@
+# NRF9.3 nutrient-rich food index (spec §7.1; Drewnowski, citation NRF93), per 100 kcal:
+#   sum(min(%DV, 100) of 9 nutrients to encourage) - sum(%MRV of 3 nutrients to limit)
+# Daily values: FDA 2016 Nutrition Facts Daily Values for adults and children 4+ (21 CFR 101.9).
+# Missing data stays missing: the score is null unless at least `min_encourage_available` of the 9
+# encouraged nutrients and all 3 limited nutrients are known.
+encourage:
+  protein_g: 50
+  fiber_g: 28
+  vitamin_a_rae_ug: 900
+  vitamin_c_mg: 90
+  vitamin_e_mg: 15
+  calcium_mg: 1300
+  iron_mg: 18
+  magnesium_mg: 420
+  potassium_mg: 4700
+limit:
+  sat_fat_g: 20
+  added_sugars_g: 50
+  sodium_mg: 2300
+cap_percent_dv: 100
+min_encourage_available: 7
+# FDC rarely reports added sugars. Heuristic: NOVA 1-2 foods have none by definition (0 when not
+# reported); for NOVA 3-4 foods total sugars stand in.
+added_sugars_zero_for_nova: [1, 2]

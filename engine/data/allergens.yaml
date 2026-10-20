@@ -1,0 +1,157 @@
+# Allergen and diet tagging rules for build_foods.py (spec §9 constraint handling).
+# Matching: lowercase description (+ ingredients for branded foods), `except` phrases removed first,
+# then each keyword matched as a whole word with an optional plural (s/es). Foods can add allergens
+# their name can't reveal with `contains` in food_list.yaml. Highly refined peanut and soybean oils
+# are exempt from FDA allergen labeling, so they're excepted.
+
+allergens:
+  milk:
+    keywords:
+      [
+        milk,
+        cheese,
+        yogurt,
+        yoghurt,
+        butter,
+        cream,
+        whey,
+        casein,
+        caseinate,
+        ghee,
+        buttermilk,
+        kefir,
+        skyr,
+        ricotta,
+        lactose,
+        curd,
+        milkfat,
+      ]
+    # Derived and look-alike phrases: plant milks and nut/seed butters aren't dairy.
+    except:
+      [
+        almond milk,
+        oat milk,
+        soy milk,
+        soymilk,
+        coconut milk,
+        peanut butter,
+        almond butter,
+        sesame butter,
+        nut butter,
+        cocoa butter,
+        butternut,
+      ]
+  egg:
+    keywords: [egg, mayonnaise, albumin]
+    except: [eggplant]
+  fish:
+    keywords:
+      [
+        fish,
+        salmon,
+        tuna,
+        cod,
+        pollock,
+        tilapia,
+        halibut,
+        catfish,
+        haddock,
+        mahi,
+        bass,
+        snapper,
+        swordfish,
+        anchovies,
+        anchovy,
+        sardine,
+        trout,
+      ]
+    except: []
+  crustacean_shellfish:
+    keywords: [crustacean, shrimp, crab, lobster, crayfish, prawn]
+    except: []
+  tree_nuts:
+    keywords:
+      [
+        almond,
+        cashew,
+        walnut,
+        pecan,
+        pistachio,
+        hazelnut,
+        filbert,
+        macadamia,
+        brazilnut,
+        pine nut,
+      ]
+    except: []
+  peanuts:
+    keywords: [peanut]
+    except: ["oil, peanut", "peanut oil"]
+  wheat:
+    keywords:
+      [
+        wheat,
+        bagel,
+        bread,
+        pasta,
+        spaghetti,
+        couscous,
+        bulgur,
+        semolina,
+        farro,
+        spelt,
+        durum,
+        seitan,
+        pretzel,
+      ]
+    except: [buckwheat]
+  soy:
+    keywords: [soy, soya, soybean, tofu, tempeh, edamame, miso, soymilk]
+    except: ["oil, soybean", "soybean oil"]
+  sesame:
+    keywords: [sesame, tahini]
+    except: []
+
+diet:
+  meat_groups: [meat, poultry, processed_meat]
+  seafood_groups: [fish, shellfish]
+  # Meat in foods outside the meat groups (broths, baked beans with pork, gelatin candies).
+  meat_keywords:
+    [
+      chicken,
+      beef,
+      pork,
+      ham,
+      bacon,
+      sausage,
+      turkey,
+      lamb,
+      bison,
+      gelatin,
+      lard,
+      pepperoni,
+      salami,
+      bologna,
+    ]
+  seafood_allergens: [fish, crustacean_shellfish]
+  non_vegan_allergens: [milk, egg]
+  non_vegan_keywords: [honey, gelatin, beeswax, carmine, shellac]
+  # Celiac (spec §9): wheat, barley, rye and non-certified oats.
+  gluten_allergens: [wheat]
+  gluten_keywords:
+    [
+      barley,
+      rye,
+      spelt,
+      farro,
+      bulgur,
+      couscous,
+      oat,
+      malt,
+      seitan,
+      granola,
+      cookie,
+      doughnut,
+      pizza,
+      cracker,
+    ]
