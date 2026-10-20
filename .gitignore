@@ -19,3 +19,6 @@ next-env.d.ts
 .env*.local
 .DS_Store
 Thumbs.db
+
+# USDA FoodData Central downloads for data/build_foods.py (~72 MB unzipped)
+engine/data/.cache/
