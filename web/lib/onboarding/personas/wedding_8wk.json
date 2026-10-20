@@ -1,0 +1,68 @@
+{
+  "as_of": "2026-10-16",
+  "answers": {
+    "firstName": "Jess",
+    "goals": [
+      "lose_fat",
+      "date"
+    ],
+    "ranking": [
+      "lose_fat",
+      "deadline_event"
+    ],
+    "goalDetails": {
+      "lose_fat": {
+        "targetWeight": 138.9
+      },
+      "deadline_event": {
+        "event": "wedding",
+        "eventDate": "2026-12-11"
+      }
+    },
+    "units": "imperial",
+    "sex": "female",
+    "birthDate": "1997-10-16",
+    "weight": 158.7,
+    "heightCm": null,
+    "heightFt": 5,
+    "heightIn": 5,
+    "bodyFatPct": null,
+    "activity": "some_walking",
+    "training": {
+      "type": "none",
+      "daysPerWeek": 0,
+      "schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ],
+      "experience": null
+    },
+    "health": {
+      "pregnancy": "no",
+      "ckdStage": null,
+      "medications": [],
+      "conditions": [],
+      "scoff": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    "eatingStyle": "no_preference",
+    "allergens": [],
+    "religious": [],
+    "dislikes": [],
+    "taste": {},
+    "cuisines": [],
+    "cookTimeMin": null,
+    "budget": null,
+    "pace": null
+  }
+}

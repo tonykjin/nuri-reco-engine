@@ -1,0 +1,56 @@
+{
+  "as_of": "2026-10-16",
+  "answers": {
+    "firstName": "Kai",
+    "goals": [
+      "build_muscle"
+    ],
+    "ranking": [],
+    "goalDetails": {},
+    "units": "metric",
+    "sex": "male",
+    "birthDate": "2000-08-09",
+    "weight": 68,
+    "heightCm": 175,
+    "heightFt": null,
+    "heightIn": null,
+    "bodyFatPct": null,
+    "activity": "on_feet_often",
+    "training": {
+      "type": "lifting",
+      "daysPerWeek": 3,
+      "schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ],
+      "experience": null
+    },
+    "health": {
+      "pregnancy": "no",
+      "ckdStage": null,
+      "medications": [],
+      "conditions": [],
+      "scoff": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    "eatingStyle": "vegan",
+    "allergens": [],
+    "religious": [],
+    "dislikes": [],
+    "taste": {},
+    "cuisines": [],
+    "cookTimeMin": null,
+    "budget": null,
+    "pace": null
+  }
+}

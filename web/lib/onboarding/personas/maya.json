@@ -1,0 +1,56 @@
+{
+  "as_of": "2026-10-16",
+  "answers": {
+    "firstName": "Maya",
+    "goals": [
+      "lose_fat"
+    ],
+    "ranking": [],
+    "goalDetails": {},
+    "units": "metric",
+    "sex": "female",
+    "birthDate": "1996-03-02",
+    "weight": 70,
+    "heightCm": 168,
+    "heightFt": null,
+    "heightIn": null,
+    "bodyFatPct": null,
+    "activity": "on_feet_often",
+    "training": {
+      "type": "lifting",
+      "daysPerWeek": 3,
+      "schedule": [
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest",
+        "rest"
+      ],
+      "experience": null
+    },
+    "health": {
+      "pregnancy": "no",
+      "ckdStage": null,
+      "medications": [],
+      "conditions": [],
+      "scoff": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    "eatingStyle": "no_preference",
+    "allergens": [],
+    "religious": [],
+    "dislikes": [],
+    "taste": {},
+    "cuisines": [],
+    "cookTimeMin": null,
+    "budget": null,
+    "pace": null
+  }
+}

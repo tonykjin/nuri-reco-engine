@@ -1,0 +1,56 @@
+{
+  "as_of": "2026-10-16",
+  "answers": {
+    "firstName": "Leo",
+    "goals": [
+      "strength"
+    ],
+    "ranking": [],
+    "goalDetails": {},
+    "units": "metric",
+    "sex": "male",
+    "birthDate": "1998-10-16",
+    "weight": 80,
+    "heightCm": 180,
+    "heightFt": null,
+    "heightIn": null,
+    "bodyFatPct": null,
+    "activity": "on_feet_all_day",
+    "training": {
+      "type": "mixed",
+      "daysPerWeek": 5,
+      "schedule": [
+        "rest",
+        "quality",
+        "easy",
+        "rest",
+        "quality",
+        "long",
+        "easy"
+      ],
+      "experience": null
+    },
+    "health": {
+      "pregnancy": "no",
+      "ckdStage": null,
+      "medications": [],
+      "conditions": [],
+      "scoff": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    "eatingStyle": "no_preference",
+    "allergens": [],
+    "religious": [],
+    "dislikes": [],
+    "taste": {},
+    "cuisines": [],
+    "cookTimeMin": null,
+    "budget": null,
+    "pace": null
+  }
+}

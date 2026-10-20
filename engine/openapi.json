@@ -91,8 +91,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -103,10 +107,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "glp1_t2d_strength": {
@@ -133,11 +143,15 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [
                           "glp1_agonist",
                           "metformin"
                         ],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -156,10 +170,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "goal_bmi_low": {
@@ -186,8 +206,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -199,10 +223,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "hybrid": {
@@ -229,8 +259,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -241,10 +275,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "marathon_fatloss": {
@@ -271,8 +311,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -293,7 +337,8 @@
                         "peanuts"
                       ],
                       "diet": "pescatarian",
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
                     "preferences": {
                       "taste": {
@@ -311,7 +356,8 @@
                         "japanese"
                       ]
                     },
-                    "as_of": "2026-10-16"
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "novice_recomp": {
@@ -326,7 +372,6 @@
                       "activity": "light",
                       "training": {
                         "resistance": true,
-                        "experience": "novice",
                         "weekly_schedule": [
                           "rest",
                           "rest",
@@ -335,12 +380,17 @@
                           "rest",
                           "rest",
                           "rest"
-                        ]
+                        ],
+                        "experience": "novice"
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -355,10 +405,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "pregnant": {
@@ -385,8 +441,12 @@
                       },
                       "flags": {
                         "pregnant": true,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -398,10 +458,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "under18": {
@@ -428,8 +494,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -441,10 +511,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "vegan_muscle": {
@@ -471,8 +547,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -484,10 +564,16 @@
                     "constraints": {
                       "allergens": [],
                       "diet": "vegan",
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "wedding_8wk": {
@@ -514,8 +600,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -533,10 +623,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 }
               }
@@ -616,8 +712,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -628,10 +728,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "glp1_t2d_strength": {
@@ -658,11 +764,15 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [
                           "glp1_agonist",
                           "metformin"
                         ],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -681,10 +791,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "goal_bmi_low": {
@@ -711,8 +827,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -724,10 +844,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "hybrid": {
@@ -754,8 +880,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -766,10 +896,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "marathon_fatloss": {
@@ -796,8 +932,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -818,7 +958,8 @@
                         "peanuts"
                       ],
                       "diet": "pescatarian",
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
                     "preferences": {
                       "taste": {
@@ -836,7 +977,8 @@
                         "japanese"
                       ]
                     },
-                    "as_of": "2026-10-16"
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "novice_recomp": {
@@ -851,7 +993,6 @@
                       "activity": "light",
                       "training": {
                         "resistance": true,
-                        "experience": "novice",
                         "weekly_schedule": [
                           "rest",
                           "rest",
@@ -860,12 +1001,17 @@
                           "rest",
                           "rest",
                           "rest"
-                        ]
+                        ],
+                        "experience": "novice"
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -880,10 +1026,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "pregnant": {
@@ -910,8 +1062,12 @@
                       },
                       "flags": {
                         "pregnant": true,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -923,10 +1079,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "under18": {
@@ -953,8 +1115,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -966,10 +1132,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "vegan_muscle": {
@@ -996,8 +1168,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -1009,10 +1185,16 @@
                     "constraints": {
                       "allergens": [],
                       "diet": "vegan",
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "wedding_8wk": {
@@ -1039,8 +1221,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -1058,10 +1244,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 }
               }
@@ -1183,8 +1375,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1195,10 +1391,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1232,11 +1434,15 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [
                             "glp1_agonist",
                             "metformin"
                           ],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1255,10 +1461,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1292,8 +1504,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1305,10 +1521,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1342,8 +1564,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1354,10 +1580,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1391,8 +1623,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1413,7 +1649,8 @@
                           "peanuts"
                         ],
                         "diet": "pescatarian",
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
                       "preferences": {
                         "taste": {
@@ -1431,7 +1668,8 @@
                           "japanese"
                         ]
                       },
-                      "as_of": "2026-10-16"
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1453,7 +1691,6 @@
                         "activity": "light",
                         "training": {
                           "resistance": true,
-                          "experience": "novice",
                           "weekly_schedule": [
                             "rest",
                             "rest",
@@ -1462,12 +1699,17 @@
                             "rest",
                             "rest",
                             "rest"
-                          ]
+                          ],
+                          "experience": "novice"
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1482,10 +1724,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1519,8 +1767,12 @@
                         },
                         "flags": {
                           "pregnant": true,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1532,10 +1784,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1569,8 +1827,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1582,10 +1844,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1619,8 +1887,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1632,10 +1904,16 @@
                       "constraints": {
                         "allergens": [],
                         "diet": "vegan",
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1669,8 +1947,12 @@
                         },
                         "flags": {
                           "pregnant": false,
+                          "breastfeeding": false,
                           "medications": [],
-                          "scoff_score": 0
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
                         }
                       },
                       "goals": [
@@ -1688,10 +1970,16 @@
                       ],
                       "constraints": {
                         "allergens": [],
-                        "religious": []
+                        "religious": [],
+                        "celiac": false
                       },
-                      "preferences": {},
-                      "as_of": "2026-10-16"
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1818,8 +2106,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -1830,10 +2122,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "glp1_t2d_strength": {
@@ -1860,11 +2158,15 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [
                           "glp1_agonist",
                           "metformin"
                         ],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -1883,10 +2185,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "goal_bmi_low": {
@@ -1913,8 +2221,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -1926,10 +2238,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "hybrid": {
@@ -1956,8 +2274,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -1968,10 +2290,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "marathon_fatloss": {
@@ -1998,8 +2326,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -2020,7 +2352,8 @@
                         "peanuts"
                       ],
                       "diet": "pescatarian",
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
                     "preferences": {
                       "taste": {
@@ -2038,7 +2371,8 @@
                         "japanese"
                       ]
                     },
-                    "as_of": "2026-10-16"
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "novice_recomp": {
@@ -2053,7 +2387,6 @@
                       "activity": "light",
                       "training": {
                         "resistance": true,
-                        "experience": "novice",
                         "weekly_schedule": [
                           "rest",
                           "rest",
@@ -2062,12 +2395,17 @@
                           "rest",
                           "rest",
                           "rest"
-                        ]
+                        ],
+                        "experience": "novice"
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -2082,10 +2420,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "pregnant": {
@@ -2112,8 +2456,12 @@
                       },
                       "flags": {
                         "pregnant": true,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -2125,10 +2473,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "under18": {
@@ -2155,8 +2509,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -2168,10 +2526,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "vegan_muscle": {
@@ -2198,8 +2562,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -2211,10 +2579,16 @@
                     "constraints": {
                       "allergens": [],
                       "diet": "vegan",
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 },
                 "wedding_8wk": {
@@ -2241,8 +2615,12 @@
                       },
                       "flags": {
                         "pregnant": false,
+                        "breastfeeding": false,
                         "medications": [],
-                        "scoff_score": 0
+                        "conditions": [],
+                        "scoff_score": 0,
+                        "ed_history": false,
+                        "reported_symptoms": []
                       }
                     },
                     "goals": [
@@ -2260,10 +2638,16 @@
                     ],
                     "constraints": {
                       "allergens": [],
-                      "religious": []
+                      "religious": [],
+                      "celiac": false
                     },
-                    "preferences": {},
-                    "as_of": "2026-10-16"
+                    "preferences": {
+                      "taste": {},
+                      "dislikes": [],
+                      "cuisines": []
+                    },
+                    "as_of": "2026-10-16",
+                    "sequence_confirmed": false
                   }
                 }
               }
