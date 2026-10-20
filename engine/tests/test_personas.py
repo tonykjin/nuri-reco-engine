@@ -1,177 +1,113 @@
-"""Golden persona fixtures (spec §11.2): schema checks only.
+"""Golden personas (spec §11.2): run each persona through engine.plan and assert its `expect`.
 
-Each tests/personas/*.json is a PlanRequest plus an `expect` object. The engine is checked
-against the expectations later (runbook Task 11); here we only make sure the files are valid
-and that the expectations point at real rules.
+The expectations live in tests/personas/*.json and are never loosened here; the fixture schema is
+checked in test_persona_fixtures.py.
 """
 
-import datetime as dt
 import json
 from pathlib import Path
-from typing import Any, Literal, Self
+from typing import Any
 
 import pytest
-from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from nuri_reco.goals import RESOLVER_PHASE_NAMES
+from nuri_reco.engine import all_rule_ids, plan
+from nuri_reco.expenditure import ColdStartExpenditure
 from nuri_reco.kb import load_kb
-from nuri_reco.models import DayType, Energy, PlanRequest
+from nuri_reco.models import PlanRequest, PlanResponse
+from nuri_reco.models.response import DayTargets, Phase
 
 PERSONAS = Path(__file__).parent / "personas"
-PERSONA_NAMES = [
-    "maya",
-    "novice_recomp",
-    "marathon_fatloss",
-    "wedding_8wk",
-    "hybrid",
-    "glp1_t2d_strength",
-    "vegan_muscle",
-    "under18",
-    "pregnant",
-    "goal_bmi_low",
-]
-SCORE_COMPONENTS = ["energy", "protein", "carb", "fiber", "micro", "pattern", "moderation"]
+NAMES = sorted(p.stem for p in PERSONAS.glob("*.json"))
 
 
-class Expect(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-
-class Range(Expect):
-    min: float | None = None
-    max: float | None = None
-
-    @model_validator(mode="after")
-    def _ordered(self) -> Self:
-        if self.min is not None and self.max is not None and self.min > self.max:
-            raise ValueError("min > max")
-        return self
-
-
-class PhaseExpect(Expect):
-    # None means every phase in the plan.
-    name: str | None = None
-    energy: list[Energy] | None = None
-    # Targets that hold on every day type of the phase.
-    targets: dict[str, Range] = Field(default_factory=dict)
-    targets_by_day_type: dict[DayType, dict[str, Range]] = Field(default_factory=dict)
-
-
-class FeasibilityExpect(Expect):
-    status: Literal["feasible", "clamped", "blocked"]
-    projected_kg_present: bool = False
-    reachable_date_present: bool = False
-
-
-class WeightsExpect(Expect):
-    phase: str | None = None
-    weights: dict[str, int]
-
-    @model_validator(mode="after")
-    def _complete(self) -> Self:
-        if sorted(self.weights) != sorted(SCORE_COMPONENTS):
-            raise ValueError(f"weights must cover {SCORE_COMPONENTS}")
-        if sum(self.weights.values()) != 100:
-            raise ValueError("weights must sum to 100")
-        return self
-
-
-class PersonaExpect(Expect):
-    notes: str
-    status: Literal["ok", "clamped", "rd_review", "blocked"]
-    no_targets: bool = False
-    phases: list[PhaseExpect] = Field(default_factory=list)
-    deficit_only_in: list[str] | None = None
-    feasibility: FeasibilityExpect | None = None
-    required_rule_ids: list[str] = Field(default_factory=list)
-    required_warnings: list[str] = Field(default_factory=list)
-    required_blocks: list[str] = Field(default_factory=list)
-    loam_score_weights: list[WeightsExpect] = Field(default_factory=list)
-    loam_score_weight_minimums: dict[str, int] = Field(default_factory=dict)
-
-    @model_validator(mode="after")
-    def _blocked_has_no_targets(self) -> Self:
-        if self.status == "blocked" and not (self.no_targets and not self.phases):
-            raise ValueError("blocked personas expect no_targets and no phases")
-        return self
-
-
-def load_persona(name: str) -> tuple[PlanRequest, PersonaExpect]:
-    raw: dict[str, Any] = json.loads((PERSONAS / f"{name}.json").read_text(encoding="utf-8"))
-    expect = PersonaExpect.model_validate(raw.pop("expect"))
+def load(name: str) -> tuple[PlanRequest, dict[str, Any]]:
+    raw = json.loads((PERSONAS / f"{name}.json").read_text(encoding="utf-8"))
+    expect = raw.pop("expect")
     return PlanRequest.model_validate(raw), expect
 
 
-def bmi(weight_kg: float, height_cm: float) -> float:
-    return weight_kg / (height_cm / 100) ** 2
+def target_value(key: str, day: DayTargets, req: PlanRequest) -> float:
+    """A target the persona names: a DayTargets field or a derived value."""
+    if key == "carb_g_per_kg":
+        return day.carb_g / req.profile.weight_kg
+    if key == "deficit_pct_tdee":
+        tdee = ColdStartExpenditure(load_kb()).tdee(req.profile)
+        return (tdee - day.kcal) / tdee * 100
+    value: float = getattr(day, key)
+    return value
 
 
-def test_persona_set_is_complete() -> None:
-    assert sorted(p.stem for p in PERSONAS.glob("*.json")) == sorted(PERSONA_NAMES)
+def in_range(value: float, rng: dict[str, float | None], label: str) -> None:
+    lo, hi = rng.get("min"), rng.get("max")
+    assert lo is None or value >= lo - 1e-6, f"{label}: {value:.2f} < {lo}"
+    assert hi is None or value <= hi + 1e-6, f"{label}: {value:.2f} > {hi}"
 
 
-@pytest.mark.parametrize("name", PERSONA_NAMES)
-def test_persona_is_valid(name: str) -> None:
-    load_persona(name)
+def check_phase(phase: Phase, exp: dict[str, Any], req: PlanRequest) -> None:
+    if exp.get("energy"):
+        assert phase.energy in exp["energy"], f"{phase.name}: energy {phase.energy}"
+    for key, rng in exp.get("targets", {}).items():
+        for day_type, day in phase.targets_by_day_type.items():
+            in_range(target_value(key, day, req), rng, f"{phase.name}/{day_type}/{key}")
+    for day_type, targets in exp.get("targets_by_day_type", {}).items():
+        day = phase.targets_by_day_type[day_type]
+        for key, rng in targets.items():
+            in_range(target_value(key, day, req), rng, f"{phase.name}/{day_type}/{key}")
 
 
-@pytest.mark.parametrize("name", PERSONA_NAMES)
-def test_persona_expectations_reference_real_rules(name: str) -> None:
-    _, expect = load_persona(name)
-    kb = load_kb()
-    referenced = expect.required_rule_ids + expect.required_warnings + expect.required_blocks
-    assert set(referenced) <= set(kb.rules), set(referenced) - set(kb.rules)
-    phase_names = {p.name for p in kb.phases.phases} | RESOLVER_PHASE_NAMES
-    named = [p.name for p in expect.phases] + [w.phase for w in expect.loam_score_weights]
-    named += expect.deficit_only_in or []
-    assert {n for n in named if n is not None} <= phase_names
-    assert set(expect.loam_score_weight_minimums) <= set(SCORE_COMPONENTS)
+def assert_expect(resp: PlanResponse, expect: dict[str, Any], req: PlanRequest) -> None:
+    assert resp.status == expect["status"]
+
+    if expect.get("no_targets"):
+        assert resp.phases == []
+        assert resp.loam_score_profile.by_phase == []
+        assert resp.goal_summary.pace.model_dump(exclude_none=True) == {}
+
+    phases = {p.name: p for p in resp.phases}
+    for exp in expect.get("phases", []):
+        name = exp.get("name")
+        targets = [phases[name]] if name else resp.phases
+        assert targets, f"no phase {name!r}"
+        for phase in targets:
+            check_phase(phase, exp, req)
+
+    if expect.get("deficit_only_in") is not None:
+        deficit = {p.name for p in resp.phases if p.energy == "deficit"}
+        assert deficit <= set(expect["deficit_only_in"]), deficit
+
+    if expect.get("feasibility"):
+        exp = expect["feasibility"]
+        assert resp.feasibility is not None
+        assert resp.feasibility.status == exp["status"]
+        if exp.get("projected_kg_present"):
+            assert resp.feasibility.projected_kg_at_event is not None
+        if exp.get("reachable_date_present"):
+            assert resp.feasibility.reachable_date is not None
+
+    cited = set(all_rule_ids(resp))
+    missing = set(expect.get("required_rule_ids", [])) - cited
+    assert not missing, f"rule ids not in the plan: {sorted(missing)}"
+    warnings = {w.rule_id for w in resp.safety.warnings}
+    assert set(expect.get("required_warnings", [])) <= warnings, warnings
+    blocks = {b.rule_id for b in resp.safety.blocks}
+    assert set(expect.get("required_blocks", [])) <= blocks, blocks
+
+    by_phase = {p.phase: p for p in resp.loam_score_profile.by_phase}
+    for exp in expect.get("loam_score_weights", []):
+        name = exp.get("phase")
+        profiles = [by_phase[name]] if name else list(by_phase.values())
+        assert profiles, f"no score profile for phase {name!r}"
+        for p in profiles:
+            assert p.weights == exp["weights"], f"{p.phase}: {p.weights}"
+    for component, minimum in expect.get("loam_score_weight_minimums", {}).items():
+        for p in by_phase.values():
+            assert p.weights_exact[component] >= minimum, f"{p.phase}: {component}"
 
 
-def test_maya_matches_prd() -> None:
-    _, expect = load_persona("maya")
-    targets = expect.phases[0].targets
-    assert targets["kcal"].min is not None and targets["kcal"].max is not None
-    assert targets["kcal"].min <= 1800 <= targets["kcal"].max
-    assert targets["protein_g"].min is not None and targets["protein_g"].max is not None
-    assert targets["protein_g"].min <= 140 <= targets["protein_g"].max
-    assert expect.loam_score_weights[0].weights == dict(
-        zip(SCORE_COMPONENTS, [20, 20, 5, 15, 15, 15, 10], strict=True)
-    )
-
-
-def test_marathon_fatloss_matches_section_10_example() -> None:
-    req, _ = load_persona("marathon_fatloss")
-    spec_example = json.loads(
-        (Path(__file__).parent / "fixtures" / "spec_plan_request.json").read_text(encoding="utf-8")
-    )
-    assert req == PlanRequest.model_validate(spec_example)
-    assert req.constraints.allergens == ["peanuts"]
-    assert req.constraints.diet == "pescatarian"
-
-
-def test_wedding_is_infeasible() -> None:
-    req, expect = load_persona("wedding_8wk")
-    lose_fat = next(g for g in req.goals if g.type == "lose_fat")
-    deadline = next(g for g in req.goals if g.type == "deadline_event")
-    assert lose_fat.target_weight_kg is not None and deadline.event_date is not None
-    weeks = (deadline.event_date - req.as_of) / dt.timedelta(weeks=1)
-    current_kg = req.profile.weight_kg
-    required_pct = (current_kg - lose_fat.target_weight_kg) / weeks / current_kg
-    bands = (load_kb().rules["GUARD.MAX_LOSS_RATE"].model_extra or {})["bands"]
-    top_band = max(b["max_loss_pct_bw_per_week"] for b in bands)
-    assert required_pct * 100 > top_band
-    assert expect.feasibility is not None and expect.feasibility.status == "clamped"
-
-
-def test_goal_bmi_low_is_below_threshold() -> None:
-    req, _ = load_persona("goal_bmi_low")
-    target = req.goals[0].target_weight_kg
-    assert target is not None
-    threshold = (load_kb().rules["FEAS.DEADLINE"].model_extra or {})["blocked_goal_bmi_below"]
-    assert bmi(target, req.profile.height_cm) < threshold
-
-
-def test_blocked_personas() -> None:
-    blocked = [n for n in PERSONA_NAMES if load_persona(n)[1].status == "blocked"]
-    assert sorted(blocked) == ["goal_bmi_low", "pregnant", "under18"]
+@pytest.mark.parametrize("name", NAMES)
+def test_persona(name: str) -> None:
+    req, expect = load(name)
+    resp = plan(req)
+    # Invariant 8: every plan returns goal_summary + loam_score_profile.
+    assert resp.goal_summary.headline and resp.loam_score_profile
+    assert_expect(resp, expect, req)
