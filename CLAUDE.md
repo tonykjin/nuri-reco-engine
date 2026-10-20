@@ -24,7 +24,7 @@ DEMO: web/app/onboarding/[step] (14 screens, section 11.3) -> web/app/results (g
 COMMANDS:
   cd engine && uv run pytest            # all tests incl. golden personas
   cd engine && uv run uvicorn api.main:app --reload --port 8000
-  cd engine && uv run python -m nuri_reco.export_openapi > openapi.json
+  cd engine && uv run python -m nuri_reco.export_openapi   # writes engine/openapi.json
   cd web && npm run gen:api && npm run dev   # http://localhost:3000
 
 GOLDEN PERSONAS: engine/tests/personas/*.json (Maya, novice recomp, marathon+fatloss,
