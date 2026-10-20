@@ -89,3 +89,28 @@ def test_demo_prints_plan(capsys: pytest.CaptureFixture[str]) -> None:
 def test_demo_unknown_persona() -> None:
     with pytest.raises(SystemExit, match="no persona or file 'nobody'"):
         demo.main(["nobody"])
+
+
+def with_rate(name: str, rate: float | None) -> PlanRequest:
+    req = persona(name)
+    goals = [req.goals[0].model_copy(update={"rate_pct_bw_week": rate}), *req.goals[1:]]
+    return req.model_copy(update={"goals": goals})
+
+
+def test_chosen_rate_applies_without_a_target_weight() -> None:
+    # Spec §4.4: the user's weekly rate sets the deficit even with no target weight (Maya).
+    kcal = {
+        rate: plan(with_rate("maya", rate), dry_run=True).phases[0].targets_by_day_type["rest"].kcal
+        for rate in (0.25, 0.4, None)
+    }
+    assert kcal[0.25] > kcal[0.4] > kcal[None]
+    summary = plan(with_rate("maya", 0.4), dry_run=True).goal_summary
+    assert summary.pace.rate_pct_bw_week == 0.4
+    assert "0.4% BW/week" in summary.goals[0].resolved_as
+
+
+def test_chosen_rate_never_exceeds_the_cap() -> None:
+    default = plan(with_rate("maya", None), dry_run=True)
+    fast = plan(with_rate("maya", 0.75), dry_run=True)
+    assert fast.phases[0].targets_by_day_type == default.phases[0].targets_by_day_type
+    assert fast.goal_summary.pace.rate_pct_bw_week == default.goal_summary.pace.rate_pct_bw_week
