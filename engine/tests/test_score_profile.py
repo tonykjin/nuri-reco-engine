@@ -261,10 +261,8 @@ def test_levers_read_naturally_and_make_no_claims(name: str) -> None:
     for lever in lsp.top_levers:
         assert "{" not in lever.text and lever.text.endswith(".")
         assert claims_violations(lever.text, kb) == []
-    templates = (kb.score_weights.levers.model_extra or {})["templates"]
-    for pair in templates.values():
-        for text in pair.values():
-            assert claims_violations(text, kb) == []
+    for text in kb.explanations.templates[kb.score_weights.levers.id].values():
+        assert claims_violations(text, kb) == []
 
 
 @pytest.mark.parametrize("name", NOT_BLOCKED)

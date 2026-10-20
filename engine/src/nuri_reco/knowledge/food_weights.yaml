@@ -599,17 +599,6 @@ ranking_params:
     low_energy_density_below: 1.5
     low_gi_max: 55
     max_chips: 3
-    copy:
-      protein: "{value:.0f} g protein per 100 kcal"
-      fiber: "{value:.1f} g fiber per 100 kcal"
-      low_energy_density: "low energy density"
-      low_gi: "low GI"
-      nutrient_rich: "nutrient-rich"
-      pattern: "fits your {pattern} pattern"
-      pantry: "in your pantry"
-      peak: "peaks tonight"
-      fueling: "quick carbs for your session"
-      why: "A good fit for your goal and the rest of the day."
     citation_ids: []
     verify: false
     heuristic: true

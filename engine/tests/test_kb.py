@@ -64,6 +64,10 @@ def test_nested_rules_are_indexed() -> None:
         ("invalid_yaml", r"guardrails\.yaml: invalid YAML"),
         ("duplicate_citation", r"citations\.yaml: duplicate citation ids: HELMS2014"),
         (
+            "unknown_template",
+            r"explanations\.yaml: templates for unknown rule ids: \['GUARD\.NOPE'\]",
+        ),
+        (
             "weight_row_not_100",
             r"score_weights\.yaml:.*LSW\.ROW\.WEIGHTLOSS: weights sum to 101, not 100",
         ),
@@ -93,6 +97,7 @@ def test_every_broken_fixture_is_tested() -> None:
         "unknown_key",
         "invalid_yaml",
         "duplicate_citation",
+        "unknown_template",
         "weight_row_not_100",
     }
     assert cases == tested

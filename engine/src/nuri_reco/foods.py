@@ -21,6 +21,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+from nuri_reco import explain
 from nuri_reco.kb import KnowledgeBase, Rule
 from nuri_reco.models import Constraints, FoodContext, Preferences
 from nuri_reco.models.response import FoodRecommendation, PlanResponse
@@ -256,20 +257,30 @@ def _taste(food: Food, prefs: dict[str, float], t: dict[str, Any]) -> float:
 # --- 7. Explain ---
 
 
-def _chips(food: Food, slot: str, c: dict[str, Any]) -> list[str]:
-    a, copy, chips = food["attributes"], c["copy"], []
+def _chips(kb: KnowledgeBase, food: Food, slot: str, c: dict[str, Any]) -> list[str]:
+    a, chips = food["attributes"], []
+
+    def chip(variant: str, **values: Any) -> str:
+        return explain.text(kb, "FOOD.RANK.CHIPS", variant, **values)
+
     if slot in ("pre_race", "during"):
-        chips.append(copy["fueling"])
+        chips.append(chip("fueling"))
     if (a["protein_g_per_100kcal"] or 0) >= c["protein_min"]:
-        chips.append(copy["protein"].format(value=a["protein_g_per_100kcal"]))
+        chips.append(chip("protein", value=a["protein_g_per_100kcal"]))
     if (a["fiber_g_per_100kcal"] or 0) >= c["fiber_min"]:
-        chips.append(copy["fiber"].format(value=a["fiber_g_per_100kcal"]))
+        chips.append(chip("fiber", value=a["fiber_g_per_100kcal"]))
     ed = a["energy_density_kcal_per_g"]
     if ed is not None and 0 < ed < c["low_energy_density_below"]:
-        chips.append(copy["low_energy_density"])
+        chips.append(chip("low_energy_density"))
     if a["gi"] is not None and a["gi"] <= c["low_gi_max"]:
-        chips.append(copy["low_gi"])
+        chips.append(chip("low_gi"))
     return chips[: c["max_chips"]]
+
+
+def _pattern_name(kb: KnowledgeBase, pattern: str) -> str:
+    """The pattern's display name (patterns.yaml), e.g. low_gi -> Low-GI / low-GL."""
+    names = {p.pattern: p.name for p in kb.patterns.patterns}
+    return names.get(pattern, pattern.replace("_", " "))
 
 
 def _base_name(food: Food, heads: list[str]) -> str:
@@ -404,7 +415,7 @@ def rank(
             continue
         seen_names.add(name)
         per_group[f["group"]] += 1
-        chips = _chips(f, context.meal_slot, chips_p)
+        chips = _chips(kb, f, context.meal_slot, chips_p)
         rule_ids = [
             "FOOD.RANK.HARD_FILTERS",
             *sorted(constraint_ids),
@@ -416,15 +427,17 @@ def rank(
             rule_ids.append("FOOD.RANK.PRE_RACE")
         if f["group"] in lens and plan.patterns:
             chips.append(
-                chips_p["copy"]["pattern"].format(pattern=plan.patterns[0].id.replace("_", " "))
+                explain.text(
+                    kb, "FOOD.RANK.CHIPS", "pattern", pattern=_pattern_name(kb, plan.patterns[0].id)
+                )
             )
             rule_ids += ["FOOD.RANK.PATTERN_LENS", "FOOD.RANK.PATTERN_LENS_GROUPS"]
         if prefs:
             rule_ids += ["FOOD.RANK.TASTE_RERANK", "FOOD.RANK.TASTE"]
         if key in pantry:
-            chips.append(chips_p["copy"]["pantry"])
+            chips.append(explain.text(kb, "FOOD.RANK.CHIPS", "pantry"))
             if pantry[key].peaks_tonight or pantry[key].ripeness == "peak":
-                chips.append(chips_p["copy"]["peak"])
+                chips.append(explain.text(kb, "FOOD.RANK.CHIPS", "peak"))
         if key in boosted:
             rule_ids += ["FOOD.RANK.CONTEXT_BOOSTS", "FOOD.RANK.CONTEXT"]
         rule_ids += [
@@ -439,7 +452,7 @@ def rank(
                 fdc_id=f["fdc_id"],
                 name=f["description"],
                 score=round(min(max(final[key], 0.0), 1.0), 3),
-                why=" · ".join(chips) if chips else chips_p["copy"]["why"],
+                why=" · ".join(chips) if chips else explain.text(kb, "FOOD.RANK.CHIPS", "why"),
                 reasons=chips,
                 rule_ids=list(dict.fromkeys(rule_ids)),
             )

@@ -1,7 +1,7 @@
 """Stage 2: resolve goals into phases (spec §4.1 priority, §4.2 combinations, §4.3 timeline).
 
 resolve() is pure. Tier membership, combinations, phase boundaries, ramp lengths, rate caps and
-copy all come from combos.yaml, phases.yaml and goals.yaml.
+copy come from combos.yaml, phases.yaml, goals.yaml and explanations.yaml.
 """
 
 import datetime as dt
@@ -9,6 +9,7 @@ from typing import Any, Literal
 
 from pydantic import Field
 
+from nuri_reco import explain
 from nuri_reco.kb import ComboRule, KnowledgeBase, PhaseRule, Rule
 from nuri_reco.models import DayType, Energy, PlanRequest, StrictModel
 from nuri_reco.models.response import PhaseTimeline
@@ -130,8 +131,7 @@ def _phase(
 
 
 def _energy_copy(kb: KnowledgeBase, energy: Energy) -> str:
-    copy: dict[str, str] = _x(kb.rules["RESOLVER.ONE_ENERGY_GOAL"])["copy"]
-    return copy[energy]
+    return explain.text(kb, "RESOLVER.ONE_ENERGY_GOAL", energy)
 
 
 def _event_timeline(
@@ -182,7 +182,7 @@ def _event_timeline(
                 body_energy,
                 body_owner,
                 ["RESOLVER.TIMELINE", recovery.id, *base_rule_ids, *combo_ids],
-                _x(recovery)["resume_why"],
+                explain.text(g.kb, recovery.id, "resume"),
             )
         )
     return phases
@@ -215,7 +215,7 @@ def _timeline_phase(
             body_energy,
             body_owner,
             [*rule_ids, *base_rule_ids],
-            x["why"],
+            explain.text(g.kb, p.id, "why"),
             **extra,
         )
     energy: Energy = x.get("energy_direction", "maintenance")
@@ -226,7 +226,7 @@ def _timeline_phase(
         energy,
         "endurance_event",
         [*rule_ids, *g.energy_rule_id("endurance_event")],
-        x["why"],
+        explain.text(g.kb, p.id, "why"),
         allow_rest_day_deficit=x.get("deficit_allowed") == "small_rest_days_only"
         and body_energy == "deficit",
     )
@@ -260,7 +260,7 @@ def _deadline_phases(g: _Goals, event_date: dt.date, combo_ids: list[str]) -> li
             "maintenance",
             "deadline_event",
             [step_back.id, *combo_ids],
-            _x(step_back)["copy"]["why"],
+            explain.text(g.kb, step_back.id, "why"),
             ramp_start=event_date,
             ramp_end=event_date + dt.timedelta(weeks=weeks),
         ),
@@ -358,29 +358,27 @@ def resolve(request: PlanRequest, safety: SafetyResult, kb: KnowledgeBase) -> Re
             body_rule_ids = ["RESOLVER.CONTRADICTION", *g.energy_rule_id("recomp")]
         elif "COMBO.LOSEFAT_MUSCLE" in combo_ids:
             cutoff = kb.rules["COMBO.LOSEFAT_MUSCLE.LEAN_CUTOFF"]
-            copy = _x(cutoff)["copy"]
             order: list[_Step] = [
                 (
                     deficit[0],
                     "deficit",
-                    copy["cut"],
+                    explain.text(kb, cutoff.id, "cut"),
                     [cutoff.id, *g.energy_rule_id(deficit[0]), *combo_ids],
                 ),
                 (
                     surplus[0],
                     "surplus",
-                    copy["lean_bulk"],
+                    explain.text(kb, cutoff.id, "lean_bulk"),
                     [cutoff.id, *g.energy_rule_id(surplus[0]), *combo_ids],
                 ),
             ]
             return Resolution(status="ok", phases=_sequenced(g, order), combo_rule_ids=combo_ids)
         elif request.sequence_confirmed:
-            copy = _x(kb.rules["RESOLVER.CONTRADICTION"])["copy"]
             by_priority: list[_Step] = [
                 (
                     t,
                     directions[t] or "maintenance",
-                    copy["sequenced"],
+                    explain.text(kb, "RESOLVER.CONTRADICTION", "sequenced"),
                     [*g.energy_rule_id(t), *combo_ids],
                 )
                 for t in g.types
@@ -394,7 +392,7 @@ def resolve(request: PlanRequest, safety: SafetyResult, kb: KnowledgeBase) -> Re
                 status="needs_ordering",
                 combo_rule_ids=combo_ids,
                 conflicting_goals=[t for t in g.types if t in contradiction],
-                ordering_question=_x(kb.rules["RESOLVER.CONTRADICTION"])["copy"]["question"],
+                ordering_question=explain.text(kb, "RESOLVER.CONTRADICTION", "question"),
             )
     body_energy = g.direction(body_owner) if body_owner else None
 

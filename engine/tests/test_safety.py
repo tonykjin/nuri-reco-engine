@@ -223,7 +223,8 @@ def claims() -> None:
     kb = load_kb()
     assert claims_violations("This food cures fatigue", kb) == ["cures"]
     assert claims_violations("Is it safe to eat?", kb) == ["safe to eat"]
-    assert claims_violations("A treatment-free, tasty plan", kb) == []
+    # Whole words only: "cure" doesn't fire inside "cured".
+    assert claims_violations("Cured ham is salty", kb) == []
     # Copy rules never fire on a request.
     assert "GUARD.CLAIMS" not in str(finding_ids(run(request(["lose_fat"], age=16))))
 

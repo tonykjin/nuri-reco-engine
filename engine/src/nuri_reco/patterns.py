@@ -12,6 +12,7 @@ Pure; every parameter comes from patterns.yaml.
 
 from typing import Any
 
+from nuri_reco import explain
 from nuri_reco.kb import KnowledgeBase, PatternRule, Rule
 from nuri_reco.models import Constraints, Preferences
 from nuri_reco.models.response import PatternRecommendation, PlanResponse
@@ -119,10 +120,9 @@ def rank(
         scored.append((pattern.pattern in first_line, raw, order, pattern, reasons))
 
     scored.sort(key=lambda s: (not s[0], -s[1], s[2]))
-    copy = _x(kb.rules["PATTERN.SCORE.ADHERENCE"]).get("copy", {})
     out = []
     for is_first_line, raw, _, pattern, reasons in scored[: 1 + alternates]:
-        why = [_x(pattern)["why"]]
+        why = [explain.text(kb, pattern.id, "why")]
         rule_ids = [
             pattern.id,
             "PATTERN.SELECT.ELIGIBLE",
@@ -130,9 +130,13 @@ def rank(
             "PATTERN.SCORE.WEIGHTS",
         ]
         if is_first_line:
-            why.insert(0, first_line_rule["copy"]["why"])
+            why.insert(0, explain.text(kb, "PATTERN.SELECT.FIRST_LINE", "why"))
             rule_ids.append("PATTERN.SELECT.FIRST_LINE")
-        why += [copy[r] for r in reasons if r in copy]
+        why += [
+            explain.text(kb, "PATTERN.SCORE.ADHERENCE", r)
+            for r in reasons
+            if explain.has(kb, "PATTERN.SCORE.ADHERENCE", r)
+        ]
         if plant_only:
             rule_ids.append("PATTERN.SELECT.DIET_FIT")
         out.append(

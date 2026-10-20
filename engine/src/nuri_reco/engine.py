@@ -9,7 +9,7 @@ import datetime as dt
 from collections import Counter
 from typing import Any
 
-from nuri_reco import feasibility, foods, goals, patterns, safety, score_profile, targets
+from nuri_reco import explain, feasibility, foods, goals, patterns, safety, score_profile, targets
 from nuri_reco.feasibility import FeasibilityResult
 from nuri_reco.goals import PhasePlan, Resolution
 from nuri_reco.kb import KnowledgeBase, Rule, load_kb
@@ -115,14 +115,13 @@ def _combo_warnings(resolution: Resolution, kb: KnowledgeBase) -> list[SafetyFin
     for combo_id in resolution.combo_rule_ids:
         combo = kb.rules[combo_id]
         for rule in getattr(combo, "rules", []):
-            copy = _x(rule).get("copy", {})
-            if "warning" in copy:
+            if explain.has(kb, rule.id, "warning"):
                 findings.append(
                     SafetyFinding(
                         rule_id=rule.id,
-                        message=copy["warning"],
+                        message=explain.text(kb, rule.id, "warning"),
                         rule_ids=[rule.id, combo_id],
-                        why=copy["why"],
+                        why=explain.text(kb, rule.id, "why"),
                     )
                 )
     return findings
@@ -142,28 +141,29 @@ def _headline(
     proj: _Projection,
     kb: KnowledgeBase,
 ) -> str:
-    h = _x(kb.summary.headlines)
     values = {"event": _event_name(request)}
     for combo_id in resolution.combo_rule_ids:
-        template = h["combos"].get(combo_id)
-        if template is None:
-            continue
-        if isinstance(template, dict):
-            if combo_id == "COMBO.LOSEFAT_DEADLINE":
-                d = proj.deadline
-                if d is None or d.projected_kg is None or d.reachable_date is None:
-                    continue
-                key = "clamped" if d.status == "clamped" else "feasible"
-                values |= {
-                    "projected_kg": f"{d.projected_kg:.1f}",
-                    "reachable_date": _date(d.reachable_date),
-                }
-            else:
-                key = "recomp" if any(p.energy_owner == "recomp" for p in phases) else "sequenced"
-            template = template[key]
-        return str(template).format(**values)
+        if explain.has(kb, combo_id, "headline"):
+            return explain.text(kb, combo_id, "headline", **values)
+        if explain.has(kb, combo_id, "headline_clamped"):  # deadline: clamped or feasible
+            d = proj.deadline
+            if d is None or d.projected_kg is None or d.reachable_date is None:
+                continue
+            key = "clamped" if d.status == "clamped" else "feasible"
+            values |= {
+                "projected_kg": f"{d.projected_kg:.1f}",
+                "reachable_date": _date(d.reachable_date),
+            }
+            return explain.text(kb, combo_id, f"headline_{key}", **values)
+        if explain.has(kb, combo_id, "headline_recomp"):  # recomp or sequenced
+            key = "recomp" if any(p.energy_owner == "recomp" for p in phases) else "sequenced"
+            return explain.text(kb, combo_id, f"headline_{key}", **values)
     owner = phases[0].energy_owner if phases else request.goals[0].type
-    return str(h["goals"].get(owner, h["goals"]["maintain"])).format(**values)
+    goal_rule = {g.type: g.id for g in kb.goals.goals}
+    rule_id = goal_rule.get(owner, goal_rule["maintain"])
+    if not explain.has(kb, rule_id, "headline"):
+        rule_id = goal_rule["maintain"]
+    return explain.text(kb, rule_id, "headline", **values)
 
 
 def _display_owner(owner: str, goal_types: list[str], kb: KnowledgeBase) -> str:
@@ -181,7 +181,11 @@ def _resolved_as(
     request: PlanRequest,
     primary_type: str | None,
 ) -> tuple[str, list[PhasePlan]]:
-    r = _x(kb.summary.resolved_as)
+    ra = kb.summary.resolved_as.id
+
+    def r(variant: str, **values: Any) -> str:
+        return explain.text(kb, ra, variant, **values)
+
     merged = _x(kb.score_weights.stacking)["merged_into"]
     goal_types = [g.type for g in request.goals]
     owned = [p for p in phases if _display_owner(p.energy_owner, goal_types, kb) == goal_type]
@@ -189,8 +193,8 @@ def _resolved_as(
         merged_phases = [p for p in phases if p.energy_owner in merged]
         if goal_type == primary_type:
             detail, _ = _resolved_as(merged_phases[0].energy_owner, phases, proj, kb, request, None)
-            return str(r["merged_primary"]).format(detail=detail), merged_phases
-        return str(r["merged"]), merged_phases
+            return r("merged_primary", detail=detail), merged_phases
+        return r("merged"), merged_phases
     if not owned and goal_type == "deadline_event" and proj.deadline is not None:
         d, event = (
             proj.deadline,
@@ -198,16 +202,17 @@ def _resolved_as(
         )
         if event is not None and d.reachable_date is not None:
             if d.status == "clamped" and d.projected_kg is not None:
-                text = str(r["deadline"]).format(
+                text = r(
+                    "deadline",
                     projected_kg=f"{d.projected_kg:.1f}",
                     event_date=_date(event),
                     reachable_date=_date(d.reachable_date),
                 )
             else:
-                text = str(r["deadline_feasible"]).format(event_date=_date(event))
+                text = r("deadline_feasible", event_date=_date(event))
             return text, [p for p in phases if p.energy_owner == goal_type]
     if not owned:
-        return str(r["modifier"]), []
+        return r("modifier"), []
 
     energy = owned[0].energy
     rate = ""
@@ -216,24 +221,25 @@ def _resolved_as(
         planned = proj.by_phase.get(deficit[0].name)
         value = planned.rate_pct_bw_week if planned else deficit[0].max_rate_pct_bw
         if value is not None:
-            rate = str(r["rate_suffix"]).format(rate=f"{value:g}")
+            rate = r("rate_suffix", rate=f"{value:g}")
 
     sequenced = len(phases) > 1 and all("RESOLVER.CONTRADICTION" in p.rule_ids for p in phases)
     if sequenced:  # goals run one after another
         n = phases.index(owned[0]) + 1
-        return str(r["sequenced"]).format(n=n, total=len(phases), energy=energy) + rate, owned
+        return r("sequenced", n=n, total=len(phases), energy=energy) + rate, owned
     same = [p for p in owned if p.energy == energy]
     if len(same) == len(phases):
-        return str(r["all_phases"]).format(energy=energy) + rate, owned
+        return r("all_phases", energy=energy) + rate, owned
     if len(same) < len(owned):
         # e.g. lose fat during the deadline phase, then step back to maintenance.
         names = " and ".join(p.name.replace("_", " ") for p in same)
         suffix = " phase" if len(same) == 1 else " phases"
-        return str(r["some_phases"]).format(energy=energy, phases=names + suffix) + rate, owned
+        return r("some_phases", energy=energy, phases=names + suffix) + rate, owned
     idx = [phases.index(p) for p in owned]
     contiguous = idx == list(range(idx[0], idx[-1] + 1))
     if contiguous and idx[0] > 0 and owned[0].start is not None:
-        text = str(r["from_to"]).format(
+        text = r(
+            "from_to",
             first=owned[0].name.replace("_", " "),
             start=owned[0].start.isoformat(),
             last=owned[-1].name.replace("_", " "),
@@ -241,7 +247,7 @@ def _resolved_as(
         return text, owned
     names = " and ".join(p.name.replace("_", " ") for p in owned)
     suffix = " phase" if len(owned) == 1 else " phases"
-    return str(r["some_phases"]).format(energy=energy, phases=names + suffix) + rate, owned
+    return r("some_phases", energy=energy, phases=names + suffix) + rate, owned
 
 
 def _goal_summary(
@@ -278,7 +284,7 @@ def _goal_summary(
                 rule_ids=_dedupe([*combos, *phase_ids, energy_rule]),
                 why=owned[0].why
                 if owned
-                else str(_x(kb.summary.resolved_as)["modifier"]).capitalize() + ".",
+                else explain.text(kb, kb.summary.resolved_as.id, "modifier").capitalize() + ".",
             )
         )
     first = proj.first
@@ -339,12 +345,11 @@ def _held_summary(
 
 def _blocked(request: PlanRequest, result: SafetyResult, kb: KnowledgeBase) -> PlanResponse:
     rule_ids = _dedupe([r for b in result.blocks for r in b.rule_ids])
-    h = _x(kb.summary.headlines)
     summary = _held_summary(
         request,
         kb,
-        h["blocked"],
-        _x(kb.summary.resolved_as)["blocked"],
+        explain.text(kb, kb.summary.headlines.id, "blocked"),
+        explain.text(kb, kb.summary.resolved_as.id, "blocked"),
         rule_ids,
         result.blocks[0].why,
     )
@@ -358,8 +363,8 @@ def _needs_ordering(
     summary = _held_summary(
         request,
         kb,
-        _x(kb.summary.headlines)["needs_ordering"],
-        _x(kb.summary.resolved_as)["awaiting_order"],
+        explain.text(kb, kb.summary.headlines.id, "needs_ordering"),
+        explain.text(kb, kb.summary.resolved_as.id, "awaiting_order"),
         rule_ids,
         resolution.ordering_question or "",
     )
@@ -389,31 +394,11 @@ def _response(
         goal_summary=summary,
         loam_score_profile=profile,
     )
-    cited = [
-        cid for rid in all_rule_ids(resp) if rid in kb.rules for cid in kb.rules[rid].citation_ids
-    ]
-    return resp.model_copy(update={"citations": _dedupe(cited)})
+    return resp.model_copy(update={"citations": explain.collect_citations(resp, kb)})
 
 
-def all_rule_ids(resp: PlanResponse) -> list[str]:
-    """Every rule id the response cites, in order of appearance."""
-    found: list[str] = []
-
-    def walk(node: Any) -> None:
-        if isinstance(node, dict):
-            for key, value in node.items():
-                if key in ("rule_ids", "weight_rule_ids") and isinstance(value, list):
-                    found.extend(value)
-                elif key == "rule_id" and isinstance(value, str):
-                    found.append(value)
-                else:
-                    walk(value)
-        elif isinstance(node, list):
-            for item in node:
-                walk(item)
-
-    walk(resp.model_dump())
-    return _dedupe(found)
+# Kept for callers that import it from here.
+all_rule_ids = explain.rule_ids_in
 
 
 # --- The pipeline ---

@@ -1,16 +1,18 @@
 """Stage 1: safety guardrails (spec §8 Matrix F; §4.1 tier 1 overrides everything).
 
 check() is pure and deterministic: no I/O, no randomness. Every threshold, vocabulary entry and
-piece of copy comes from guardrails.yaml; this module only decides when each rule's trigger fires.
+piece of copy comes from guardrails.yaml and explanations.yaml; this module only decides when each
+rule's trigger fires.
 """
 
-import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Literal
 
 from pydantic import Field
 
+from nuri_reco import explain
+from nuri_reco.explain import claims_violations
 from nuri_reco.kb import KnowledgeBase, Rule
 from nuri_reco.models import PlanRequest, StrictModel
 from nuri_reco.models.response import Referral, Safety, SafetyFinding
@@ -202,12 +204,14 @@ def _blocking_combos(kb: KnowledgeBase, rule_id: str) -> list[str]:
     ]
 
 
-def _finding(rule: Rule, message: str, rule_ids: list[str] | None = None) -> SafetyFinding:
+def _finding(
+    kb: KnowledgeBase, rule: Rule, variant: str, rule_ids: list[str] | None = None
+) -> SafetyFinding:
     return SafetyFinding(
         rule_id=rule.id,
-        message=message,
+        message=explain.text(kb, rule.id, variant),
         rule_ids=rule_ids or [rule.id],
-        why=_extra(rule)["copy"]["why"],
+        why=explain.text(kb, rule.id, "why"),
     )
 
 
@@ -275,21 +279,20 @@ def check(request: PlanRequest, kb: KnowledgeBase) -> SafetyResult:
         if not trigger(ctx, rule):
             continue
         e = _extra(rule)
-        copy = e.get("copy", {})
 
         blocked = [item for item in e.get("blocks", []) if _requested(ctx, item)]
         if blocked:
-            blocks.append(_finding(rule, copy["block"], [rule.id, *_blocking_combos(kb, rule.id)]))
+            blocks.append(_finding(kb, rule, "block", [rule.id, *_blocking_combos(kb, rule.id)]))
 
         removed = [item for item in e.get("removes", []) if _requested(ctx, item)]
         if removed:
             restrictions.append(Restriction(rule_id=rule.id, kind="remove", items=removed))
 
         # A rule that removes something only warns when it actually removed it.
-        if "warning" in copy and (removed or "removes" not in e):
-            warnings.append(_finding(rule, copy["warning"]))
-        if "referral" in copy:
-            referral = _finding(rule, copy["referral"])
+        if explain.has(kb, rule.id, "warning") and (removed or "removes" not in e):
+            warnings.append(_finding(kb, rule, "warning"))
+        if explain.has(kb, rule.id, "referral"):
+            referral = _finding(kb, rule, "referral")
             referrals.append(Referral(**referral.model_dump(), to=e["referral_to"]))
 
         for field, kind in RESTRICTION_FIELDS.items():
@@ -319,7 +322,4 @@ def check(request: PlanRequest, kb: KnowledgeBase) -> SafetyResult:
     )
 
 
-def claims_violations(text: str, kb: KnowledgeBase) -> list[str]:
-    """Forbidden claim phrases (GUARD.CLAIMS) found in user-facing copy."""
-    phrases = _extra(kb.rules["GUARD.CLAIMS"])["forbidden_phrases"]
-    return [p for p in phrases if re.search(rf"\b{re.escape(p)}\b", text, flags=re.IGNORECASE)]
+__all__ = ["SafetyResult", "check", "claims_violations", "loss_rate_band", "bmi"]
