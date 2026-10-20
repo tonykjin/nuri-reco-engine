@@ -16,6 +16,7 @@ evidence_grades:
 patterns:
   - id: PATTERN.MEDITERRANEAN
     pattern: mediterranean
+    why: "A flexible, well-studied way of eating built on vegetables, legumes, whole grains, fish and olive oil."
     name: "Mediterranean"
     text: "Mediterranean | Heart, T2D, wellness, longevity | Skip the alcohol component (pregnancy, liver, AUD); nut/fish allergens | High, flexible, culturally adaptable | 1 | A (PREDIMED HR ≈0.70)"
     best_fit: "Heart, T2D, wellness, longevity"
@@ -31,6 +32,7 @@ patterns:
     heuristic: false
   - id: PATTERN.DASH
     pattern: dash
+    why: "Built around produce, whole grains and low-fat dairy, with less salt."
     name: "DASH"
     text: "DASH | Hypertension, heart | High potassium/phosphorus: advanced CKD, potassium-sparing meds | Moderate (sodium is hard) | 1 | A (−11.5 mmHg SBP in hypertension)"
     best_fit: "Hypertension, heart"
@@ -46,6 +48,7 @@ patterns:
     heuristic: false
   - id: PATTERN.HIGH_PROTEIN
     pattern: high_protein
+    why: "Protein at every meal keeps you full and protects muscle."
     name: "High-protein"
     text: "High-protein | Fat loss, recomp, muscle gain, GLP-1, older adults | Advanced CKD (not on dialysis) | High if protein foods are liked; cost | n/a | A (body comp)"
     best_fit: "Fat loss, recomp, muscle gain, GLP-1, older adults"
@@ -60,6 +63,7 @@ patterns:
     heuristic: false
   - id: PATTERN.LOW_GI
     pattern: low_gi
+    why: "Slower-digesting carbs for steadier energy and appetite."
     name: "Low-GI / low-GL"
     text: "Low-GI / low-GL | T2D, prediabetes, appetite | Wrong cue pre/during endurance events | High (swaps, not eliminations) | n/a | A (HbA1c −0.31%)"
     best_fit: "T2D, prediabetes, appetite"
@@ -75,6 +79,7 @@ patterns:
     heuristic: false
   - id: PATTERN.ENERGY_DENSITY
     pattern: energy_density
+    why: "Big, filling portions from foods with fewer calories per bite."
     name: "Energy density / Volumetrics"
     text: "Energy density / Volumetrics | Fat loss, hunger management, GLP-1 maintenance | Underweight, poor appetite, frail older adults | High (nothing banned) | n/a | A/B (Hall 2019: ultra-processed diet led to +508 kcal/day)"
     best_fit: "Fat loss, hunger management, GLP-1 maintenance"
@@ -90,6 +95,7 @@ patterns:
     heuristic: false
   - id: PATTERN.VEGETARIAN_VEGAN
     pattern: vegetarian_vegan
+    why: "Plant-based meals, with protein from a mix of plant sources."
     name: "Vegetarian / vegan"
     text: "Vegetarian / vegan | Heart, LDL, T2D, weight, ethics | B12 mandatory for vegans; iron, zinc, iodine, calcium, vitamin D, omega-3; lower leucine | Strong if values-driven | 1 (lacto-ovo) / 2 (vegan) | A/B"
     best_fit: "Heart, LDL, T2D, weight, ethics"
@@ -104,6 +110,7 @@ patterns:
     heuristic: false
   - id: PATTERN.FLEXITARIAN_PESCATARIAN
     pattern: flexitarian_pescatarian
+    why: "Mostly plants, with fish and room to flex: the least restrictive option."
     name: "Flexitarian / pescatarian"
     text: "Flexitarian / pescatarian | Wellness, gradual shift | Mercury guidance in pregnancy | High (least restrictive) | 1 (pescatarian) | B"
     best_fit: "Wellness, gradual shift"
@@ -118,6 +125,7 @@ patterns:
     heuristic: false
   - id: PATTERN.LOW_CARB_KETO
     pattern: low_carb_keto
+    why: "Fewer carbs with more protein and fat; best kept short-term."
     name: "Low-carb / keto"
     text: "Low-carb / keto | T2D glycemic control (RD), short-term loss, high triglycerides | SGLT2 inhibitors (euglycemic DKA), insulin/sulfonylureas, pregnancy, ED history, high-intensity endurance; LDL can rise | Falls off after ≈6 months | 3 / 4 | B"
     best_fit: "T2D glycemic control (RD), short-term loss, high triglycerides"
@@ -134,6 +142,7 @@ patterns:
     heuristic: false
   - id: PATTERN.IF_TRE
     pattern: if_tre
+    why: "Eating within a set daily window, for people who like structure."
     name: "IF / time-restricted eating"
     text: "IF / time-restricted eating | Users who like structure (works only via lower intake) | Glucose-lowering meds, pregnancy, ED history, adolescents, underweight | Polarizing | n/a | B (TREAT: no difference vs control; lean-mass loss)"
     best_fit: "Users who like structure (works only via lower intake)"
@@ -148,6 +157,7 @@ patterns:
     heuristic: false
   - id: PATTERN.HIGH_CARB_PERFORMANCE
     pattern: high_carb_performance
+    why: "Carbs timed around training to fuel hard sessions."
     name: "High-carb performance"
     text: "High-carb performance | Endurance and team sport at high load | T2D without RD; screen for low EA | Needs periodization | n/a | A (performance)"
     best_fit: "Endurance and team sport at high load"
@@ -162,6 +172,7 @@ patterns:
     heuristic: false
   - id: PATTERN.MIND
     pattern: mind
+    why: "A Mediterranean-style pattern studied for brain health."
     name: "MIND"
     text: "MIND | Brain health (hypothesis) | None | As Mediterranean | n/a | C (NEJM 2023 RCT null) → not offered as a goal pattern"
     best_fit: "Brain health (hypothesis)"
@@ -202,3 +213,116 @@ selection:
     citation_ids: []
     verify: false
     heuristic: false
+  # --- Engine parameters for the steps above (Loam heuristics, agreed 2026-10-19). ---
+  - id: PATTERN.SELECT.GOAL_MAP
+    text: "Best-fit goals as goal types: Mediterranean (heart, T2D, wellness) · DASH (hypertension) · High-protein (fat loss, recomp, muscle gain, GLP-1, deadline) · Low-GI (T2D, appetite) · Energy density (fat loss, deadline, GLP-1) · Vegetarian/vegan (heart, T2D, weight, wellness) · Flexitarian/pescatarian (wellness) · Low-carb/keto (T2D, short-term loss) · IF/TRE (only when the user asks for it) · High-carb performance (endurance, hybrid)"
+    goals:
+      mediterranean: [hypertension, t2d, maintain]
+      dash: [hypertension]
+      high_protein: [lose_fat, recomp, build_muscle, glp1, deadline_event]
+      low_gi: [t2d, lose_fat]
+      energy_density: [lose_fat, deadline_event, glp1]
+      vegetarian_vegan: [hypertension, t2d, lose_fat, maintain]
+      flexitarian_pescatarian: [maintain]
+      low_carb_keto: [t2d, lose_fat]
+      if_tre: []
+      high_carb_performance: [endurance_event, strength_hybrid]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: PATTERN.SELECT.DIET_FIT
+    text: "Hard constraints: vegan and vegetarian users get plant-based patterns only; other diets can use any pattern. The pattern matching the diet the user already follows is always eligible."
+    plant_based_diets: [vegan, vegetarian]
+    plant_based_patterns: [vegetarian_vegan]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: PATTERN.SELECT.MATRIX_F
+    text: "Matrix F exclusions: patterns safety excludes (SGLT2 inhibitor: keto / very-low-carb), and carb-restricting patterns when carb restriction needs RD approval (insulin / sulfonylurea)."
+    carb_restricting_patterns: [low_carb_keto]
+    citation_ids: [SGLT2_KETO_DKA_CASE]
+    verify: true
+    heuristic: false
+  - id: PATTERN.SELECT.FIRST_LINE
+    text: "First-line patterns rank above the rest for these goals: DASH for hypertension (spec 4.2: DASH pattern ranked first)."
+    first_line: { hypertension: [dash] }
+    copy:
+      why: "The best-tested eating style for blood pressure."
+    citation_ids: [DASH_SODIUM]
+    verify: false
+    heuristic: true
+  - id: PATTERN.SCORE.WEIGHTS
+    text: "score = 0.35 × evidence + 0.65 × adherence (adherence weighted highest)"
+    evidence: 0.35
+    adherence: 0.65
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: PATTERN.SCORE.EVIDENCE
+    text: "evidence = 0.6 × grade + 0.4 × AHA tier. Grade A 1.0 · A/B 0.85 · B 0.7 · C 0.4. AHA tier 1 1.0 · 2 0.75 · 3 0.5 · 4 0.25 · n/a 0.6 (a split tier like 3 / 4 averages)."
+    grade_share: 0.6
+    tier_share: 0.4
+    grade: { A: 1.0, A/B: 0.85, B: 0.7, C: 0.4 }
+    tier: { 1: 1.0, 2: 0.75, 3: 0.5, 4: 0.25 }
+    tier_unrated: 0.6
+    citation_ids: [AHA2023]
+    verify: false
+    heuristic: true
+  - id: PATTERN.SCORE.ADHERENCE
+    text: "adherence = Matrix D baseline (High 0.8 · least restrictive 0.85 · High if protein foods are liked 0.7 · Moderate or needs periodization 0.6 · strong if values-driven 0.6 · falls off 0.5 · polarizing 0.4) + cuisine match 0.15 + already follows this diet 0.2 + asked for this pattern 0.5 + taste match 0.05 per dimension (max 0.1, dimension at 0.6 or more) − low budget on a costly pattern 0.15 − quick cooking (15 min or less) on a cook-heavy pattern 0.1 − 0.1 per disliked signature food (max 0.2); never below 0"
+    baseline:
+      mediterranean: 0.8
+      dash: 0.6
+      high_protein: 0.7
+      low_gi: 0.8
+      energy_density: 0.8
+      vegetarian_vegan: 0.6
+      flexitarian_pescatarian: 0.85
+      low_carb_keto: 0.5
+      if_tre: 0.4
+      high_carb_performance: 0.6
+      mind: 0.8
+    cuisine_match: 0.15
+    diet_match: 0.2
+    pattern_pref: 0.5
+    taste_match: 0.05
+    taste_match_max: 0.1
+    taste_threshold: 0.6
+    budget_penalty: 0.15
+    quick_cook_minutes: 15
+    cook_time_penalty: 0.1
+    dislike_penalty: 0.1
+    dislike_penalty_max: 0.2
+    follows:
+      vegetarian_vegan: [vegan, vegetarian]
+      flexitarian_pescatarian: [pescatarian, flexitarian]
+    cuisines:
+      mediterranean: [mediterranean, greek, italian, spanish, middle_eastern]
+      dash: [american]
+      vegetarian_vegan: [indian, middle_eastern, ethiopian]
+      flexitarian_pescatarian: [japanese, nordic, mediterranean]
+      high_carb_performance: [italian, japanese]
+    signature_foods:
+      mediterranean: [fish, olive oil, nuts, legumes, whole grains]
+      dash: [low-fat dairy, vegetables, fruit, whole grains, nuts]
+      high_protein: [chicken, fish, eggs, greek yogurt, cottage cheese, tofu]
+      low_gi: [legumes, oats, barley, whole grains]
+      energy_density: [vegetables, soups, fruit, salads]
+      vegetarian_vegan: [tofu, legumes, nuts, tempeh]
+      flexitarian_pescatarian: [fish, seafood, legumes]
+      low_carb_keto: [meat, eggs, cheese, avocado]
+      high_carb_performance: [rice, pasta, bread, potatoes]
+    costly: [high_protein]
+    cook_heavy: [mediterranean, dash]
+    copy:
+      cuisine: "It suits the cuisines you enjoy."
+      follows: "It matches the way you already eat."
+      pattern_pref: "You asked for this eating style."
+    taste_tags:
+      mediterranean: [richness, umami]
+      flexitarian_pescatarian: [umami]
+      low_carb_keto: [richness]
+      high_carb_performance: [sweetness]
+    citation_ids: []
+    verify: false
+    heuristic: true

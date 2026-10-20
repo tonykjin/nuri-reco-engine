@@ -66,6 +66,8 @@ class Preferences(StrictModel):
     cook_time_min: int | None = Field(default=None, gt=0)
     budget: str | None = None
     cuisines: list[str] = Field(default_factory=list)
+    # A Matrix D pattern id the user asked for (e.g. "mediterranean"); boosts its adherence.
+    pattern_pref: str | None = None
 
 
 class PlanRequest(StrictModel):

@@ -8,7 +8,7 @@ knowledge base when none is passed.
 import datetime as dt
 from typing import Any
 
-from nuri_reco import feasibility, goals, safety, score_profile, targets
+from nuri_reco import feasibility, goals, patterns, safety, score_profile, targets
 from nuri_reco.feasibility import FeasibilityResult
 from nuri_reco.goals import PhasePlan, Resolution
 from nuri_reco.kb import KnowledgeBase, Rule, load_kb
@@ -19,6 +19,7 @@ from nuri_reco.models.response import (
     GoalSummary,
     LoamScoreProfile,
     Pace,
+    PatternRecommendation,
     Phase,
     PhaseTimeline,
     PlanResponse,
@@ -373,12 +374,14 @@ def _response(
     summary: GoalSummary,
     profile: LoamScoreProfile,
     kb: KnowledgeBase,
+    pattern_recs: list[PatternRecommendation] | None = None,
 ) -> PlanResponse:
     resp = PlanResponse(
         status=status,
         safety=safety_out,
         phases=phases,
         feasibility=feas,
+        patterns=pattern_recs or [],
         goal_summary=summary,
         loam_score_profile=profile,
     )
@@ -412,7 +415,10 @@ def all_rule_ids(resp: PlanResponse) -> list[str]:
 # --- The pipeline ---
 
 
-def plan(request: PlanRequest, kb: KnowledgeBase | None = None) -> PlanResponse:
+def plan(
+    request: PlanRequest, kb: KnowledgeBase | None = None, *, dry_run: bool = False
+) -> PlanResponse:
+    """The full plan. dry_run skips patterns and foods (the onboarding pace slider, spec §10)."""
     kb = kb or load_kb()
     result = safety.check(request, kb)
     if result.blocked:
@@ -463,4 +469,8 @@ def plan(request: PlanRequest, kb: KnowledgeBase | None = None) -> PlanResponse:
         update={"warnings": [*safety_out.warnings, *_combo_warnings(resolution, kb)]}
     )
     summary = _goal_summary(request, resolution, phases, proj, kb)
-    return _response(status, safety_out, api_phases, feas, summary, profile, kb)
+    resp = _response(status, safety_out, api_phases, feas, summary, profile, kb)
+    if dry_run:
+        return resp
+    recs = patterns.rank(resp, request.preferences, request.constraints, result, kb)
+    return _response(status, safety_out, api_phases, feas, summary, profile, kb, recs)
