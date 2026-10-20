@@ -1,6 +1,7 @@
 """Pydantic models: Profile, Goal, Constraint, Preference, Plan, Targets, Recommendation."""
 
 from .common import DayType, Energy, Recommended, Sex, StrictModel
+from .food import FoodContext, MealSlot, PantryItem, RemainingTargets, Ripeness
 from .request import Constraints, Flags, Goal, PlanRequest, Preferences, Profile, Training
 from .response import (
     DayTargets,
@@ -32,14 +33,17 @@ __all__ = [
     "DisabledComponent",
     "Energy",
     "Feasibility",
+    "FoodContext",
     "Flags",
     "FoodRecommendation",
     "Goal",
     "GoalResolution",
     "GoalSummary",
     "LoamScoreProfile",
+    "MealSlot",
     "MicronutrientTarget",
     "Pace",
+    "PantryItem",
     "PatternRecommendation",
     "Phase",
     "PhaseTimeline",
@@ -50,6 +54,8 @@ __all__ = [
     "Profile",
     "Recommended",
     "Referral",
+    "RemainingTargets",
+    "Ripeness",
     "Safety",
     "SafetyFinding",
     "ScoreComponent",

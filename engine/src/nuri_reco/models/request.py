@@ -58,6 +58,8 @@ class Constraints(StrictModel):
     allergens: list[str] = Field(default_factory=list)
     diet: str | None = None
     religious: list[str] = Field(default_factory=list)
+    # Spec §9: wheat, barley, rye and non-certified oats are excluded.
+    celiac: bool = False
 
 
 class Preferences(StrictModel):

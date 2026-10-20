@@ -6,15 +6,17 @@ knowledge base when none is passed.
 """
 
 import datetime as dt
+from collections import Counter
 from typing import Any
 
-from nuri_reco import feasibility, goals, patterns, safety, score_profile, targets
+from nuri_reco import feasibility, foods, goals, patterns, safety, score_profile, targets
 from nuri_reco.feasibility import FeasibilityResult
 from nuri_reco.goals import PhasePlan, Resolution
 from nuri_reco.kb import KnowledgeBase, Rule, load_kb
-from nuri_reco.models import PlanRequest
+from nuri_reco.models import FoodContext, PlanRequest
 from nuri_reco.models.response import (
     Feasibility,
+    FoodRecommendation,
     GoalResolution,
     GoalSummary,
     LoamScoreProfile,
@@ -375,6 +377,7 @@ def _response(
     profile: LoamScoreProfile,
     kb: KnowledgeBase,
     pattern_recs: list[PatternRecommendation] | None = None,
+    food_recs: list[FoodRecommendation] | None = None,
 ) -> PlanResponse:
     resp = PlanResponse(
         status=status,
@@ -382,6 +385,7 @@ def _response(
         phases=phases,
         feasibility=feas,
         patterns=pattern_recs or [],
+        foods=food_recs or [],
         goal_summary=summary,
         loam_score_profile=profile,
     )
@@ -473,4 +477,15 @@ def plan(
     if dry_run:
         return resp
     recs = patterns.rank(resp, request.preferences, request.constraints, result, kb)
-    return _response(status, safety_out, api_phases, feas, summary, profile, kb, recs)
+    resp = _response(status, safety_out, api_phases, feas, summary, profile, kb, recs)
+    # Default context for the plan: the user's most common day type, any meal.
+    day = Counter(request.profile.training.weekly_schedule).most_common(1)[0][0]
+    food_recs = foods.rank(
+        FoodContext(day_type=day),
+        resp,
+        request.preferences,
+        request.constraints,
+        kb,
+        foods.load_foods(),
+    )
+    return _response(status, safety_out, api_phases, feas, summary, profile, kb, recs, food_recs)

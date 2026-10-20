@@ -142,6 +142,7 @@ class FoodWeightsFile(FileModel):
     seed_foods: list[Rule]
     ranking_pipeline: list[Rule]
     ranking_note: Rule
+    ranking_params: list[Rule]
 
 
 class GuardrailsFile(FileModel):
@@ -199,6 +200,10 @@ class ComponentTargetRule(Rule):
     score_type: str
 
 
+class ConstraintRulesFile(FileModel):
+    rules: list[Rule]
+
+
 class SummaryFile(FileModel):
     headlines: Rule
     resolved_as: Rule
@@ -244,6 +249,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "micronutrients": MicronutrientsFile,
     "score_weights": ScoreWeightsFile,
     "summary": SummaryFile,
+    "constraints": ConstraintRulesFile,
     "citations": CitationsFile,
 }
 
@@ -262,6 +268,7 @@ class KnowledgeBase(BaseModel):
     micronutrients: MicronutrientsFile
     score_weights: ScoreWeightsFile
     summary: SummaryFile
+    constraints: ConstraintRulesFile
     citations: CitationsFile
 
     def rules_by_file(self) -> dict[str, list[Rule]]:

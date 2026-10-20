@@ -83,6 +83,7 @@ class PatternRecommendation(Recommended):
 
 
 class FoodRecommendation(Recommended):
+    key: str
     fdc_id: int
     name: str
     score: float = Field(ge=0, le=1)

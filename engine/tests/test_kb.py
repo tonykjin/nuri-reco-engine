@@ -113,6 +113,7 @@ def test_cli_summary(capsys: pytest.CaptureFixture[str]) -> None:
         "micronutrients",
         "score_weights",
         "summary",
+        "constraints",
     ]:
         assert f"{name}.yaml" in out
     assert "total" in out

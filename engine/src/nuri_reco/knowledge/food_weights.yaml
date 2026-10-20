@@ -382,3 +382,234 @@ ranking_note:
   citation_ids: [TRATTNER_ELSWEILER2017]
   verify: false
   heuristic: false
+
+# --- Ranking engine parameters (spec 7.2 / 7.4; Loam heuristics agreed 2026-10-19) ---
+ranking_params:
+  - id: FOOD.RANK.SCORING
+    text: "Strength symbols as numbers: ++ = 2 · + = 1 · unmarked = 1. Attributes are normalized 0–1 within the food's group; the goal score is the weighted mean of the attributes a food reports (missing ones are skipped, never 0). Condition goals (T2D, GLP-1, hypertension) blend in at 0.4 of the score, like Matrix G stacking. Cross-group fix (agreed): each attribute score is 0.5 within-group plus 0.5 across all foods, so the best food of a weak group doesn't score like the best overall; foods under 5 kcal per 100 g (water, coffee, tea) aren't recommended."
+    group_share: 0.5
+    min_kcal_per_100g: 5
+    strength: { "++": 2, "+": 1, "": 1 }
+    condition_share: 0.4
+    condition_goals: [t2d, glp1, hypertension]
+    # Which 7.2 row applies: by meal slot first, then by the phase's energy owner.
+    slot_rows:
+      {
+        pre_race: FOOD.W.ENDURANCE_PRE_RACE,
+        during: FOOD.W.ENDURANCE_PRE_RACE,
+        recovery: FOOD.W.RECOVERY,
+      }
+    owner_rows:
+      lose_fat: FOOD.W.FAT_LOSS
+      deadline_event: FOOD.W.FAT_LOSS
+      recomp: FOOD.W.MUSCLE
+      build_muscle: FOOD.W.MUSCLE
+      gain_weight: FOOD.W.MUSCLE
+      endurance_event: FOOD.W.ENDURANCE_DAILY
+      strength_hybrid: FOOD.W.ENDURANCE_DAILY
+    condition_rows:
+      { t2d: FOOD.W.T2D, glp1: FOOD.W.GLP1, hypertension: FOOD.W.HYPERTENSION }
+    # Goals with no 7.2 row (maintain, condition goals alone): general diet quality.
+    default_up:
+      [
+        { attribute: nrf9_3, strength: "+" },
+        { attribute: fiber_density, strength: "+" },
+      ]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.ATTRIBUTES
+    text: "How each 7.2 attribute is read from foods.json (per 100 kcal unless noted). Leucine per serving uses leucine per 100 g (a typical portion) until serving sizes exist; familiar foods and small portions stay neutral (no data)."
+    # attribute -> foods.json source; per_100kcal divides a per-100 g nutrient by energy.
+    sources:
+      energy_density: { field: attributes.energy_density_kcal_per_g }
+      protein_density: { field: attributes.protein_g_per_100kcal }
+      fiber_density: { field: attributes.fiber_g_per_100kcal }
+      fiber: { field: attributes.fiber_g_per_100kcal }
+      nrf9_3: { field: attributes.nrf93 }
+      leucine_per_serving: { field: per_100g.leucine_g }
+      leucine_rich_protein: { field: per_100g.leucine_g }
+      carb_density: { field: per_100g.carb_g, per_100kcal: true }
+      carbs: { field: per_100g.carb_g, per_100kcal: true }
+      fast_carbs: { field: per_100g.carb_g, per_100kcal: true }
+      iron: { field: per_100g.iron_mg, per_100kcal: true }
+      potassium: { field: per_100g.potassium_mg, per_100kcal: true }
+      gi_gl: { field: attributes.gi }
+      unsaturated_fat: { field: unsaturated_fat, per_100kcal: true }
+      protein_pairing: { field: attributes.protein_g_per_100kcal }
+      nova: { field: nova }
+      dash_groups: { field: group }
+    neutral: [familiar_foods, small_portions]
+    dash_groups: [vegetables, fruits, legumes, nuts_seeds, dairy]
+    citation_ids: [NRF93]
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.PENALTIES
+    text: "Down-weights (7.2): energy density over 4 kcal/g in a fat-loss phase −0.15 (measured portions only); liquid calories in a fat-loss phase −0.2; sugary drinks and refined grains for T2D −0.2; greasy, fried and carbonated foods for GLP-1 −0.2; sodium per 100 kcal for hypertension, weight 1 against the score. In a surplus, energy density counts as a positive (1)."
+    high_energy_density_penalty: 0.15
+    liquid_calories_penalty: 0.2
+    liquid_groups: [beverages, fruit_juice, plant_milk, sports_nutrition]
+    t2d_penalty: 0.2
+    sugary_drink_keywords:
+      [cola, juice, sports drink, gatorade, chocolate, carbonated]
+    refined_grain_keywords:
+      [
+        white,
+        bagel,
+        corn flakes,
+        pretzels,
+        crackers,
+        saltines,
+        doughnut,
+        cookies,
+      ]
+    glp1_penalty: 0.2
+    glp1_keywords:
+      [
+        fried,
+        chips,
+        pizza,
+        doughnut,
+        sausage,
+        bacon,
+        carbonated,
+        cola,
+        pepperoni,
+        salami,
+      ]
+    sodium_weight: 1
+    surplus_energy_density_weight: 1
+    citation_ids: []
+    verify: true
+    heuristic: true
+  - id: FOOD.RANK.PRE_RACE
+    text: "Pre-race and during (1–4 h before): exclude high-fiber foods (≥ 3 g fiber per 100 kcal) and high-fat foods (fat over 30% of energy). Unknown fiber or fat counts as excluded. New foods can't be detected yet (no history)."
+    high_fiber_g_per_100kcal: 3
+    high_fat_pct_energy: 30
+    citation_ids: [ACSM2016]
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.PATTERN_LENS_GROUPS
+    text: "Pattern lens: foods in the selected pattern's food groups get +0.1 (top pattern) or +0.05 (alternates)."
+    top_boost: 0.1
+    alternate_boost: 0.05
+    groups:
+      mediterranean: [vegetables, fruits, legumes, nuts_seeds, fish, grains]
+      dash: [vegetables, fruits, legumes, nuts_seeds, dairy, grains]
+      high_protein: [poultry, fish, shellfish, eggs, dairy, legumes]
+      low_gi: [legumes, vegetables, nuts_seeds, dairy]
+      energy_density: [vegetables, fruits, soups, legumes]
+      vegetarian_vegan: [legumes, vegetables, fruits, nuts_seeds, grains]
+      flexitarian_pescatarian: [fish, shellfish, legumes, vegetables, fruits]
+      low_carb_keto: [meat, poultry, fish, eggs, dairy, nuts_seeds]
+      if_tre: []
+      high_carb_performance: [grains, fruits, sports_nutrition]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.TASTE
+    text: "Taste re-rank inside the top 50 health-scored foods, blended at 0.15 (taste is never the first sort). Proxies for PRD taste dimensions: sweetness = sugar share of energy; richness = fat share of energy; umami = savory groups and foods; bitterness = leafy greens, coffee, dark chocolate. Texture and ripeness stay neutral (0.5); no taste data = neutral. Disliked foods −0.3."
+    health_set: 50
+    blend: 0.15
+    neutral: 0.5
+    dislike_penalty: 0.3
+    umami_groups: [meat, poultry, fish, shellfish, processed_meat, soups]
+    umami_keywords:
+      [
+        cheese,
+        parmesan,
+        mushroom,
+        tomato,
+        soy,
+        miso,
+        tempeh,
+        tofu,
+        anchov,
+        broth,
+      ]
+    bitter_keywords:
+      [
+        kale,
+        arugula,
+        collards,
+        radicchio,
+        spinach,
+        beet greens,
+        coffee,
+        chocolate,
+        dark,
+      ]
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.CONTEXT
+    text: "Context boosts: pantry item +0.1; NIR peaks-tonight +0.15 more. Gaps in the remaining targets add up to 0.1 for matching density: protein when 20 g or more remains, fiber when 5 g or more, carbs when 50 g or more; when 300 kcal or less remains, low energy density."
+    pantry_boost: 0.1
+    peak_boost: 0.15
+    gap_boost: 0.1
+    gap_minimums: { protein_g: 20, fiber_g: 5, carb_g: 50 }
+    low_kcal_remaining: 300
+    citation_ids: [NURI_PRD]
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.DIVERSITY_RULES
+    text: "Diversity: one food per base name (first word, or first two for broad heads like fish or beans) and at most 3 foods from one group in the top 10."
+    top_n: 10
+    max_per_group: 3
+    two_word_heads:
+      [
+        fish,
+        beans,
+        cheese,
+        nuts,
+        seeds,
+        oil,
+        beef,
+        pork,
+        chicken,
+        turkey,
+        milk,
+        yogurt,
+        bread,
+        rice,
+        pasta,
+        snacks,
+        beverages,
+        soup,
+        crustaceans,
+        mollusks,
+        cereals,
+        squash,
+        peppers,
+        lettuce,
+        cabbage,
+        potatoes,
+        tomatoes,
+        onions,
+        sausage,
+        lunchmeat,
+      ]
+    citation_ids: []
+    verify: false
+    heuristic: true
+  - id: FOOD.RANK.CHIPS
+    text: "Why chips (7.4 example: 21 g protein per 100 kcal · low energy density · in your pantry, peaks tonight): protein from 10 g per 100 kcal; fiber from 3 g per 100 kcal; energy density under 1.5 kcal/g; GI 55 or lower; up to 3 chips plus context."
+    protein_min: 10
+    fiber_min: 3
+    low_energy_density_below: 1.5
+    low_gi_max: 55
+    max_chips: 3
+    copy:
+      protein: "{value:.0f} g protein per 100 kcal"
+      fiber: "{value:.1f} g fiber per 100 kcal"
+      low_energy_density: "low energy density"
+      low_gi: "low GI"
+      nutrient_rich: "nutrient-rich"
+      pattern: "fits your {pattern} pattern"
+      pantry: "in your pantry"
+      peak: "peaks tonight"
+      fueling: "quick carbs for your session"
+      why: "A good fit for your goal and the rest of the day."
+    citation_ids: []
+    verify: false
+    heuristic: true
