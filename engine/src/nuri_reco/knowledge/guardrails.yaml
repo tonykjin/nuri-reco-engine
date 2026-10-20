@@ -2,10 +2,10 @@
 # Rows tagged "⚠️ verify" or "⚠️ clinical sign-off" are verify: true (the page's legend says ⚠️
 # items need clinical sign-off before they ship). "🧪 bands" is heuristic: true.
 #
-# safety.py reads these rules. `copy` is the user-facing wording (plain language, no numbers):
+# safety.py reads these rules. Their user-facing wording lives in explanations.yaml, keyed by rule id:
 #   block    - shown when the rule blocks something the user asked for (a deficit, a weight-loss target)
-#   referral - shown whenever the rule's trigger fires
-#   warning  - shown whenever the rule's trigger fires
+#   referral - shown whenever the rule's trigger fires (when the rule has a referral sentence)
+#   warning  - shown whenever the rule's trigger fires (when the rule has a warning sentence)
 #   why      - the reason, attached to every finding from the rule
 spec_section: "8"
 
@@ -52,10 +52,6 @@ guardrails:
     blocks: [deficit]
     fallback_energy: maintenance
     referral_to: [family, clinician]
-    copy:
-      block: "We don't set weight-loss plans for children or teens."
-      referral: "A parent, guardian or your doctor can help you plan meals that support growing."
-      why: "Growing bodies need enough energy, so weight loss needs a clinician involved."
     citation_ids: [AAP2023]
     verify: false
     heuristic: false
@@ -69,10 +65,6 @@ guardrails:
     flags: [pregnant, breastfeeding]
     blocks: [deficit, weight_loss_targets]
     referral_to: [rd]
-    copy:
-      block: "We don't set calorie deficits or weight-loss targets during pregnancy or breastfeeding."
-      referral: "A registered dietitian can build a plan that fits this stage."
-      why: "Energy needs go up during pregnancy and breastfeeding, so cutting calories isn't recommended."
     citation_ids: [IOM2009, ACOG]
     verify: true
     heuristic: false
@@ -91,10 +83,6 @@ guardrails:
     blocks: [deficit, aesthetic_modes]
     offer: [number_hiding_mode]
     referral_to: [resources]
-    copy:
-      block: "We won't set a calorie deficit or a goal-date plan right now."
-      referral: "Support is available. A doctor or an eating-disorder helpline can help."
-      why: "Some of your answers suggest dieting could be harmful right now, and your wellbeing comes first."
     citation_ids: [SCOFF1999, NURI_PRD]
     verify: false
     heuristic: false
@@ -111,10 +99,6 @@ guardrails:
     # "Remove deficit": the plan continues at maintenance instead of being blocked.
     removes: [deficit]
     referral_to: [doctor, sports_rd]
-    copy:
-      warning: "We've taken the calorie deficit out of your plan."
-      referral: "Please check in with a doctor or a sports dietitian."
-      why: "Missed periods, stress fractures or ongoing tiredness can mean you're not eating enough for your training."
     citation_ids: [IOC_REDS2023]
     verify: true
     heuristic: false
@@ -134,9 +118,6 @@ guardrails:
       with_diabetes: { min: 0.6, max: 0.8 }
     cautions: [dash_potassium]
     rd_gated: true
-    copy:
-      warning: "Your protein target is capped and potassium-rich suggestions are limited to protect your kidneys."
-      why: "Kidney disease changes how much protein and potassium is right for you, so a dietitian reviews your plan."
     citation_ids: [KDOQI2020]
     verify: false
     heuristic: false
@@ -149,9 +130,6 @@ guardrails:
     text: "SGLT2 inhibitor | Medication | Exclude keto / very-low-carb patterns | Case literature ⚠️ clinical sign-off"
     medications: [sglt2_inhibitor]
     exclude_pattern_ids: [PATTERN.LOW_CARB_KETO]
-    copy:
-      warning: "Keto and very-low-carb eating patterns are left out of your options."
-      why: "With your medication, very-low-carb eating can raise the risk of a serious side effect."
     citation_ids: [SGLT2_KETO_DKA_CASE]
     verify: true
     heuristic: false
@@ -166,10 +144,6 @@ guardrails:
     blocks_without_rd: [carb_restriction, large_deficit]
     notice: hypoglycemia
     referral_to: [rd]
-    copy:
-      warning: "Watch for signs of low blood sugar if you change how much or when you eat."
-      referral: "A dietitian should sign off on any carb cuts or large calorie deficits."
-      why: "Your medication lowers blood sugar, so big changes in carbs or calories can push it too low."
     citation_ids: []
     verify: true
     heuristic: false
@@ -182,9 +156,6 @@ guardrails:
     text: "Warfarin | Medication | Keep vitamin K intake consistent; don't suddenly boost leafy greens | ⚠️ clinical sign-off"
     medications: [warfarin]
     keep_consistent: [vitamin_k]
-    copy:
-      warning: "Keep leafy greens and other vitamin K foods steady from day to day."
-      why: "Your medication works best when your vitamin K intake stays consistent."
     citation_ids: []
     verify: true
     heuristic: false
@@ -207,9 +178,6 @@ guardrails:
         with_medications: [antihypertensive]
     rd_gated_on: care
     app_only_fallback: general_wellness
-    copy:
-      warning: "A dietitian will confirm your plan. Until then, talk to your clinician before making big changes."
-      why: "Goals tied to a health condition are reviewed by a dietitian."
     citation_ids: [NURI_PRD]
     verify: false
     heuristic: false
@@ -221,18 +189,41 @@ guardrails:
     source: "PRD §4, §11"
     text: 'Claims guardrail | All copy | No diagnosis, no "treats" or "cures", no food-safety guarantees; all outputs labelled Recommended | PRD §4, §11'
     forbidden: [diagnosis, treats, cures, food_safety_guarantees]
-    # Matched case-insensitively as whole words/phrases by safety.claims_violations().
+    # Matched case-insensitively as whole words/phrases by explain.claims_violations() on every
+    # sentence the engine renders. Sources: PRD §4.6 no medical claims, never "safe to eat",
+    # NIR is not medical-grade; PRD §11 no diagnosis, no food-safety guarantees; PRD §4.7 no shame
+    # or restriction nudges.
     forbidden_phrases:
-      [
-        diagnose,
-        diagnosis,
-        diagnosed,
-        treat,
-        treats,
-        cure,
-        cures,
-        "safe to eat",
-      ]
+      - diagnose
+      - diagnoses
+      - diagnosis
+      - diagnosed
+      - diagnostic
+      - treat
+      - treats
+      - treatment
+      - cure
+      - cures
+      - heal
+      - heals
+      - healing
+      - reverse
+      - reverses
+      - medical-grade
+      - clinically proven
+      - safe to eat
+      - guaranteed
+      - guarantee
+      - guarantees
+      - won't spoil
+      - detox
+      - cheat
+      - cheat meal
+      - guilt
+      - guilty
+      - bad food
+      - junk food
+      - sinful
     provenance_label: recommended
     citation_ids: [NURI_PRD]
     verify: false

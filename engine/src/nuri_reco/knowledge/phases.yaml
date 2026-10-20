@@ -16,7 +16,6 @@ phases:
   - id: PHASE.BASE
     name: base
     text: "Base | More than 16 weeks out (or the first block) | Body-comp goals allowed (deficit ≤0.5% BW/week for athletes) | Day-type tiers; train-low allowed on easy sessions only"
-    why: "Your base block is the time for body-composition goals, before training load peaks."
     weeks_before_event: { min: 16, max: null }
     or_first_block: true
     energy: "Body-comp goals allowed (deficit ≤0.5% BW/week for athletes)"
@@ -30,7 +29,6 @@ phases:
   - id: PHASE.BUILD
     name: build
     text: "Build | 16 → 6 weeks | Maintenance; small deficit on rest days at most | Day-type tiers"
-    why: "Training is building, so you eat at maintenance to fuel it."
     weeks_before_event: { min: 6, max: 16 }
     energy: "Maintenance; small deficit on rest days at most"
     energy_direction: maintenance
@@ -42,7 +40,6 @@ phases:
   - id: PHASE.PEAK
     name: peak
     text: "Peak | 6 → 3 weeks | Maintenance or above; no deficit | Fuel every quality/long session fully; practise race fueling"
-    why: "Hard training weeks: every quality and long session is fully fueled."
     # Floor of "Maintenance or above": the engine never sets a deficit here.
     energy_direction: maintenance
     weeks_before_event: { min: 3, max: 6 }
@@ -56,7 +53,6 @@ phases:
   - id: PHASE.TAPER
     name: taper
     text: "Taper | 3 → 1 weeks | Maintenance (reduce with lower volume; don't cut) | Day-type tiers"
-    why: "Training eases off before the race; you keep eating at maintenance."
     weeks_before_event: { min: 1, max: 3 }
     energy: "Maintenance (reduce with lower volume; don't cut)"
     energy_direction: maintenance
@@ -68,7 +64,6 @@ phases:
   - id: PHASE.RACE_WEEK
     name: race_week
     text: "Race week | Final 7 days | Maintenance+ | Carb load 10–12 g/kg for 36–48 h before events over 90 min; low-fiber/low-fat the day before"
-    why: "Race week: fuel up and keep things familiar."
     # Floor of "Maintenance+": the engine never sets a deficit here.
     energy_direction: maintenance
     days_before_event: 7
@@ -84,8 +79,6 @@ phases:
   - id: PHASE.RECOVERY
     name: recovery
     text: "Recovery | 1–2 weeks after | Maintenance | Normal; then the next goal resumes"
-    why: "Recover from the race before the next goal picks up."
-    resume_why: "The race is done, so your other goal picks up again."
     weeks_after_event: { min: 1, max: 2 }
     energy: "Maintenance"
     energy_direction: maintenance

@@ -1,0 +1,465 @@
+# Every sentence the engine shows, keyed by rule id (spec §10: every output carries a why).
+# Variants: `rule` explains the rule itself (dev drawer, tooltips; required for every rule id the
+# engine outputs); other variants are the copy a stage uses (why, block, referral, warning, headline,
+# lever and chip sentences). {placeholders} are filled by the engine. explain.py runs every rendered
+# string through the claims filter (GUARD.CLAIMS, PRD §4 and §11).
+spec_section: "10"
+
+templates:
+  COMBO.DEFICIT_BLOCKED:
+    rule: "Weight-loss plans are put on hold during pregnancy, for teens, or when dieting could be harmful."
+  COMBO.ENDURANCE_T2D:
+    headline: "Fuel your training while your dietitian sets your carbs."
+  COMBO.GAINWEIGHT_LOSEFAT:
+    rule: "Gaining weight and losing fat pull in opposite directions, so they're worked on one at a time."
+    headline: "Work on one goal at a time, starting with the one you chose first."
+  COMBO.GLP1_T2D_STRENGTH:
+    rule: "With a GLP-1 medication and diabetes, protein comes first and a dietitian confirms the plan."
+    headline: "Protect your muscle with protein first while your dietitian confirms your plan."
+  COMBO.LOSEFAT_DEADLINE:
+    rule: "A goal date sets the timeline, but fat loss still runs at a safe, steady pace."
+    headline_clamped: "Lose fat at a safe pace for your {event}: about {projected_kg} kg by the day, with your full goal by {reachable_date}."
+    headline_feasible: "Reach your goal weight before your {event} at a safe, steady pace."
+  COMBO.LOSEFAT_DEADLINE.STEP_BACK:
+    rule: "After the event, calories ease back up to maintenance gradually."
+    why: "After the event, calories step back up to maintenance gradually."
+  COMBO.LOSEFAT_ENDURANCE:
+    rule: "Fat loss happens early in training; full fueling takes over as the race gets closer."
+    headline: "Lose fat at a steady pace while fueling your {event} build."
+  COMBO.LOSEFAT_HYPERTENSION:
+    rule: "An eating style suited to healthy blood pressure is ranked first."
+    headline: "Lose fat with an eating style that suits healthy blood pressure."
+  COMBO.LOSEFAT_MUSCLE:
+    rule: "Losing fat and building muscle can happen together with high protein and a small deficit."
+    headline_recomp: "Build muscle while losing fat: protein high, deficit small."
+    headline_sequenced: "Lose fat first, then build muscle."
+  COMBO.LOSEFAT_MUSCLE.LEAN_CUTOFF:
+    rule: "Already-lean, trained lifters lose fat first and then build muscle."
+    cut: "You're already trained and lean, so losing fat first and then building muscle works better than doing both at once."
+    lean_bulk: "With the cut done, a small surplus supports building muscle."
+  COMBO.MUSCLE_ENDURANCE:
+    headline: "Fuel both your strength and endurance training."
+  COMBO.MUSCLE_VEGAN:
+    rule: "Plant-based muscle building aims a little higher on protein and mixes protein sources."
+    headline: "Build muscle on a vegan diet, with protein from a mix of plant sources."
+  COMBO.MUSCLE_VEGAN.NUTRIENTS:
+    rule: "Vegan diets need a reliable vitamin B12 source and a mix of protein sources."
+    warning: "Vegan diets need a reliable source of vitamin B12, such as a supplement or fortified foods."
+    why: "Plant foods don't provide B12, and plant proteins carry less leucine, so we pair sources."
+  COMBO.MUSCLE_VEGAN.UPPER_PROTEIN:
+    rule: "Protein sits at the top of the range on a plant-based diet."
+  CONSTRAINT.ALLERGENS:
+    rule: "Foods with your allergens, including hidden forms like whey or tahini, are always left out."
+  CONSTRAINT.CELIAC:
+    rule: "With celiac disease, wheat, barley, rye and non-certified oats are left out."
+  CONSTRAINT.ETHICAL:
+    rule: "Only foods that fit your vegan, vegetarian or pescatarian diet are suggested."
+  CONSTRAINT.RELIGIOUS:
+    rule: "Foods that don't fit your religious practice are left out."
+  DAYTYPE.CARB_LOAD:
+    rule: "Before a long race, carbs go up for a day or two to top up energy stores."
+  DAYTYPE.EASY:
+    rule: "Easy training days get moderate carbs."
+  DAYTYPE.LONG:
+    rule: "Long sessions get the most carbs, plus fuel during the session."
+  DAYTYPE.QUALITY:
+    rule: "Hard interval and tempo days are fully fueled."
+  DAYTYPE.REST:
+    rule: "Rest days need fewer carbs, so most of any calorie deficit lands here."
+  ENERGY.ACTIVITY_FACTORS:
+    rule: "Your daily energy needs start from your resting needs scaled by how active you are."
+  ENERGY.KCAL_PER_KG:
+    rule: "The calorie deficit is kept small enough to match a safe weekly pace."
+  ENERGY.MIFFLIN_ST_JEOR:
+    rule: "Your resting energy needs are estimated from your age, sex, height and weight."
+  FEAS.DEADLINE:
+    rule: "We check whether your goal fits your timeline at a safe pace, and when you'd reach it if not."
+  FOOD.RANK.CHIPS:
+    # placeholders: {value} {pattern}
+    rule: "Each food shows the few reasons it fits you best."
+    fiber: "{value:.1f} g fiber per 100 kcal"
+    fueling: "quick carbs for your session"
+    low_energy_density: "low energy density"
+    low_gi: "low GI"
+    nutrient_rich: "nutrient-rich"
+    pantry: "in your pantry"
+    pattern: "fits your {pattern} pattern"
+    peak: "peaks tonight"
+    protein: "{value:.0f} g protein per 100 kcal"
+    why: "A good fit for your goal and the rest of the day."
+  FOOD.RANK.CONTEXT:
+    rule: "Foods you already have, foods at their best today, and today's remaining targets get a lift."
+  FOOD.RANK.CONTEXT_BOOSTS:
+    rule: "Your pantry, ripeness and what's left of today's targets move foods up."
+  FOOD.RANK.DIVERSITY:
+    rule: "Suggestions stay varied instead of repeating similar foods."
+  FOOD.RANK.DIVERSITY_RULES:
+    rule: "One food per kind and only a few from each food group."
+  FOOD.RANK.EXPLAIN:
+    rule: "Every suggestion comes with a short reason."
+  FOOD.RANK.GOAL_SCORE:
+    rule: "Foods are scored on what matters most for your goal today."
+  FOOD.RANK.HARD_FILTERS:
+    rule: "Allergens, your diet and other must-avoids are removed before anything is ranked."
+  FOOD.RANK.PATTERN_LENS:
+    rule: "Foods from your eating style get a small lift."
+  FOOD.RANK.PATTERN_LENS_GROUPS:
+    rule: "Each eating style favors its own food groups."
+  FOOD.RANK.PRE_RACE:
+    rule: "Before and during training, high-fiber and high-fat foods are left out to keep your stomach settled."
+  FOOD.RANK.SCORING:
+    rule: "Food qualities are compared fairly within each food group and across all foods."
+  FOOD.RANK.TASTE:
+    rule: "Your taste preferences reorder foods that already fit your goal."
+  FOOD.RANK.TASTE_RERANK:
+    rule: "Taste only reorders healthy picks; it never pushes a food above a better fit."
+  FOOD.W.ENDURANCE_DAILY:
+    rule: "For endurance training, carb-rich and nutrient-rich foods rank higher."
+  FOOD.W.ENDURANCE_PRE_RACE:
+    rule: "Before a session, quick, familiar carbs rank highest."
+  FOOD.W.FAT_LOSS:
+    rule: "For fat loss, filling, protein-rich foods with fewer calories per bite rank higher."
+  FOOD.W.GLP1:
+    rule: "On a GLP-1 medication, protein-rich, nutrient-rich foods in small portions rank higher."
+  FOOD.W.HYPERTENSION:
+    rule: "For blood pressure, potassium-rich, lower-salt foods rank higher."
+  FOOD.W.MUSCLE:
+    rule: "For building muscle, protein- and leucine-rich foods rank higher."
+  FOOD.W.RECOVERY:
+    rule: "After training, carbs with good-quality protein rank higher."
+  FOOD.W.T2D:
+    rule: "For steady blood sugar, slower carbs, fiber and healthy fats rank higher."
+  GOAL.BUILD_MUSCLE:
+    headline: "Build muscle with a small calorie surplus."
+  GOAL.BUILD_MUSCLE.ENERGY:
+    rule: "Building muscle uses a small calorie surplus."
+  GOAL.BUILD_MUSCLE.PROTEIN:
+    rule: "Building muscle needs plenty of protein each day."
+  GOAL.DEADLINE_EVENT:
+    headline: "Reach your goal weight for your {event} at a safe pace."
+  GOAL.DEADLINE_EVENT.ENERGY:
+    rule: "A goal date uses a calorie deficit at a safe pace."
+  GOAL.DEADLINE_EVENT.PROTEIN:
+    rule: "Protein stays at the top of the range to keep muscle while you lose fat."
+  GOAL.ENDURANCE_EVENT:
+    headline: "Fuel your training for your {event}."
+  GOAL.ENDURANCE_EVENT.CARBS_FAT:
+    rule: "Carbs follow your training, day by day."
+  GOAL.ENDURANCE_EVENT.ENERGY:
+    rule: "Endurance training is matched with enough energy, with no deficit near the race."
+  GOAL.ENDURANCE_EVENT.PROTEIN:
+    rule: "Endurance training needs a moderate amount of protein for recovery."
+  GOAL.GAIN_WEIGHT:
+    headline: "Gain weight gradually with nourishing, energy-dense foods."
+  GOAL.GAIN_WEIGHT.ENERGY:
+    rule: "Gaining weight uses a gentle calorie surplus."
+  GOAL.GAIN_WEIGHT.PROTEIN:
+    rule: "Protein stays at a healthy level while you gain."
+  GOAL.GLP1:
+    headline: "Put protein first while your dietitian confirms your plan."
+  GOAL.GLP1.ENERGY:
+    rule: "With a GLP-1 medication, no large extra deficit is added on top of a lower appetite."
+  GOAL.GLP1.PROTEIN:
+    rule: "Protein is a priority on a GLP-1 medication to help keep muscle."
+  GOAL.HYPERTENSION:
+    headline: "Eat in a way that suits healthy blood pressure."
+  GOAL.HYPERTENSION.ENERGY:
+    rule: "Calories follow your weight goal."
+  GOAL.LOSE_FAT:
+    headline: "Lose fat at a steady, sustainable pace."
+  GOAL.LOSE_FAT.CARBS_FAT:
+    rule: "Fat stays in a healthy range and carbs fill the rest."
+  GOAL.LOSE_FAT.ENERGY:
+    rule: "Fat loss uses a moderate calorie deficit that never goes below your floor."
+  GOAL.LOSE_FAT.PROTEIN:
+    rule: "Protein stays high while you lose fat to protect muscle."
+  GOAL.MAINTAIN:
+    headline: "Eat well and keep your weight steady."
+  GOAL.MAINTAIN.CARBS_FAT:
+    rule: "Carbs and fat sit in the healthy everyday ranges."
+  GOAL.MAINTAIN.ENERGY:
+    rule: "Calories match what you use, adjusted to your weight trend."
+  GOAL.MAINTAIN.PROTEIN:
+    rule: "Protein sits in a healthy everyday range."
+  GOAL.RECOMP:
+    headline: "Build muscle while losing fat: protein high, deficit small."
+  GOAL.RECOMP.CARBS_FAT:
+    rule: "Fat stays in a healthy range, with enough carbs on lifting days."
+  GOAL.RECOMP.ENERGY:
+    rule: "Building muscle while losing fat uses a small deficit."
+  GOAL.RECOMP.PROTEIN:
+    rule: "Protein stays high to build muscle while you lose fat."
+  GOAL.STRENGTH_HYBRID:
+    headline: "Fuel your strength and endurance training at maintenance."
+  GOAL.STRENGTH_HYBRID.ENERGY:
+    rule: "Strength and endurance training together run at maintenance."
+  GOAL.STRENGTH_HYBRID.PROTEIN:
+    rule: "Protein supports recovery from both kinds of training."
+  GOAL.T2D:
+    headline: "Eat for steady energy while your dietitian confirms your plan."
+  GOAL.T2D.ENERGY:
+    rule: "Calories are set at maintenance unless your dietitian sets a deficit."
+  GUARD.CALORIE_FLOOR:
+    rule: "Calories never drop below a healthy minimum for your body."
+  GUARD.CKD:
+    rule: "With kidney disease, protein and potassium are adjusted and a dietitian reviews the plan."
+    warning: "Your protein target is capped and potassium-rich suggestions are limited to protect your kidneys."
+    why: "Kidney disease changes how much protein and potassium is right for you, so a dietitian reviews your plan."
+  GUARD.CLAIMS:
+    rule: "Everything here is guidance, not a medical claim."
+  GUARD.CONDITION_GOALS:
+    rule: "Goals tied to a health condition are reviewed by a dietitian."
+    warning: "A dietitian will confirm your plan. Until then, talk to your clinician before making big changes."
+    why: "Goals tied to a health condition are reviewed by a dietitian."
+  GUARD.ED_RISK:
+    rule: "If dieting might be harmful right now, weight-loss plans are paused and support is offered."
+    block: "We won't set a calorie deficit or a goal-date plan right now."
+    referral: "Support is available. A doctor or an eating-disorder helpline can help."
+    why: "Some of your answers suggest dieting could be harmful right now, and your wellbeing comes first."
+  GUARD.INSULIN_SU:
+    rule: "With insulin or similar medications, big changes to carbs or calories need a dietitian first."
+    referral: "A dietitian should sign off on any carb cuts or large calorie deficits."
+    warning: "Watch for signs of low blood sugar if you change how much or when you eat."
+    why: "Your medication lowers blood sugar, so big changes in carbs or calories can push it too low."
+  GUARD.LOW_EA:
+    rule: "If you may not be eating enough for your training, the deficit is removed."
+    referral: "Please check in with a doctor or a sports dietitian."
+    warning: "We've taken the calorie deficit out of your plan."
+    why: "Missed periods, stress fractures or ongoing tiredness can mean you're not eating enough for your training."
+  GUARD.MAX_LOSS_RATE:
+    rule: "Weight loss is capped at a safe weekly pace for your body."
+  GUARD.PEAK_WEEK:
+    rule: "Before an event, we never suggest cutting water or using diuretics."
+  GUARD.PREGNANCY:
+    rule: "During pregnancy or breastfeeding, weight-loss plans are paused."
+    block: "We don't set calorie deficits or weight-loss targets during pregnancy or breastfeeding."
+    referral: "A registered dietitian can build a plan that fits this stage."
+    why: "Energy needs go up during pregnancy and breastfeeding, so cutting calories isn't recommended."
+  GUARD.SGLT2:
+    rule: "With an SGLT2 medication, very-low-carb eating styles are left out."
+    warning: "Keto and very-low-carb eating patterns are left out of your options."
+    why: "With your medication, very-low-carb eating can raise the risk of a serious side effect."
+  GUARD.UNDER_18:
+    rule: "Weight-loss plans aren't set for children or teens."
+    block: "We don't set weight-loss plans for children or teens."
+    referral: "A parent, guardian or your doctor can help you plan meals that support growing."
+    why: "Growing bodies need enough energy, so weight loss needs a clinician involved."
+  GUARD.WARFARIN:
+    rule: "With warfarin, vitamin K foods are kept steady from day to day."
+    warning: "Keep leafy greens and other vitamin K foods steady from day to day."
+    why: "Your medication works best when your vitamin K intake stays consistent."
+  LS.CARB:
+    rule: "Carbs are scored against your target for the day."
+    why: "Carbs matched to your day give you energy where you need it."
+  LS.ENERGY:
+    rule: "Calories are scored against your target for the day."
+    why: "Staying close to your calorie target for the day supports your goal."
+  LS.FIBER:
+    rule: "Fiber is scored against your daily goal."
+    why: "Fiber keeps you full and supports digestion."
+  LS.FREESUGAR:
+    rule: "Added and free sugars are kept below a limit."
+    why: "Keeping added and free sugars low leaves room for more filling foods."
+  LS.MICRO:
+    rule: "Key vitamins and minerals are scored across the week."
+    why: "A steady supply of key vitamins and minerals across the week."
+  LS.PATTERN:
+    rule: "Variety and fruit and vegetables count toward your score."
+    why: "A varied plate with plenty of fruit and vegetables."
+  LS.PROTEIN:
+    rule: "Protein is scored against your daily range."
+    why: "Enough protein, spread across meals, protects muscle and keeps you full."
+  LS.SATFAT:
+    rule: "Saturated fat is kept below a limit."
+    why: "Less saturated fat, with unsaturated fats in its place, is better for your heart."
+  LS.SODIUM:
+    rule: "Salt is kept below a limit."
+    why: "Less salt supports healthy blood pressure."
+  LSW.FLOOR.CONFLICT:
+    rule: "When several health conditions overlap, their priorities are balanced and a dietitian confirms."
+  LSW.FLOOR.GLP1:
+    rule: "On a GLP-1 medication, protein and vitamins always count for a lot in your score."
+  LSW.FLOOR.HYPERTENSION:
+    rule: "For blood pressure, salt and other limits always count for a lot in your score."
+  LSW.FLOOR.RULE:
+    rule: "Health-condition priorities are never watered down by other goals."
+  LSW.FLOOR.T2D:
+    rule: "For blood sugar, carbs and fiber always count for a lot in your score."
+  LSW.LEVERS:
+    # placeholders: {kcal} {protein_per_meal_g} {meals} {fiber_g} {produce_g}
+    rule: "The few changes that would lift your score the most."
+    carb_first: "Fueling counts most for you: match your carbs to each day's training."
+    carb_next: "Match your carbs to each day's training."
+    energy_first: "Hitting your energy target moves your score most: about {kcal} kcal a day."
+    energy_next: "Staying close to about {kcal} kcal a day helps your score."
+    fiber_first: "Fiber is your biggest lever: aim for {fiber_g} g a day."
+    fiber_next: "Fiber helps too: aim for {fiber_g} g a day."
+    micro_first: "Nutrient-rich foods move your score most: vegetables, legumes, whole grains, and dairy or fortified alternatives."
+    micro_next: "Mix in nutrient-rich foods like vegetables, legumes and whole grains."
+    moderation_first: "Easing off saturated fat, added sugar and salt moves your score most."
+    moderation_next: "Keep saturated fat, added sugar and salt in check."
+    pattern_first: "Variety counts most for you: aim for {produce_g} g of fruit and vegetables a day."
+    pattern_next: "Aim for {produce_g} g of fruit and vegetables a day."
+    protein_first: "Protein counts most for you: aim for about {protein_per_meal_g} g at each of {meals} meals."
+    protein_next: "Protein helps too: about {protein_per_meal_g} g at each of {meals} meals."
+  LSW.ROW.ATHLETE:
+    rule: "Score weights for endurance training."
+  LSW.ROW.DEADLINE:
+    rule: "Score weights for a goal date."
+  LSW.ROW.GLP1:
+    rule: "Score weights for GLP-1 users."
+  LSW.ROW.HYBRID:
+    rule: "Score weights for strength and endurance together."
+  LSW.ROW.HYPERTENSION:
+    rule: "Score weights for blood pressure."
+  LSW.ROW.MUSCLEGAIN:
+    rule: "Score weights for building muscle."
+  LSW.ROW.RECOMP:
+    rule: "Score weights for building muscle while losing fat."
+  LSW.ROW.T2D:
+    rule: "Score weights for blood sugar."
+  LSW.ROW.WEIGHTGAIN:
+    rule: "Score weights for gaining weight."
+  LSW.ROW.WEIGHTLOSS:
+    rule: "Score weights for fat loss."
+  LSW.ROW.WELLNESS:
+    rule: "Score weights for general wellness."
+  LSW.STACK.0604:
+    rule: "With more than one goal, your main goal counts most and the others still count."
+  MICRO.B12:
+    rule: "Vitamin B12 target for adults."
+  MICRO.CALCIUM:
+    rule: "Calcium target for your age and sex."
+  MICRO.FOLATE:
+    rule: "Folate target for adults."
+  MICRO.IRON:
+    rule: "Iron target for your age and sex."
+  MICRO.MAGNESIUM:
+    rule: "Magnesium target for your age and sex."
+  MICRO.POTASSIUM:
+    rule: "Potassium target for your sex."
+  MICRO.VITAMIN_D:
+    rule: "Vitamin D target for your age."
+  PATTERN.DASH:
+    rule: "An eating style built on produce, whole grains and low-fat dairy with less salt."
+    why: "Built around produce, whole grains and low-fat dairy, with less salt."
+  PATTERN.ENERGY_DENSITY:
+    rule: "An eating style built on filling foods with fewer calories per bite."
+    why: "Big, filling portions from foods with fewer calories per bite."
+  PATTERN.FLEXITARIAN_PESCATARIAN:
+    rule: "A mostly plant-based eating style with fish and room to flex."
+    why: "Mostly plants, with fish and room to flex: the least restrictive option."
+  PATTERN.HIGH_CARB_PERFORMANCE:
+    rule: "An eating style that times carbs around training."
+    why: "Carbs timed around training to fuel hard sessions."
+  PATTERN.HIGH_PROTEIN:
+    rule: "An eating style with protein at every meal."
+    why: "Protein at every meal keeps you full and protects muscle."
+  PATTERN.IF_TRE:
+    rule: "Eating within a set daily window."
+    why: "Eating within a set daily window, for people who like structure."
+  PATTERN.LOW_CARB_KETO:
+    rule: "An eating style low in carbs, best kept short-term."
+    why: "Fewer carbs with more protein and fat; best kept short-term."
+  PATTERN.LOW_GI:
+    rule: "An eating style built on slower-digesting carbs."
+    why: "Slower-digesting carbs for steadier energy and appetite."
+  PATTERN.MEDITERRANEAN:
+    rule: "A flexible eating style built on vegetables, legumes, whole grains, fish and olive oil."
+    why: "A flexible, well-studied way of eating built on vegetables, legumes, whole grains, fish and olive oil."
+  PATTERN.MIND:
+    why: "A Mediterranean-style pattern studied for brain health."
+  PATTERN.SCORE.ADHERENCE:
+    rule: "How easy an eating style would be for you to stick with."
+    cuisine: "It suits the cuisines you enjoy."
+    follows: "It matches the way you already eat."
+    pattern_pref: "You asked for this eating style."
+  PATTERN.SCORE.WEIGHTS:
+    rule: "How easy a style is to stick with counts most, then the strength of the research."
+  PATTERN.SELECT.DIET_FIT:
+    rule: "Only eating styles that fit your diet are suggested."
+  PATTERN.SELECT.ELIGIBLE:
+    rule: "Eating styles are matched to your goals."
+  PATTERN.SELECT.FIRST_LINE:
+    rule: "For some goals, one eating style is the first choice."
+    why: "The best-tested eating style for blood pressure."
+  PATTERN.SELECT.GOAL_MAP:
+    rule: "Each eating style is matched to the goals it suits."
+  PATTERN.SELECT.MATRIX_F:
+    rule: "Eating styles that clash with your medications are left out."
+  PATTERN.VEGETARIAN_VEGAN:
+    rule: "A plant-based eating style."
+    why: "Plant-based meals, with protein from a mix of plant sources."
+  PHASE.BASE:
+    rule: "Early training, when body-composition goals fit best."
+    why: "Your base block is the time for body-composition goals, before training load peaks."
+  PHASE.BUILD:
+    rule: "Training is building, so you eat at maintenance."
+    why: "Training is building, so you eat at maintenance to fuel it."
+  PHASE.PEAK:
+    rule: "The hardest training weeks, fully fueled."
+    why: "Hard training weeks: every quality and long session is fully fueled."
+  PHASE.RACE_WEEK:
+    rule: "The final week before the race."
+    why: "Race week: fuel up and keep things familiar."
+  PHASE.RECOVERY:
+    rule: "Recovery after the race."
+    resume: "The race is done, so your other goal picks up again."
+    why: "Recover from the race before the next goal picks up."
+  PHASE.TAPER:
+    rule: "Training eases off before the race."
+    why: "Training eases off before the race; you keep eating at maintenance."
+  RESOLVER.CONTRADICTION:
+    rule: "Goals that pull in opposite directions are combined or done one at a time."
+    question: "These goals pull in opposite directions. Which matters most first?"
+    sequenced: "You chose to work on this goal first; the next one follows once it's done."
+  RESOLVER.ONE_ENERGY_GOAL:
+    rule: "Each phase has one calorie direction, and protein stays high throughout."
+    deficit: "A steady calorie deficit, with protein kept high to protect muscle."
+    maintenance: "Eating at maintenance, with protein kept high."
+    surplus: "A small calorie surplus to support building muscle."
+  RESOLVER.RAMP:
+    rule: "Targets change gradually between phases instead of all at once."
+  RESOLVER.TIMELINE:
+    rule: "Dated goals become phases on a timeline."
+  SUMMARY.HEADLINE:
+    blocked: "Let's put your wellbeing first. We've suggested who to talk to next."
+    needs_ordering: "Your goals pull in different directions. Pick which one comes first and we'll build the plan."
+  SUMMARY.RESOLVED_AS:
+    # placeholders: {energy} {phases} {first} {start} {last} {rate} {n} {total} {projected_kg} {event_date} {reachable_date}
+    all_phases: "{energy} throughout"
+    awaiting_order: "waiting for you to choose which goal comes first"
+    blocked: "on hold for now"
+    deadline: "sets the timeline: about {projected_kg} kg by {event_date}, full goal by {reachable_date}"
+    deadline_feasible: "sets the timeline: goal weight by {event_date}"
+    from_to: "primary from {first} ({start}) to {last}"
+    merged: "combined with your other goal as recomp"
+    merged_primary: "recomp: {detail}"
+    modifier: "shapes your targets and food choices alongside your main goal"
+    rate_suffix: ", ≤ {rate}% BW/week"
+    sequenced: "phase {n} of {total}: {energy}"
+    some_phases: "{energy} in {phases} only"
+  TARGETS.CARB_TIERS:
+    rule: "On training days, carbs follow how hard you train."
+  TARGETS.DEFICIT_SPLIT:
+    rule: "In training phases, most of the deficit falls on rest and easy days."
+  TARGETS.ENERGY_POSITION:
+    rule: "Your calorie change sits in the middle of the recommended range."
+  TARGETS.FAT:
+    rule: "Fat sits in the middle of the healthy range."
+  TARGETS.FIBER:
+    rule: "Fiber goal for your calories."
+  TARGETS.PROTEIN_POSITION:
+    rule: "Protein sits in the upper part of the recommended range."
+  TIER.BODY_COMP:
+    rule: "Body-composition goals set direction when nothing more important applies."
+  TIER.DEADLINE:
+    rule: "Goal dates are pursued only at a safe pace."
+  TIER.EVENT_WINDOW:
+    rule: "In the weeks before a race, fueling for performance comes first."
+  TIER.GENERAL_HEALTH:
+    rule: "Fiber, vitamins and overall diet quality always count."
+  TIER.SAFETY:
+    rule: "Health and safety rules come before every other goal."
+  TIMING.PROTEIN_PER_MEAL:
+    rule: "Protein is spread across your meals."

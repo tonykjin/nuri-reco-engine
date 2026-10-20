@@ -16,7 +16,6 @@ evidence_grades:
 patterns:
   - id: PATTERN.MEDITERRANEAN
     pattern: mediterranean
-    why: "A flexible, well-studied way of eating built on vegetables, legumes, whole grains, fish and olive oil."
     name: "Mediterranean"
     text: "Mediterranean | Heart, T2D, wellness, longevity | Skip the alcohol component (pregnancy, liver, AUD); nut/fish allergens | High, flexible, culturally adaptable | 1 | A (PREDIMED HR ≈0.70)"
     best_fit: "Heart, T2D, wellness, longevity"
@@ -32,7 +31,6 @@ patterns:
     heuristic: false
   - id: PATTERN.DASH
     pattern: dash
-    why: "Built around produce, whole grains and low-fat dairy, with less salt."
     name: "DASH"
     text: "DASH | Hypertension, heart | High potassium/phosphorus: advanced CKD, potassium-sparing meds | Moderate (sodium is hard) | 1 | A (−11.5 mmHg SBP in hypertension)"
     best_fit: "Hypertension, heart"
@@ -48,7 +46,6 @@ patterns:
     heuristic: false
   - id: PATTERN.HIGH_PROTEIN
     pattern: high_protein
-    why: "Protein at every meal keeps you full and protects muscle."
     name: "High-protein"
     text: "High-protein | Fat loss, recomp, muscle gain, GLP-1, older adults | Advanced CKD (not on dialysis) | High if protein foods are liked; cost | n/a | A (body comp)"
     best_fit: "Fat loss, recomp, muscle gain, GLP-1, older adults"
@@ -63,7 +60,6 @@ patterns:
     heuristic: false
   - id: PATTERN.LOW_GI
     pattern: low_gi
-    why: "Slower-digesting carbs for steadier energy and appetite."
     name: "Low-GI / low-GL"
     text: "Low-GI / low-GL | T2D, prediabetes, appetite | Wrong cue pre/during endurance events | High (swaps, not eliminations) | n/a | A (HbA1c −0.31%)"
     best_fit: "T2D, prediabetes, appetite"
@@ -79,7 +75,6 @@ patterns:
     heuristic: false
   - id: PATTERN.ENERGY_DENSITY
     pattern: energy_density
-    why: "Big, filling portions from foods with fewer calories per bite."
     name: "Energy density / Volumetrics"
     text: "Energy density / Volumetrics | Fat loss, hunger management, GLP-1 maintenance | Underweight, poor appetite, frail older adults | High (nothing banned) | n/a | A/B (Hall 2019: ultra-processed diet led to +508 kcal/day)"
     best_fit: "Fat loss, hunger management, GLP-1 maintenance"
@@ -95,7 +90,6 @@ patterns:
     heuristic: false
   - id: PATTERN.VEGETARIAN_VEGAN
     pattern: vegetarian_vegan
-    why: "Plant-based meals, with protein from a mix of plant sources."
     name: "Vegetarian / vegan"
     text: "Vegetarian / vegan | Heart, LDL, T2D, weight, ethics | B12 mandatory for vegans; iron, zinc, iodine, calcium, vitamin D, omega-3; lower leucine | Strong if values-driven | 1 (lacto-ovo) / 2 (vegan) | A/B"
     best_fit: "Heart, LDL, T2D, weight, ethics"
@@ -110,7 +104,6 @@ patterns:
     heuristic: false
   - id: PATTERN.FLEXITARIAN_PESCATARIAN
     pattern: flexitarian_pescatarian
-    why: "Mostly plants, with fish and room to flex: the least restrictive option."
     name: "Flexitarian / pescatarian"
     text: "Flexitarian / pescatarian | Wellness, gradual shift | Mercury guidance in pregnancy | High (least restrictive) | 1 (pescatarian) | B"
     best_fit: "Wellness, gradual shift"
@@ -125,7 +118,6 @@ patterns:
     heuristic: false
   - id: PATTERN.LOW_CARB_KETO
     pattern: low_carb_keto
-    why: "Fewer carbs with more protein and fat; best kept short-term."
     name: "Low-carb / keto"
     text: "Low-carb / keto | T2D glycemic control (RD), short-term loss, high triglycerides | SGLT2 inhibitors (euglycemic DKA), insulin/sulfonylureas, pregnancy, ED history, high-intensity endurance; LDL can rise | Falls off after ≈6 months | 3 / 4 | B"
     best_fit: "T2D glycemic control (RD), short-term loss, high triglycerides"
@@ -142,7 +134,6 @@ patterns:
     heuristic: false
   - id: PATTERN.IF_TRE
     pattern: if_tre
-    why: "Eating within a set daily window, for people who like structure."
     name: "IF / time-restricted eating"
     text: "IF / time-restricted eating | Users who like structure (works only via lower intake) | Glucose-lowering meds, pregnancy, ED history, adolescents, underweight | Polarizing | n/a | B (TREAT: no difference vs control; lean-mass loss)"
     best_fit: "Users who like structure (works only via lower intake)"
@@ -157,7 +148,6 @@ patterns:
     heuristic: false
   - id: PATTERN.HIGH_CARB_PERFORMANCE
     pattern: high_carb_performance
-    why: "Carbs timed around training to fuel hard sessions."
     name: "High-carb performance"
     text: "High-carb performance | Endurance and team sport at high load | T2D without RD; screen for low EA | Needs periodization | n/a | A (performance)"
     best_fit: "Endurance and team sport at high load"
@@ -172,7 +162,6 @@ patterns:
     heuristic: false
   - id: PATTERN.MIND
     pattern: mind
-    why: "A Mediterranean-style pattern studied for brain health."
     name: "MIND"
     text: "MIND | Brain health (hypothesis) | None | As Mediterranean | n/a | C (NEJM 2023 RCT null) → not offered as a goal pattern"
     best_fit: "Brain health (hypothesis)"
@@ -246,8 +235,6 @@ selection:
   - id: PATTERN.SELECT.FIRST_LINE
     text: "First-line patterns rank above the rest for these goals: DASH for hypertension (spec 4.2: DASH pattern ranked first)."
     first_line: { hypertension: [dash] }
-    copy:
-      why: "The best-tested eating style for blood pressure."
     citation_ids: [DASH_SODIUM]
     verify: false
     heuristic: true
@@ -314,10 +301,6 @@ selection:
       high_carb_performance: [rice, pasta, bread, potatoes]
     costly: [high_protein]
     cook_heavy: [mediterranean, dash]
-    copy:
-      cuisine: "It suits the cuisines you enjoy."
-      follows: "It matches the way you already eat."
-      pattern_pref: "You asked for this eating style."
     taste_tags:
       mediterranean: [richness, umami]
       flexitarian_pescatarian: [umami]

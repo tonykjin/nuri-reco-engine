@@ -9,6 +9,7 @@ parameter comes from score_weights.yaml.
 from collections import Counter
 from typing import Any
 
+from nuri_reco import explain
 from nuri_reco.goals import PhasePlan
 from nuri_reco.kb import KnowledgeBase, Rule
 from nuri_reco.models import DayType, Profile
@@ -107,7 +108,6 @@ class _Builder:
         extra_rule_ids: tuple[str, ...] = (),
     ) -> ScoreComponent:
         rule = self.targets[rule_id]
-        x = _x(rule)
         return ScoreComponent(
             id=id,
             type=rule.score_type,
@@ -116,7 +116,7 @@ class _Builder:
             weight_key=rule.component,
             day_type=day_type,
             rule_ids=list(dict.fromkeys([rule.id, *extra_rule_ids])),
-            why=x["why"],
+            why=explain.text(self.kb, rule.id, "why"),
         )
 
     def components(self, t: Targets) -> list[ScoreComponent]:
@@ -225,9 +225,12 @@ def _levers(
         "fiber_g": round(t.fiber_g_by_day_type[common_day]),
         "produce_g": _x(kb.rules["LS.PATTERN"])["produce_min_g_per_day"],
     }
-    templates = _x(kb.score_weights.levers)["templates"]
+    lever_id = kb.score_weights.levers.id
     return [
-        TopLever(component=c, text=templates[c]["first" if i == 0 else "next"].format(**values))
+        TopLever(
+            component=c,
+            text=explain.text(kb, lever_id, f"{c}_{'first' if i == 0 else 'next'}", **values),
+        )
         for i, c in enumerate(ranked[: priors["top_n"]])
     ]
 

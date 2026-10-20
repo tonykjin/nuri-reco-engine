@@ -200,6 +200,12 @@ class ComponentTargetRule(Rule):
     score_type: str
 
 
+class ExplanationsFile(FileModel):
+    """explanations.yaml: rule id -> variant -> sentence template (no rules of its own)."""
+
+    templates: dict[str, dict[str, str]]
+
+
 class ConstraintRulesFile(FileModel):
     rules: list[Rule]
 
@@ -250,6 +256,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "score_weights": ScoreWeightsFile,
     "summary": SummaryFile,
     "constraints": ConstraintRulesFile,
+    "explanations": ExplanationsFile,
     "citations": CitationsFile,
 }
 
@@ -269,13 +276,14 @@ class KnowledgeBase(BaseModel):
     score_weights: ScoreWeightsFile
     summary: SummaryFile
     constraints: ConstraintRulesFile
+    explanations: ExplanationsFile
     citations: CitationsFile
 
     def rules_by_file(self) -> dict[str, list[Rule]]:
         return {
             name: list(iter_rules(getattr(self, name)))
             for name in FILE_MODELS
-            if name != "citations"
+            if name not in ("citations", "explanations")
         }
 
     @functools.cached_property
@@ -344,6 +352,12 @@ def _cross_check(kb: KnowledgeBase) -> None:
     ]
     if unknown:
         raise KnowledgeError(f"unknown citation ids: {'; '.join(unknown)}")
+
+    unknown_templates = sorted(set(kb.explanations.templates) - set(kb.rules))
+    if unknown_templates:
+        raise KnowledgeError(
+            f"explanations.yaml: templates for unknown rule ids: {unknown_templates}"
+        )
 
 
 def load_kb_from(directory: Path) -> KnowledgeBase:

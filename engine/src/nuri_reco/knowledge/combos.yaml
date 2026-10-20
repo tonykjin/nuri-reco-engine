@@ -73,19 +73,12 @@ resolver_rules:
   - id: RESOLVER.ONE_ENERGY_GOAL
     order: 1
     text: "One primary energy goal per phase (deficit, maintenance or surplus). Protein stays high across all phases."
-    copy:
-      deficit: "A steady calorie deficit, with protein kept high to protect muscle."
-      maintenance: "Eating at maintenance, with protein kept high."
-      surplus: "A small calorie surplus to support building muscle."
     citation_ids: []
     verify: false
     heuristic: false
   - id: RESOLVER.CONTRADICTION
     order: 2
     text: 'Contradictory energy directions in the same phase (e.g. "gain weight" + "lose fat") → check recomp eligibility. If eligible, use recomp. If not, ask the user to order them and sequence them as phases.'
-    copy:
-      question: "These goals pull in opposite directions. Which matters most first?"
-      sequenced: "You chose to work on this goal first; the next one follows once it's done."
     citation_ids: []
     verify: false
     heuristic: false
@@ -132,9 +125,6 @@ combinations:
         lean_body_fat_pct_below: { male: 15, female: 25 }
         stalled_weeks: { min: 6, max: 8 }
         then: [cut, lean_bulk]
-        copy:
-          cut: "You're already trained and lean, so losing fat first and then building muscle works better than doing both at once."
-          lean_bulk: "With the cut done, a small surplus supports building muscle."
         citation_ids: []
         verify: true
         heuristic: false
@@ -174,8 +164,6 @@ combinations:
       - id: COMBO.LOSEFAT_DEADLINE.STEP_BACK
         text: "after the event, step back to maintenance over 2–4 weeks 🧪"
         step_back_weeks: { min: 2, max: 4 }
-        copy:
-          why: "After the event, calories step back up to maintenance gradually."
         citation_ids: []
         verify: false
         heuristic: true
@@ -213,10 +201,6 @@ combinations:
         verify: false
         heuristic: true
       - id: COMBO.MUSCLE_VEGAN.NUTRIENTS
-        # Shown as a plan warning when this combination applies (engine.py).
-        copy:
-          warning: "Vegan diets need a reliable source of vitamin B12, such as a supplement or fortified foods."
-          why: "Plant foods don't provide B12, and plant proteins carry less leucine, so we pair sources."
         text: "blend sources for leucine (soy, seitan, legumes + grains); B12 mandatory; watch iron, zinc, iodine, calcium, omega-3"
         mandatory: [b12]
         watch: [iron, zinc, iodine, calcium, omega_3]
