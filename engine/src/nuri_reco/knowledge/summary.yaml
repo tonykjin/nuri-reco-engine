@@ -1,0 +1,59 @@
+# goal_summary copy (spec §7b.6 output contract). Headlines are picked by the plan's situation:
+# a matched combination first, then the primary goal. Placeholders are filled by engine.py.
+# Plain language; blocked plans carry no numbers.
+spec_section: "7b.6"
+
+headlines:
+  id: SUMMARY.HEADLINE
+  text: "One plain-language sentence summarising the plan, e.g. Lose fat at a steady pace while fueling your marathon build."
+  blocked: "Let's put your wellbeing first. We've suggested who to talk to next."
+  needs_ordering: "Your goals pull in different directions. Pick which one comes first and we'll build the plan."
+  combos:
+    COMBO.LOSEFAT_ENDURANCE: "Lose fat at a steady pace while fueling your {event} build."
+    COMBO.LOSEFAT_DEADLINE:
+      clamped: "Lose fat at a safe pace for your {event}: about {projected_kg} kg by the day, with your full goal by {reachable_date}."
+      feasible: "Reach your goal weight before your {event} at a safe, steady pace."
+    COMBO.LOSEFAT_MUSCLE:
+      recomp: "Build muscle while losing fat: protein high, deficit small."
+      sequenced: "Lose fat first, then build muscle."
+    COMBO.MUSCLE_VEGAN: "Build muscle on a vegan diet, with protein from a mix of plant sources."
+    COMBO.MUSCLE_ENDURANCE: "Fuel both your strength and endurance training."
+    COMBO.GLP1_T2D_STRENGTH: "Protect your muscle with protein first while your dietitian confirms your plan."
+    COMBO.LOSEFAT_HYPERTENSION: "Lose fat with an eating style that suits healthy blood pressure."
+    COMBO.ENDURANCE_T2D: "Fuel your training while your dietitian sets your carbs."
+    COMBO.GAINWEIGHT_LOSEFAT: "Work on one goal at a time, starting with the one you chose first."
+  goals:
+    lose_fat: "Lose fat at a steady, sustainable pace."
+    recomp: "Build muscle while losing fat: protein high, deficit small."
+    build_muscle: "Build muscle with a small calorie surplus."
+    gain_weight: "Gain weight gradually with nourishing, energy-dense foods."
+    maintain: "Eat well and keep your weight steady."
+    endurance_event: "Fuel your training for your {event}."
+    strength_hybrid: "Fuel your strength and endurance training at maintenance."
+    deadline_event: "Reach your goal weight for your {event} at a safe pace."
+    t2d: "Eat for steady energy while your dietitian confirms your plan."
+    glp1: "Put protein first while your dietitian confirms your plan."
+    hypertension: "Eat in a way that suits healthy blood pressure."
+  citation_ids: []
+  verify: false
+  heuristic: false
+
+resolved_as:
+  id: SUMMARY.RESOLVED_AS
+  text: "How each goal was resolved, e.g. deficit in base phase only, ≤ 0.5% BW/week · primary from peak (2027-03-07) to race week"
+  # {energy} deficit|maintenance|surplus; {phases} phase names; {rate} the planned weekly rate.
+  all_phases: "{energy} throughout"
+  some_phases: "{energy} in {phases} only"
+  from_to: "primary from {first} ({start}) to {last}"
+  rate_suffix: ", ≤ {rate}% BW/week"
+  merged: "combined with your other goal as recomp"
+  merged_primary: "recomp: {detail}"
+  deadline: "sets the timeline: about {projected_kg} kg by {event_date}, full goal by {reachable_date}"
+  deadline_feasible: "sets the timeline: goal weight by {event_date}"
+  modifier: "shapes your targets and food choices alongside your main goal"
+  sequenced: "phase {n} of {total}: {energy}"
+  blocked: "on hold for now"
+  awaiting_order: "waiting for you to choose which goal comes first"
+  citation_ids: []
+  verify: false
+  heuristic: false

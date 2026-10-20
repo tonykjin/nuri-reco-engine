@@ -23,6 +23,7 @@ RULE_FILES = [
     "targets.yaml",
     "micronutrients.yaml",
     "score_weights.yaml",
+    "summary.yaml",
 ]
 ID_RE = re.compile(r"^[A-Z0-9_]+(\.[A-Z0-9_]+)+$")
 NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")

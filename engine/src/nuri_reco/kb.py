@@ -199,6 +199,11 @@ class ComponentTargetRule(Rule):
     score_type: str
 
 
+class SummaryFile(FileModel):
+    headlines: Rule
+    resolved_as: Rule
+
+
 class ScoreWeightsFile(FileModel):
     components: list[str] = Field(min_length=1)
     rows: list[WeightRow]
@@ -238,6 +243,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "targets": TargetsFile,
     "micronutrients": MicronutrientsFile,
     "score_weights": ScoreWeightsFile,
+    "summary": SummaryFile,
     "citations": CitationsFile,
 }
 
@@ -255,6 +261,7 @@ class KnowledgeBase(BaseModel):
     targets: TargetsFile
     micronutrients: MicronutrientsFile
     score_weights: ScoreWeightsFile
+    summary: SummaryFile
     citations: CitationsFile
 
     def rules_by_file(self) -> dict[str, list[Rule]]:

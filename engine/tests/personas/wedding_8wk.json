@@ -40,7 +40,10 @@
   "expect": {
     "notes": "Spec 11.2 #4 / 4.4: -9 kg in 8 weeks from 72 kg needs ≈1.56% BW/week; BMI 26.4 caps it at 0.75% (even the top band is 1.0%), so the plan is clamped. Goal BMI 23.1 is not blocked.",
     "status": "clamped",
-    "phases": [{ "energy": ["deficit"] }],
+    "phases": [
+      { "name": "deadline", "energy": ["deficit"] },
+      { "name": "step_back", "energy": ["maintenance"] }
+    ],
     "feasibility": {
       "status": "clamped",
       "projected_kg_present": true,
