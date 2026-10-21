@@ -2,27 +2,32 @@ import { describe, expect, it } from "vitest";
 
 import { type Answers, initialAnswers } from "./answers";
 import { PERSONAS } from "./personas";
-import { nextStep, previousStep, STEP_IDS, visibleSteps } from "./steps";
+import { nextStep, previousStep, STEP_IDS, STEPS, visibleSteps } from "./steps";
 
 const ids = (answers: Answers) => visibleSteps(answers).map((s) => s.id);
 
 describe("onboarding steps", () => {
-  it("has the 14 screens of spec 11.3, ending in results", () => {
-    expect(STEP_IDS).toHaveLength(14);
-    expect(STEP_IDS.at(-1)).toBe("results");
-    expect(new Set(STEP_IDS).size).toBe(14);
+  it("has screens 1-13 of spec 11.3, ending in building", () => {
+    expect(STEP_IDS).toHaveLength(13);
+    expect(STEP_IDS.at(-1)).toBe("building");
+    expect(new Set(STEP_IDS).size).toBe(13);
   });
 
-  it("skips ranking with one goal, and details and pace without weight or event goals", () => {
+  it("only 'eat healthier' skips ranking, goal details and pace", () => {
     const visible = ids({ ...initialAnswers, goals: ["eat_healthier"] });
     expect(visible).not.toContain("priority");
     expect(visible).not.toContain("goal-details");
     expect(visible).not.toContain("pace");
-    expect(visible).toHaveLength(11);
+    expect(visible).toHaveLength(10);
   });
 
   it("shows ranking when one choice adds two goals", () => {
     expect(ids({ ...initialAnswers, goals: ["both"] })).toContain("priority");
+  });
+
+  it("shows pace for lose fat but not for gain weight", () => {
+    expect(ids({ ...initialAnswers, goals: ["lose_fat"] })).toContain("pace");
+    expect(ids({ ...initialAnswers, goals: ["gain_weight"] })).not.toContain("pace");
   });
 
   it("shows every screen for the marathon persona", () => {
@@ -35,6 +40,20 @@ describe("onboarding steps", () => {
     expect(previousStep("about", answers)?.id).toBe("goals");
     expect(nextStep("taste", answers)?.id).toBe("building");
     expect(previousStep("welcome", answers)).toBeUndefined();
-    expect(nextStep("results", answers)).toBeUndefined();
+    expect(nextStep("building", answers)).toBeUndefined();
+  });
+
+  it.each(Object.keys(PERSONAS))("%s can step through every screen", (name) => {
+    // Prefill -> step through: every visible screen accepts the persona's answers.
+    const answers = PERSONAS[name].answers;
+    const blocked = visibleSteps(answers)
+      .filter((s) => s.complete && !s.complete(answers))
+      .map((s) => s.id);
+    expect(blocked).toEqual([]);
+  });
+
+  it("blocks Continue on empty answers where a screen needs input", () => {
+    const blocked = STEPS.filter((s) => s.complete && !s.complete(initialAnswers)).map((s) => s.id);
+    expect(blocked).toEqual(["welcome", "goals", "about", "activity", "health"]);
   });
 });

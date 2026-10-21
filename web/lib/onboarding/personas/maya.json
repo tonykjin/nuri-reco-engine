@@ -2,9 +2,7 @@
   "as_of": "2026-10-16",
   "answers": {
     "firstName": "Maya",
-    "goals": [
-      "lose_fat"
-    ],
+    "goals": ["lose_fat"],
     "ranking": [],
     "goalDetails": {},
     "units": "metric",
@@ -19,15 +17,7 @@
     "training": {
       "type": "lifting",
       "daysPerWeek": 3,
-      "schedule": [
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest"
-      ],
+      "schedule": ["rest", "rest", "rest", "rest", "rest", "rest", "rest"],
       "experience": null
     },
     "health": {
@@ -35,13 +25,7 @@
       "ckdStage": null,
       "medications": [],
       "conditions": [],
-      "scoff": [
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
+      "scoff": [false, false, false, false, false]
     },
     "eatingStyle": "no_preference",
     "allergens": [],

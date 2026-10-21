@@ -35,6 +35,14 @@ def _x(rule: Rule) -> dict[str, Any]:
     return rule.model_extra or {}
 
 
+def _planned_rate(phase: PhasePlan) -> float | None:
+    """The phase's weekly loss rate: the user's choice, never above the phase cap."""
+    chosen, cap = phase.rate_pct_bw_week, phase.max_rate_pct_bw
+    if chosen is None or cap is None:
+        return cap if chosen is None else chosen
+    return min(chosen, cap)
+
+
 def _dedupe(ids: list[str]) -> list[str]:
     return list(dict.fromkeys(ids))
 
@@ -219,7 +227,7 @@ def _resolved_as(
     deficit = [p for p in owned if p.energy == "deficit"]
     if deficit:
         planned = proj.by_phase.get(deficit[0].name)
-        value = planned.rate_pct_bw_week if planned else deficit[0].max_rate_pct_bw
+        value = planned.rate_pct_bw_week if planned else _planned_rate(deficit[0])
         if value is not None:
             rate = r("rate_suffix", rate=f"{value:g}")
 
@@ -291,7 +299,7 @@ def _goal_summary(
     first_deficit = next((p for p in phases if p.energy == "deficit"), None)
     rate = first.rate_pct_bw_week if first else None
     if rate is None and first_deficit is not None:
-        rate = first_deficit.max_rate_pct_bw
+        rate = _planned_rate(first_deficit)
     pace = Pace(
         rate_pct_bw_week=rate,
         projected_kg_at_event=_projected_at_event(request, proj),

@@ -1,23 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect } from "react";
 
+import { useHydrated } from "@/lib/onboarding/hydration";
+import { usePlan } from "@/lib/onboarding/plan";
 import { nextStep, previousStep, stepById, visibleSteps } from "@/lib/onboarding/steps";
 import { useAnswers } from "@/lib/onboarding/store";
 
-const subscribe = (onChange: () => void) => useAnswers.persist.onFinishHydration(onChange);
-
-function useHydrated(): boolean {
-  useEffect(() => {
-    if (!useAnswers.persist.hasHydrated()) void useAnswers.persist.rehydrate();
-  }, []);
-  return useSyncExternalStore(subscribe, () => useAnswers.persist.hasHydrated(), () => false);
-}
+import { StepNav } from "./nav";
 
 export function OnboardingFlow({ stepId }: { stepId: string }) {
   const router = useRouter();
-  const hydrated = useHydrated();
+  const answersReady = useHydrated(useAnswers);
+  const planReady = useHydrated(usePlan);
+  const hydrated = answersReady && planReady;
   const answers = useAnswers((s) => s.answers);
   const step = stepById(stepId);
   const shown = hydrated && step !== undefined && step.condition(answers);
@@ -63,7 +60,9 @@ export function OnboardingFlow({ stepId }: { stepId: string }) {
       </div>
 
       <h1 className="text-2xl font-semibold">{step.title}</h1>
-      <Screen />
+      <StepNav value={{ next: () => next && router.push(`/onboarding/${next.id}`) }}>
+        <Screen />
+      </StepNav>
 
       <div className="flex justify-between gap-3">
         <button
