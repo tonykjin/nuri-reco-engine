@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "gen:api": "openapi-typescript ../engine/openapi.json -o lib/api/schema.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "next": "16.4.2",
@@ -25,6 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "openapi-typescript": "^7.13.0",
+    "playwright-core": "^1.64.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.5"
