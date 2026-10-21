@@ -2,9 +2,7 @@
   "as_of": "2026-10-16",
   "answers": {
     "firstName": "Leo",
-    "goals": [
-      "strength"
-    ],
+    "goals": ["strength"],
     "ranking": [],
     "goalDetails": {},
     "units": "metric",
@@ -19,15 +17,7 @@
     "training": {
       "type": "mixed",
       "daysPerWeek": 5,
-      "schedule": [
-        "rest",
-        "quality",
-        "easy",
-        "rest",
-        "quality",
-        "long",
-        "easy"
-      ],
+      "schedule": ["rest", "quality", "easy", "rest", "quality", "long", "easy"],
       "experience": null
     },
     "health": {
@@ -35,13 +25,7 @@
       "ckdStage": null,
       "medications": [],
       "conditions": [],
-      "scoff": [
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
+      "scoff": [false, false, false, false, false]
     },
     "eatingStyle": "no_preference",
     "allergens": [],

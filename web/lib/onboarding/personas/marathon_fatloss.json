@@ -2,20 +2,15 @@
   "as_of": "2026-10-16",
   "answers": {
     "firstName": "Ana",
-    "goals": [
-      "lose_fat",
-      "event"
-    ],
-    "ranking": [
-      "lose_fat",
-      "endurance_event"
-    ],
+    "goals": ["lose_fat", "event"],
+    "ranking": ["lose_fat", "endurance_event"],
     "goalDetails": {
       "lose_fat": {
         "targetWeight": 66
       },
       "endurance_event": {
-        "event": "marathon",
+        "eventType": "running",
+        "distance": "marathon",
         "eventDate": "2027-04-18"
       }
     },
@@ -31,15 +26,7 @@
     "training": {
       "type": "mixed",
       "daysPerWeek": 4,
-      "schedule": [
-        "rest",
-        "easy",
-        "quality",
-        "rest",
-        "easy",
-        "long",
-        "rest"
-      ],
+      "schedule": ["rest", "easy", "quality", "rest", "easy", "long", "rest"],
       "experience": null
     },
     "health": {
@@ -47,31 +34,18 @@
       "ckdStage": null,
       "medications": [],
       "conditions": [],
-      "scoff": [
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
+      "scoff": [false, false, false, false, false]
     },
     "eatingStyle": "pescatarian",
-    "allergens": [
-      "peanuts"
-    ],
+    "allergens": ["peanuts"],
     "religious": [],
-    "dislikes": [
-      "cottage cheese"
-    ],
+    "dislikes": ["cottage cheese"],
     "taste": {
       "sweetness": 0.3,
       "richness": 0.6,
       "umami": 0.8
     },
-    "cuisines": [
-      "mediterranean",
-      "japanese"
-    ],
+    "cuisines": ["mediterranean", "japanese"],
     "cookTimeMin": 30,
     "budget": "medium",
     "pace": null

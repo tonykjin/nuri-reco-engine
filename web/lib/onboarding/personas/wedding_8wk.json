@@ -2,14 +2,8 @@
   "as_of": "2026-10-16",
   "answers": {
     "firstName": "Jess",
-    "goals": [
-      "lose_fat",
-      "date"
-    ],
-    "ranking": [
-      "lose_fat",
-      "deadline_event"
-    ],
+    "goals": ["lose_fat", "date"],
+    "ranking": ["lose_fat", "deadline_event"],
     "goalDetails": {
       "lose_fat": {
         "targetWeight": 138.9
@@ -31,15 +25,7 @@
     "training": {
       "type": "none",
       "daysPerWeek": 0,
-      "schedule": [
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest"
-      ],
+      "schedule": ["rest", "rest", "rest", "rest", "rest", "rest", "rest"],
       "experience": null
     },
     "health": {
@@ -47,13 +33,7 @@
       "ckdStage": null,
       "medications": [],
       "conditions": [],
-      "scoff": [
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
+      "scoff": [false, false, false, false, false]
     },
     "eatingStyle": "no_preference",
     "allergens": [],

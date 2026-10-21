@@ -10,6 +10,7 @@ import {
   type Answers,
   type EatingStyle,
   EVENT_GOALS,
+  type GoalDetail,
   type GoalType,
   rankedGoalTypes,
   WEIGHT_GOALS,
@@ -74,6 +75,13 @@ function required<T>(value: T | null | undefined, name: string): T {
   return value;
 }
 
+/** The event name: the occasion for a deadline, the distance for a race, else the event type. */
+export function eventName(type: GoalType, detail: GoalDetail): string | null {
+  if (type === "deadline_event") return detail.event ?? null;
+  if (type !== "endurance_event") return null;
+  return (detail.eventType === "running" ? detail.distance : null) ?? detail.eventType ?? null;
+}
+
 function goal(type: GoalType, priority: number, answers: Answers) {
   const detail = answers.goalDetails[type] ?? {};
   const target = WEIGHT_GOALS.includes(type) ? (detail.targetWeight ?? null) : null;
@@ -82,7 +90,7 @@ function goal(type: GoalType, priority: number, answers: Answers) {
     type,
     priority,
     target_weight_kg: target === null ? null : toKg(target, answers.units),
-    event: isEvent ? (detail.event ?? null) : null,
+    event: eventName(type, detail),
     event_date: isEvent ? (detail.eventDate ?? null) : null,
     rate_pct_bw_week: WEIGHT_GOALS.includes(type) ? answers.pace : null,
   };
@@ -111,7 +119,7 @@ export function mapAnswers(answers: Answers, { asOf }: { asOf: string }): PlanRe
         ckd_stage: health.ckdStage,
         medications: health.medications,
         conditions: health.conditions,
-        scoff_score: scoffScore(health.scoff),
+        scoff_score: health.scoffDeclined ? null : scoffScore(health.scoff),
         ed_history: false,
         reported_symptoms: [],
       },
@@ -132,6 +140,6 @@ export function mapAnswers(answers: Answers, { asOf }: { asOf: string }): PlanRe
       pattern_pref: PATTERNS[answers.eatingStyle] ?? null,
     },
     as_of: asOf,
-    sequence_confirmed: false,
+    sequence_confirmed: answers.sequenceConfirmed ?? false,
   };
 }
