@@ -2,13 +2,8 @@
   "as_of": "2026-10-16",
   "answers": {
     "firstName": "Sam",
-    "goals": [
-      "both"
-    ],
-    "ranking": [
-      "lose_fat",
-      "build_muscle"
-    ],
+    "goals": ["both"],
+    "ranking": ["lose_fat", "build_muscle"],
     "goalDetails": {},
     "units": "imperial",
     "sex": "male",
@@ -22,15 +17,7 @@
     "training": {
       "type": "lifting",
       "daysPerWeek": 3,
-      "schedule": [
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest",
-        "rest"
-      ],
+      "schedule": ["rest", "rest", "rest", "rest", "rest", "rest", "rest"],
       "experience": "novice"
     },
     "health": {
@@ -38,13 +25,7 @@
       "ckdStage": null,
       "medications": [],
       "conditions": [],
-      "scoff": [
-        false,
-        false,
-        false,
-        false,
-        false
-      ]
+      "scoff": [false, false, false, false, false]
     },
     "eatingStyle": "no_preference",
     "allergens": [],

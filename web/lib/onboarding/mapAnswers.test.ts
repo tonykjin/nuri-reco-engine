@@ -10,7 +10,9 @@ import { PERSONAS } from "./personas";
 const ENGINE_PERSONAS = new URL("../../../engine/tests/personas/", import.meta.url);
 
 function engineRequest(name: string) {
-  const raw = JSON.parse(readFileSync(fileURLToPath(new URL(`${name}.json`, ENGINE_PERSONAS)), "utf8"));
+  const raw = JSON.parse(
+    readFileSync(fileURLToPath(new URL(`${name}.json`, ENGINE_PERSONAS)), "utf8"),
+  );
   delete raw.expect;
   return raw;
 }
@@ -42,9 +44,14 @@ describe("age from birth date", () => {
 describe("unit conversion", () => {
   it("leaves metric values as entered", () => {
     expect(toKg(70.25, "metric")).toBe(70.25);
-    expect(heightCm({ units: "metric", heightCm: 168.5, heightFt: null, heightIn: null })).toBe(
-      168.5,
-    );
+    expect(
+      heightCm({
+        units: "metric",
+        heightCm: 168.5,
+        heightFt: null,
+        heightIn: null,
+      }),
+    ).toBe(168.5);
   });
 
   it("converts pounds to kg (0.1 kg)", () => {
@@ -54,7 +61,12 @@ describe("unit conversion", () => {
 
   it("converts feet and inches to cm (whole cm)", () => {
     const h = (ft: number, inches: number | null) =>
-      heightCm({ units: "imperial", heightCm: null, heightFt: ft, heightIn: inches });
+      heightCm({
+        units: "imperial",
+        heightCm: null,
+        heightFt: ft,
+        heightIn: inches,
+      });
     expect(h(5, 6)).toBe(168);
     expect(h(6, 0)).toBe(183);
     expect(h(6, null)).toBe(183);
@@ -70,9 +82,13 @@ describe("field mapping", () => {
     weight: 70,
     heightCm: 168,
     activity: "mostly_sitting",
-    health: { ...initialAnswers.health, scoff: [false, false, false, false, false] },
+    health: {
+      ...initialAnswers.health,
+      scoff: [false, false, false, false, false],
+    },
   };
-  const map = (patch: Partial<Answers>) => mapAnswers({ ...base, ...patch }, { asOf: "2026-10-16" });
+  const map = (patch: Partial<Answers>) =>
+    mapAnswers({ ...base, ...patch }, { asOf: "2026-10-16" });
 
   it("ranks goals by the user's order, then choice order", () => {
     const r = map({ goals: ["both", "event"], ranking: ["endurance_event"] });
@@ -102,7 +118,9 @@ describe("field mapping", () => {
   });
 
   it("splits eating style into diet and pattern", () => {
-    expect(map({ eatingStyle: "vegan" }).constraints).toMatchObject({ diet: "vegan" });
+    expect(map({ eatingStyle: "vegan" }).constraints).toMatchObject({
+      diet: "vegan",
+    });
     expect(map({ eatingStyle: "lower_carb" }).preferences).toMatchObject({
       pattern_pref: "low_carb_keto",
     });
@@ -113,9 +131,18 @@ describe("field mapping", () => {
   it("maps pregnancy answers to flags", () => {
     const flags = (pregnancy: Answers["health"]["pregnancy"]) =>
       map({ health: { ...base.health, pregnancy } }).profile.flags;
-    expect(flags("pregnant")).toMatchObject({ pregnant: true, breastfeeding: false });
-    expect(flags("breastfeeding")).toMatchObject({ pregnant: false, breastfeeding: true });
-    expect(flags("prefer_not_to_say")).toMatchObject({ pregnant: false, breastfeeding: false });
+    expect(flags("pregnant")).toMatchObject({
+      pregnant: true,
+      breastfeeding: false,
+    });
+    expect(flags("breastfeeding")).toMatchObject({
+      pregnant: false,
+      breastfeeding: true,
+    });
+    expect(flags("prefer_not_to_say")).toMatchObject({
+      pregnant: false,
+      breastfeeding: false,
+    });
   });
 
   it("refuses to guess a missing answer", () => {

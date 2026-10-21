@@ -435,12 +435,14 @@ def resolve(request: PlanRequest, safety: SafetyResult, kb: KnowledgeBase) -> Re
         ),
         None,
     )
-    if weight_goal:
+    # The user's chosen rate applies with or without a target weight (spec §4.4).
+    rate = next((x.rate_pct_bw_week for x in g.goals if x.rate_pct_bw_week is not None), None)
+    if weight_goal or rate is not None:
         phases = [
             p.model_copy(
                 update={
-                    "target_weight_kg": weight_goal.target_weight_kg,
-                    "rate_pct_bw_week": weight_goal.rate_pct_bw_week,
+                    "target_weight_kg": weight_goal.target_weight_kg if weight_goal else None,
+                    "rate_pct_bw_week": rate,
                 }
             )
             if p.energy == "deficit"

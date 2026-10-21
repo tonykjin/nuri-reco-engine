@@ -49,7 +49,11 @@ export type EatingStyle =
 export interface GoalDetail {
   /** In the user's units (kg or lb). */
   targetWeight?: number | null;
+  /** Deadline goals: the occasion (wedding, holiday, other). */
   event?: string | null;
+  /** Endurance goals: running, cycling, triathlon or other; running also has a distance. */
+  eventType?: string | null;
+  distance?: string | null;
   /** YYYY-MM-DD */
   eventDate?: string | null;
 }
@@ -59,6 +63,8 @@ export interface Answers {
   goals: GoalChoice[];
   /** Goal types in the order the user ranked them; empty until screen 3 is answered. */
   ranking: GoalType[];
+  /** The user confirmed the order after the engine asked (needs_ordering). */
+  sequenceConfirmed?: boolean;
   goalDetails: Partial<Record<GoalType, GoalDetail>>;
   units: Units;
   sex: "female" | "male" | null;
@@ -83,8 +89,10 @@ export interface Answers {
     ckdStage: number | null;
     medications: string[];
     conditions: string[];
-    /** The five SCOFF yes/no items; null = not answered or prefer not to say. */
+    /** The five SCOFF yes/no items; null = not answered. */
     scoff: (boolean | null)[];
+    /** "Prefer not to say" for the SCOFF items. */
+    scoffDeclined?: boolean;
   };
   eatingStyle: EatingStyle;
   allergens: string[];
@@ -103,6 +111,7 @@ export const initialAnswers: Answers = {
   firstName: "",
   goals: [],
   ranking: [],
+  sequenceConfirmed: false,
   goalDetails: {},
   units: "metric",
   sex: null,
@@ -125,6 +134,7 @@ export const initialAnswers: Answers = {
     medications: [],
     conditions: [],
     scoff: [null, null, null, null, null],
+    scoffDeclined: false,
   },
   eatingStyle: "no_preference",
   allergens: [],
@@ -139,14 +149,30 @@ export const initialAnswers: Answers = {
 
 // --- Options (screen copy) ---
 
-export const GOAL_CHOICES: { id: GoalChoice; label: string; types: GoalType[] }[] = [
+export const GOAL_CHOICES: {
+  id: GoalChoice;
+  label: string;
+  types: GoalType[];
+}[] = [
   { id: "lose_fat", label: "Lose fat", types: ["lose_fat"] },
   { id: "build_muscle", label: "Build muscle", types: ["build_muscle"] },
-  { id: "both", label: "Lose fat and build muscle", types: ["lose_fat", "build_muscle"] },
+  {
+    id: "both",
+    label: "Lose fat and build muscle",
+    types: ["lose_fat", "build_muscle"],
+  },
   { id: "gain_weight", label: "Gain weight", types: ["gain_weight"] },
   { id: "event", label: "Train for an event", types: ["endurance_event"] },
-  { id: "date", label: "Feel ready for a date (wedding, holiday)", types: ["deadline_event"] },
-  { id: "strength", label: "Get stronger and fitter", types: ["strength_hybrid"] },
+  {
+    id: "date",
+    label: "Feel ready for a date (wedding, holiday)",
+    types: ["deadline_event"],
+  },
+  {
+    id: "strength",
+    label: "Get stronger and fitter",
+    types: ["strength_hybrid"],
+  },
   { id: "eat_healthier", label: "Eat healthier", types: ["maintain"] },
   { id: "blood_sugar", label: "Manage blood sugar", types: ["t2d"] },
   { id: "heart_health", label: "Heart health", types: ["hypertension"] },
