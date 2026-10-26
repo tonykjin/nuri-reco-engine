@@ -44,6 +44,7 @@ def spec_response() -> dict[str, Any]:
         "patterns": [
             {
                 "id": "mediterranean",
+                "name": "Mediterranean",
                 "score": 0.86,
                 "rule_ids": ["PATTERN.MEDITERRANEAN"],
                 "why": "Fits pescatarian eating and your cuisine picks.",

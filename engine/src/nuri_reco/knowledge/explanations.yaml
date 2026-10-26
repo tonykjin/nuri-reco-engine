@@ -6,6 +6,8 @@
 spec_section: "10"
 
 templates:
+  FOOD.RANK.DAY_TYPE:
+    rule: "On hard training days, foods are ranked for fueling your session."
   EVAL.FORMULAS:
     rule: "Each part of the score compares what was eaten with your personal target, from 0 to 100."
     why: "Your day is scored against your own targets, and the score only counts the parts with data."

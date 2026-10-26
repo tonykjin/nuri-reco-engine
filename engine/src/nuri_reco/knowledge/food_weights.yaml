@@ -418,6 +418,15 @@ ranking_params:
     citation_ids: []
     verify: false
     heuristic: true
+  - id: FOOD.RANK.DAY_TYPE
+    text: "Goal score for the current phase and day type (7.4 step 3): for a user with an endurance goal, quality and long days (fully fueled, COMBO.LOSEFAT_ENDURANCE) and carb-load days rank foods with the Endurance (daily) row instead of the phase goal's row; rest and easy days keep the phase row, and meal-slot rows (pre-race, recovery) still come first. Agreed in Task 24. 🧪"
+    day_types: [quality, long, carb_load]
+    goal_types: [endurance_event, strength_hybrid]
+    row_rule_ids: [FOOD.W.ENDURANCE_DAILY]
+    combo_rule_ids: [COMBO.LOSEFAT_ENDURANCE]
+    citation_ids: [ACSM2016]
+    verify: false
+    heuristic: true
   - id: FOOD.RANK.ATTRIBUTES
     text: "How each 7.2 attribute is read from foods.json (per 100 kcal unless noted). Leucine per serving uses leucine per 100 g (a typical portion) until serving sizes exist; familiar foods and small portions stay neutral (no data)."
     # attribute -> foods.json source; per_100kcal divides a per-100 g nutrient by energy.

@@ -142,6 +142,7 @@ def rank(
         out.append(
             PatternRecommendation(
                 id=pattern.pattern,
+                name=pattern.name,
                 score=round(min(raw, 1.0), 3),
                 rule_ids=rule_ids,
                 why=" ".join(why),

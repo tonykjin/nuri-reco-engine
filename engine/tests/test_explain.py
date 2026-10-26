@@ -50,7 +50,8 @@ def test_no_banned_phrases_in_food_chips(name: str) -> None:
     req, resp, kb = request(name), response(name), load_kb()
     if resp.status != "ok":
         return
-    pantry = [PantryItem(key="banana", ripeness="peak", peaks_tonight=True)]
+    banana = "bananas_ripe_and_slightly_ripe_raw"
+    pantry = [PantryItem(key=banana, ripeness="peak", peaks_tonight=True)]
     for slot in get_args(MealSlot):
         context = FoodContext(meal_slot=slot, pantry=pantry)
         recs = rank(context, resp, req.preferences, req.constraints, kb, load_foods(), limit=40)

@@ -79,6 +79,8 @@ class Feasibility(StrictModel):
 
 class PatternRecommendation(Recommended):
     id: str
+    # Display name from patterns.yaml, e.g. "Low-GI / low-GL".
+    name: str
     score: float = Field(ge=0, le=1)
 
 
