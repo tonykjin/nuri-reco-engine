@@ -13,7 +13,7 @@ from pydantic import Field
 
 from api import errors, examples
 from api.errors import ApiError
-from nuri_reco import compose, explain, foods, safety, score_eval, simulate
+from nuri_reco import compose, explain, foods, safety, score_eval, simulate, weight_range
 from nuri_reco.engine import plan
 from nuri_reco.kb import GoalsFile, GuardrailsFile, PatternsFile, ScoreWeightsFile, load_kb
 from nuri_reco.models import (
@@ -29,6 +29,7 @@ from nuri_reco.models import (
     ScoreLevel,
     StrictModel,
     TracedPlan,
+    WeightRangeResponse,
 )
 from nuri_reco.models.response import PlanStatus
 from nuri_reco.safety import SafetyResult
@@ -249,6 +250,17 @@ def recommend_day(
         )
     resp = DayRecommendationResponse(status=full.status, day=day)
     return resp.model_copy(update={"citations": explain.collect_citations(resp, load_kb())})
+
+
+@app.post("/v1/goals/weight-range", tags=["goals"], responses=errors.INVALID)
+def goal_weight_range(
+    request: Annotated[PlanRequest, Body(openapi_examples=examples.weight_range_examples())],
+) -> WeightRangeResponse:
+    """The recommended target-weight range, an optional first milestone, and target bounds with a
+    suggested default for each weight goal (spec §4.4b). Safety runs first: a blocked request
+    returns no numbers, and number-hiding cases return status `hidden`."""
+    _check_goal_types(request)
+    return weight_range.weight_range(request, load_kb())
 
 
 @app.post("/v1/safety/check", tags=["safety"], responses=errors.INVALID)

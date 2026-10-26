@@ -215,6 +215,14 @@ class ScoreEvalFile(FileModel):
     nutrients: Rule
 
 
+class WeightRangeFile(FileModel):
+    bmi: Rule
+    older: Rule
+    body_fat: Rule
+    milestone: Rule
+    slider: Rule
+
+
 class ComposeFile(FileModel):
     tolerance: Rule
     templates: list[Rule]
@@ -282,6 +290,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "compose": ComposeFile,
     "expenditure": ExpenditureFile,
     "score_eval": ScoreEvalFile,
+    "weight_range": WeightRangeFile,
     "explanations": ExplanationsFile,
     "citations": CitationsFile,
 }
@@ -305,6 +314,7 @@ class KnowledgeBase(BaseModel):
     compose: ComposeFile
     expenditure: ExpenditureFile
     score_eval: ScoreEvalFile
+    weight_range: WeightRangeFile
     explanations: ExplanationsFile
     citations: CitationsFile
 

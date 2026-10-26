@@ -28,6 +28,14 @@ from .response import (
 )
 from .score import ComponentScore, LeftOut, ScoredItem, ScoreEvaluation, ScoreItem, ScoreLevel
 from .trace import Trace, TraceCitation, TracedPlan, TraceRule, TraceStage
+from .weight_range import (
+    Milestone,
+    RangeBasis,
+    RecommendedRange,
+    TargetBounds,
+    WeightRangeResponse,
+    WeightRangeStatus,
+)
 
 __all__ = [
     "ComponentScore",
@@ -53,6 +61,7 @@ __all__ = [
     "MealItem",
     "MealSlot",
     "MicronutrientTarget",
+    "Milestone",
     "Nutrients",
     "Pace",
     "PantryItem",
@@ -64,7 +73,9 @@ __all__ = [
     "PlanResponse",
     "Preferences",
     "Profile",
+    "RangeBasis",
     "Recommended",
+    "RecommendedRange",
     "Referral",
     "RemainingTargets",
     "Ripeness",
@@ -86,4 +97,7 @@ __all__ = [
     "TraceRule",
     "TraceStage",
     "Training",
+    "WeightRangeResponse",
+    "WeightRangeStatus",
+    "TargetBounds",
 ]

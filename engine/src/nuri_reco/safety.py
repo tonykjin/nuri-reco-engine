@@ -260,6 +260,12 @@ RESTRICTION_FIELDS: dict[str, RestrictionKind] = {
 }
 
 
+def fired(request: PlanRequest, kb: KnowledgeBase) -> list[str]:
+    """Ids of the guardrails whose trigger fires for the request, in guardrails.yaml order."""
+    ctx = _context(request, kb)
+    return [rule.id for rule in kb.guardrails.guardrails if TRIGGERS[rule.id](ctx, rule)]
+
+
 def check(request: PlanRequest, kb: KnowledgeBase) -> SafetyResult:
     """Evaluate every Matrix F guardrail against the request, in guardrails.yaml order."""
     ctx = _context(request, kb)
@@ -322,4 +328,4 @@ def check(request: PlanRequest, kb: KnowledgeBase) -> SafetyResult:
     )
 
 
-__all__ = ["SafetyResult", "check", "claims_violations", "loss_rate_band", "bmi"]
+__all__ = ["SafetyResult", "check", "claims_violations", "fired", "loss_rate_band", "bmi"]
