@@ -1,4 +1,4 @@
-// The onboarding screens in order (spec §11.3, screens 1-13; results live at /results).
+// The onboarding screens in order (spec §11.3, screens 1-14; results live at /results).
 // A step whose condition is false is skipped.
 
 import type { ComponentType } from "react";
@@ -45,7 +45,7 @@ export const STEPS: Step[] = [
   {
     id: "goal-details",
     title: "Goal details",
-    condition: (a) => hasAny(a, [...WEIGHT_GOALS, ...EVENT_GOALS]),
+    condition: (a) => hasAny(a, EVENT_GOALS),
     component: screens.GoalDetails,
     complete: (a) => valid.goalDetailsComplete(a),
   },
@@ -76,6 +76,15 @@ export const STEPS: Step[] = [
     condition: always,
     component: screens.Health,
     complete: valid.healthComplete,
+  },
+  {
+    id: "target-weight",
+    title: "Pick a target weight",
+    // After Health: the engine hides the number for SCOFF >= 2, ED history, pregnancy,
+    // breastfeeding and under 18, and those are answered on the Health screen.
+    condition: (a) => hasAny(a, WEIGHT_GOALS),
+    component: screens.TargetWeight,
+    complete: valid.targetWeightComplete,
   },
   {
     id: "eating",

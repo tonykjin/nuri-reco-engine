@@ -27,14 +27,21 @@ export function goalsComplete(a: Answers): boolean {
 export function goalDetailsComplete(a: Answers, asOf = today()): boolean {
   return goalTypes(a.goals).every((type) => {
     const d = a.goalDetails[type] ?? {};
-    if (WEIGHT_GOALS.includes(type)) {
-      return d.targetWeight === null || d.targetWeight === undefined || positive(d.targetWeight);
-    }
     if (!EVENT_GOALS.includes(type)) return true;
     const dated = isDate(d.eventDate) && d.eventDate > asOf;
     if (type === "deadline_event") return dated && !!d.event;
     return dated && !!d.eventType && (d.eventType !== "running" || !!d.distance);
   });
+}
+
+/** Every weight goal has no target (skipped) or a positive one; the slider sets the bounds. */
+export function targetWeightComplete(a: Answers): boolean {
+  return goalTypes(a.goals)
+    .filter((type) => WEIGHT_GOALS.includes(type))
+    .every((type) => {
+      const target = a.goalDetails[type]?.targetWeight;
+      return target === null || target === undefined || positive(target);
+    });
 }
 
 export function aboutComplete(a: Answers, asOf = today()): boolean {

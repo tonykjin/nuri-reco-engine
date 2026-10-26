@@ -9,15 +9,13 @@ import {
   goalTypes,
   MAX_GOALS,
   rankedGoalTypes,
-  WEIGHT_GOALS,
 } from "@/lib/onboarding/answers";
 import { DISTANCES, EVENT_TYPES, OCCASIONS } from "@/lib/onboarding/options";
 import { usePlan } from "@/lib/onboarding/plan";
 import { useAnswers } from "@/lib/onboarding/store";
-import { switchUnits } from "@/lib/onboarding/units";
 import { today } from "@/lib/onboarding/validation";
 
-import { Choice, Chips, DateField, Helper, Label, NumberField, Segmented, toggle } from "../ui";
+import { Choice, Chips, DateField, Helper, Label, toggle } from "../ui";
 
 export function Goals() {
   const goals = useAnswers((s) => s.answers.goals);
@@ -99,21 +97,6 @@ export function Priority() {
   );
 }
 
-function WeightTarget({ type }: { type: GoalType }) {
-  const answers = useAnswers((s) => s.answers);
-  const update = useAnswers((s) => s.update);
-  const detail = answers.goalDetails[type] ?? {};
-  const unit = answers.units === "metric" ? "kg" : "lb";
-  return (
-    <NumberField
-      label={`${GOAL_LABELS[type]}: target weight (optional)`}
-      unit={unit}
-      value={detail.targetWeight ?? null}
-      onChange={(v) => setDetail(update, answers, type, { targetWeight: v })}
-    />
-  );
-}
-
 function setDetail(
   update: (patch: Partial<Answers>) => void,
   answers: Answers,
@@ -189,30 +172,13 @@ function Race() {
   );
 }
 
+// Event goals only; the target weight has its own screen after the health check (spec §11.3).
 export function GoalDetails() {
   const answers = useAnswers((s) => s.answers);
-  const update = useAnswers((s) => s.update);
   const types = goalTypes(answers.goals);
-  const weightGoals = types.filter((t) => WEIGHT_GOALS.includes(t));
   return (
     <div className="space-y-8">
-      <Helper>A target and a date help us plan a pace that&apos;s safe.</Helper>
-      {weightGoals.length > 0 && (
-        <section className="space-y-3">
-          <Segmented
-            label="Units"
-            options={[
-              { id: "metric", label: "kg" },
-              { id: "imperial", label: "lb" },
-            ]}
-            value={answers.units}
-            onChange={(u) => update(switchUnits(answers, u))}
-          />
-          {weightGoals.map((t) => (
-            <WeightTarget key={t} type={t} />
-          ))}
-        </section>
-      )}
+      <Helper>The date helps us plan a pace that fits.</Helper>
       {types.includes("deadline_event") && <Occasion />}
       {types.includes("endurance_event") && <Race />}
     </div>

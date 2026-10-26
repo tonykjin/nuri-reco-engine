@@ -2,7 +2,7 @@
 
 import type { Answers, GoalDetail } from "./answers";
 
-const KG_PER_LB = 0.45359237;
+export const KG_PER_LB = 0.45359237;
 const CM_PER_INCH = 2.54;
 
 const round1 = (n: number) => Math.round(n * 10) / 10;

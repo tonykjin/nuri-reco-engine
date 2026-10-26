@@ -9,7 +9,12 @@ import { eventName, mapAnswers } from "./mapAnswers";
 import { nextDayType } from "./options";
 import { PERSONAS } from "./personas";
 import { switchUnits } from "./units";
-import { aboutComplete, goalDetailsComplete, healthComplete } from "./validation";
+import {
+  aboutComplete,
+  goalDetailsComplete,
+  healthComplete,
+  targetWeightComplete,
+} from "./validation";
 
 const ASOF = "2026-10-16";
 const maya = PERSONAS.maya.answers;
@@ -55,6 +60,22 @@ describe("validation", () => {
       goalDetails: { deadline_event: { eventDate: "2027-01-01" } },
     };
     expect(goalDetailsComplete(date, ASOF)).toBe(false);
+  });
+
+  it("goal details no longer asks about weight; the target weight screen does", () => {
+    const lose = (targetWeight: number | null): Answers => ({
+      ...initialAnswers,
+      goals: ["lose_fat"],
+      goalDetails: { lose_fat: { targetWeight } },
+    });
+    expect(goalDetailsComplete(lose(0), ASOF)).toBe(true);
+    expect(targetWeightComplete(lose(null))).toBe(true);
+    expect(targetWeightComplete({ ...initialAnswers, goals: ["lose_fat"] })).toBe(true);
+    expect(targetWeightComplete(lose(64))).toBe(true);
+    expect(targetWeightComplete(lose(0))).toBe(false);
+    expect(targetWeightComplete(lose(-5))).toBe(false);
+    // Only weight goals count.
+    expect(targetWeightComplete({ ...lose(0), goals: ["event"] })).toBe(true);
   });
 
   it("health needs every SCOFF item answered, or prefer not to say", () => {
