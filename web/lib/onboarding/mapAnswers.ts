@@ -15,10 +15,10 @@ import {
   rankedGoalTypes,
   WEIGHT_GOALS,
 } from "./answers";
+import { KG_PER_LB } from "./units";
 
 export type PlanRequest = components["schemas"]["PlanRequest"];
 
-const KG_PER_LB = 0.45359237;
 const CM_PER_INCH = 2.54;
 
 const ACTIVITY: Record<Activity, string> = {

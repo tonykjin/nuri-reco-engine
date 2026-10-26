@@ -19,7 +19,7 @@ INVARIANTS (never break):
 ENDPOINTS: /v1/plan (?dry_run=true) · /v1/score/profile · /v1/score/evaluate (M6) ·
   /v1/recommendations/foods · /v1/recommendations/day · /v1/goals/weight-range ·
   /v1/safety/check · /v1/knowledge/* · /health
-DEMO: web/app/onboarding/[step] (14 screens, section 11.3) -> web/app/results (goals panel,
+DEMO: web/app/onboarding/[step] (15 screens, section 11.3) -> web/app/results (goals panel,
   Loam Score panel, dev drawer).
 
 COMMANDS:
