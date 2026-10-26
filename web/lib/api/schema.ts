@@ -95,7 +95,8 @@ export interface paths {
         put?: never;
         /**
          * Score Evaluate
-         * @description Score a meal or day against a profile (milestone M6).
+         * @description Score a meal or day (food keys + grams) against the plan's Loam Score profile, with data
+         *     coverage shown separately. Blocked or unordered plans return no evaluation.
          */
         post: operations["score_evaluate_v1_score_evaluate_post"];
         delete?: never;
@@ -226,6 +227,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/knowledge/foods": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Knowledge Foods
+         * @description The food table's foods (key, name, group) for pickers; nutrient values stay in the
+         *     engine.
+         */
+        get: operations["knowledge_foods_v1_knowledge_foods_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/knowledge/score_weights": {
         parameters: {
             query?: never;
@@ -262,6 +284,36 @@ export interface components {
             ea_floor_adds_exercise_kcal: boolean;
             /** Absolute Min Kcal Per Day */
             absolute_min_kcal_per_day: number;
+        };
+        /** ComponentScore */
+        ComponentScore: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Id */
+            id: string;
+            /** Weight Key */
+            weight_key: string;
+            /** Type */
+            type: string;
+            target: components["schemas"]["ScoreTarget"];
+            /** Actual */
+            actual?: number | null;
+            /** Score */
+            score?: number | null;
+            /** Weight */
+            weight: number;
+            /** Contribution */
+            contribution?: number | null;
+            /** Available */
+            available: boolean;
         };
         /** ComponentTargetRule */
         ComponentTargetRule: {
@@ -427,6 +479,17 @@ export interface components {
             pantry?: components["schemas"]["PantryItem"][];
             remaining?: components["schemas"]["RemainingTargets"] | null;
         };
+        /** FoodListing */
+        FoodListing: {
+            /** Key */
+            key: string;
+            /** Fdc Id */
+            fdc_id: number;
+            /** Name */
+            name: string;
+            /** Group */
+            group: string;
+        };
         /** FoodRecommendation */
         FoodRecommendation: {
             /**
@@ -591,6 +654,19 @@ export interface components {
              * @constant
              */
             status: "ok";
+        };
+        /**
+         * LeftOut
+         * @description A component that doesn't enter the score or the coverage at this level.
+         */
+        LeftOut: {
+            /** Id */
+            id: string;
+            /**
+             * Reason
+             * @enum {string}
+             */
+            reason: "not_at_meal_level" | "disabled";
         };
         /** LoamScoreProfile */
         LoamScoreProfile: {
@@ -1073,6 +1149,84 @@ export interface components {
             /** Day Type */
             day_type?: ("rest" | "easy" | "quality" | "long" | "carb_load") | null;
         };
+        /** ScoreEvaluateRequest */
+        ScoreEvaluateRequest: {
+            request: components["schemas"]["PlanRequest"];
+            /** Items */
+            items: components["schemas"]["ScoreItem"][];
+            /**
+             * Level
+             * @default meal
+             * @enum {string}
+             */
+            level: "meal" | "day";
+            /** Day Type */
+            day_type?: ("rest" | "easy" | "quality" | "long" | "carb_load") | null;
+            /** Phase */
+            phase?: string | null;
+        };
+        /** ScoreEvaluateResponse */
+        ScoreEvaluateResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "clamped" | "rd_review" | "blocked" | "needs_ordering";
+            evaluation?: components["schemas"]["ScoreEvaluation"] | null;
+            /** Citations */
+            citations?: string[];
+        };
+        /** ScoreEvaluation */
+        ScoreEvaluation: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "meal" | "day";
+            /** Phase */
+            phase: string;
+            /**
+             * Day Type
+             * @enum {string}
+             */
+            day_type: "rest" | "easy" | "quality" | "long" | "carb_load";
+            /** Items */
+            items: components["schemas"]["ScoredItem"][];
+            /** Energy Kcal */
+            energy_kcal: number;
+            /** Day Energy Kcal */
+            day_energy_kcal: number;
+            /** Energy Share */
+            energy_share: number;
+            /** Score */
+            score?: number | null;
+            /** Coverage Pct */
+            coverage_pct: number;
+            /** Components */
+            components: components["schemas"]["ComponentScore"][];
+            /** Left Out */
+            left_out?: components["schemas"]["LeftOut"][];
+        };
+        /**
+         * ScoreItem
+         * @description A food from the food table (its key) and the grams eaten.
+         */
+        ScoreItem: {
+            /** Key */
+            key: string;
+            /** Grams */
+            grams: number;
+        };
         /** ScoreTarget */
         ScoreTarget: {
             /** Unit */
@@ -1104,6 +1258,17 @@ export interface components {
             /** Component Targets */
             component_targets: components["schemas"]["ComponentTargetRule"][];
             applies_to: components["schemas"]["Rule"];
+        };
+        /** ScoredItem */
+        ScoredItem: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Grams */
+            grams: number;
+            /** Kcal */
+            kcal: number;
         };
         /** TopLever */
         TopLever: {
@@ -1387,7 +1552,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScoreEvaluateRequest"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -1395,11 +1564,11 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["ScoreEvaluateResponse"];
                 };
             };
-            /** @description Unexpected engine error. */
-            500: {
+            /** @description The request failed validation. */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1407,8 +1576,8 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not implemented yet. */
-            501: {
+            /** @description Unexpected engine error. */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1618,6 +1787,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GuardrailsFile"];
+                };
+            };
+            /** @description Unexpected engine error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    knowledge_foods_v1_knowledge_foods_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FoodListing"][];
                 };
             };
             /** @description Unexpected engine error. */

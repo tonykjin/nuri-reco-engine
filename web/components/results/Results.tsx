@@ -15,6 +15,7 @@ import { Banner, Why } from "./common";
 import { DevDrawer } from "./DevDrawer";
 import { GoalsPanel } from "./GoalsPanel";
 import { SampleDayCard } from "./SampleDayCard";
+import { TryMealCard } from "./TryMealCard";
 import { ScorePanel } from "./ScorePanel";
 
 export function Results() {
@@ -133,6 +134,10 @@ export function Results() {
 
       {!blocked && status !== "needs_ordering" && request && phase && shownDay && (
         <SampleDayCard request={request} phase={phase.name} day={shownDay} pending={pending} />
+      )}
+
+      {!blocked && status !== "needs_ordering" && request && phase && shownDay && (
+        <TryMealCard request={request} phase={phase.name} day={shownDay} pending={pending} />
       )}
 
       <DevDrawer request={request} response={response} />
