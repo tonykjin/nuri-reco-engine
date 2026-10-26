@@ -36,6 +36,14 @@ def spec_response() -> dict[str, Any]:
                     "rest": {"kcal": 1750, "protein_g": 130, "carb_g": 230, "fat_g": 55},
                     "long": {"kcal": 2300, "protein_g": 130, "carb_g": 430, "fat_g": 55},
                 },
+                "meal_pattern": {
+                    "meals": 3,
+                    "snacks": 1,
+                    "source": "default",
+                    "per_meal_protein_g": 32.5,
+                    "rule_ids": ["TIMING.MEAL_PATTERN", "TIMING.PROTEIN_PER_MEAL"],
+                    "why": "Your protein is spread across 3 meals and 1 snack: about 33 g each.",
+                },
                 "rule_ids": ["COMBO.LOSEFAT_ENDURANCE", "PHASE.BASE"],
                 "why": "Your base block is the window for fat loss before training load peaks.",
             }

@@ -15,26 +15,18 @@ tolerance:
 
 templates:
   - id: COMPOSE.MEALS.REST
-    text: "Days without a session: breakfast 25%, lunch 30%, dinner 30% and a snack 15% of the day's energy. Each carries protein (TIMING.PROTEIN_PER_MEAL). Shares are guidance, not caps. 🧪"
+    text: "Days without a session: each slot's share of the day's energy is its weight ÷ the sum of the weights of the slots in the day (COMPOSE.MEAL_SLOTS). Weights: breakfast 25, lunch 30, extra meal 25, dinner 30, each snack 15, so the default 3 meals + 1 snack is breakfast 25%, lunch 30%, dinner 30% and a snack 15%. Every meal and snack carries protein (TIMING.PROTEIN_PER_MEAL). Shares are guidance, not caps. 🧪"
     day_types: [rest, carb_load]
-    meals:
-      - { slot: breakfast, kcal_pct: 25, protein_meal: true }
-      - { slot: lunch, kcal_pct: 30, protein_meal: true }
-      - { slot: dinner, kcal_pct: 30, protein_meal: true }
-      - { slot: snack, kcal_pct: 15, protein_meal: true }
+    weights: { breakfast: 25, lunch: 30, extra_meal: 25, dinner: 30, snack: 15 }
     protein_rule_ids: [TIMING.PROTEIN_PER_MEAL, TIMING.GUIDANCE_NOT_CAPS]
     citation_ids: [SCHOENFELD_ARAGON2018, ISSN2017]
     verify: false
     heuristic: true
   - id: COMPOSE.MEALS.SESSION
-    text: "Session days: breakfast 20%, lunch 25%, a pre-session meal 15%, dinner 30% and a snack 10% of the day's energy. The four meals other than the pre-session one carry protein (TIMING.PROTEIN_PER_MEAL); the pre-session meal follows TIMING.PRE_SESSION_CARBS and holds at most 5 g fiber in total (a hard cap, on top of the per-food FOOD.RANK.PRE_RACE exclusions; agreed in Task 21). Shares are guidance, not caps. 🧪"
+    text: "Session days: each slot's share of the day's energy is its weight ÷ the sum of the weights of the slots in the day (COMPOSE.MEAL_SLOTS). Weights: breakfast 20, lunch 25, extra meal 20, pre-session meal 15, dinner 30, each snack 10, so the default 3 meals + 1 snack is breakfast 20%, lunch 25%, a pre-session meal 15%, dinner 30% and a snack 10%. Every meal and snack except the pre-session one carries protein (TIMING.PROTEIN_PER_MEAL); the pre-session meal follows TIMING.PRE_SESSION_CARBS and holds at most 5 g fiber in total (a hard cap, on top of the per-food FOOD.RANK.PRE_RACE exclusions; agreed in Task 21). Shares are guidance, not caps. 🧪"
     day_types: [easy, quality, long]
-    meals:
-      - { slot: breakfast, kcal_pct: 20, protein_meal: true }
-      - { slot: lunch, kcal_pct: 25, protein_meal: true }
-      - { slot: pre_session, kcal_pct: 15, protein_meal: false }
-      - { slot: dinner, kcal_pct: 30, protein_meal: true }
-      - { slot: snack, kcal_pct: 10, protein_meal: true }
+    weights: { breakfast: 20, lunch: 25, extra_meal: 20, pre_session: 15, dinner: 30, snack: 10 }
+    non_protein_slots: [pre_session]
     protein_rule_ids: [TIMING.PROTEIN_PER_MEAL, TIMING.GUIDANCE_NOT_CAPS]
     pre_session_rule_ids: [TIMING.PRE_SESSION_CARBS, FOOD.RANK.PRE_RACE]
     pre_session_max_fiber_g: 5
@@ -42,26 +34,48 @@ templates:
     verify: false
     heuristic: true
 
+meal_slots:
+  id: COMPOSE.MEAL_SLOTS
+  text: "A day's slots follow the user's meal pattern (TIMING.MEAL_PATTERN): 1 meal is dinner · 2 meals are lunch and dinner · 3 are breakfast, lunch and dinner · 4 are breakfast, lunch, an extra meal and dinner; then one slot per snack. Session days add the pre-session meal before dinner: it's fueling, not one of the user's meals. With more protein meals than TIMING.PROTEIN_PER_MEAL's minimum meals, each one's protein target is the lower of the per-meal dose and the day's protein ÷ protein meals (agreed in Task 27). 🧪"
+  by_meal_count:
+    "1": [dinner]
+    "2": [lunch, dinner]
+    "3": [breakfast, lunch, dinner]
+    "4": [breakfast, lunch, extra_meal, dinner]
+  pre_session_before: dinner
+  pattern_rule_ids: [TIMING.MEAL_PATTERN]
+  citation_ids: []
+  verify: false
+  heuristic: true
+
 roles:
   id: COMPOSE.ROLES
-  text: "Each meal is built from roles, each filled by the best-ranked food from its groups (the whole table is ranked for the meal slot, so a role can reach foods outside the usual top 10) that isn't already in the day. A protein food has at least 8 g protein per 100 kcal; a carb food gets at least 50% of its energy from carbs; a fat food gets at least 50% from fat. Lunch and dinner take their fat from a cooking oil; the snack from nuts and seeds. The pre-session meal ranks foods for the pre-race slot, so high-fiber and high-fat foods are already out; it can add one sweet (honey or jam), like the FOOD.SEED.ENDURANCE pre-race seeds (bagel/toast + honey/jam). The sweet role never takes a second food. 🧪"
+  text: "Each meal is built from roles, each filled by the best-ranked food from its groups (the whole table is ranked for the meal slot, so a role can reach foods outside the usual top 10) that isn't already in the day. A protein food has at least 8 g protein per 100 kcal; a carb food gets at least 50% of its energy from carbs; a fat food gets at least 50% from fat. Lunch, dinner and an extra meal take their fat from a cooking oil (an extra meal is ranked and filled like lunch); the snack from nuts and seeds. The pre-session meal ranks foods for the pre-race slot, so high-fiber and high-fat foods are already out; it can add one sweet (honey or jam), like the FOOD.SEED.ENDURANCE pre-race seeds (bagel/toast + honey/jam). The sweet role never takes a second food. 🧪"
   protein_min_g_per_100kcal: 8
   carb_min_pct_energy: 50
   single_food_roles: [sweet]
   fat_min_pct_energy: 50
   # Which FoodContext meal slot ranks the foods for each composer slot.
   rank_slots:
-    { breakfast: breakfast, lunch: lunch, dinner: dinner, snack: snack, pre_session: pre_race }
+    {
+      breakfast: breakfast,
+      lunch: lunch,
+      extra_meal: lunch,
+      dinner: dinner,
+      snack: snack,
+      pre_session: pre_race,
+    }
   slots:
     breakfast:
       protein: [eggs, dairy, plant_milk, legumes, sports_nutrition]
       carb: [grains]
       fruit: [fruits]
-    lunch:
+    lunch: &lunch_roles
       protein: [fish, poultry, shellfish, meat, legumes, eggs]
       carb: [grains, legumes]
       vegetable: [vegetables]
       fat: [fats_oils]
+    extra_meal: *lunch_roles
     dinner:
       protein: [fish, poultry, shellfish, meat, legumes, eggs]
       carb: [grains, legumes]

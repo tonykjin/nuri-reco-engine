@@ -455,6 +455,8 @@ def plan(
     """The full plan. dry_run skips patterns and foods (the onboarding pace slider, spec §10).
     trace=True also returns each stage and every rule it fired, in order (Task 22)."""
     kb = kb or load_kb()
+    # Reject a meal count the rules don't allow up front, even when the plan would be blocked.
+    targets.meal_pattern(request.preferences, kb)
     tracer = Tracer(kb) if trace else None
     resp = _plan(request, kb, dry_run, tracer)
     if tracer is None:
@@ -532,8 +534,18 @@ def _plan(
             outputs=_expenditure_stage(exp, request, kb),
         )
     phase_targets = [
-        targets.compute(p, request.profile, kb, safety=result, expenditure=exp) for p in phases
+        targets.compute(
+            p,
+            request.profile,
+            kb,
+            safety=result,
+            expenditure=exp,
+            preferences=request.preferences,
+        )
+        for p in phases
     ]
+    goal_types = [g.type for g in request.goals]
+    meal_patterns = [targets.meal_pattern_output(t, goal_types, kb) for t in phase_targets]
     if tracer:
         tracer.stage(
             "targets",
@@ -541,11 +553,11 @@ def _plan(
             children=[
                 tracer.node(
                     "targets",
-                    rule_ids=t.rule_ids,
+                    rule_ids=[*t.rule_ids, *mp.rule_ids],
                     inputs={"phase": p, "tdee_kcal": t.tdee_kcal},
-                    outputs={"targets": t},
+                    outputs={"targets": t, "meal_pattern": mp},
                 )
-                for p, t in zip(phases, phase_targets, strict=True)
+                for p, t, mp in zip(phases, phase_targets, meal_patterns, strict=True)
             ],
         )
     profile = score_profile.build(
@@ -572,8 +584,9 @@ def _plan(
             **p.model_dump(include=set(PhaseTimeline.model_fields) - {"rule_ids"}),
             rule_ids=_dedupe([*p.rule_ids, *p.modifier_rule_ids, *t.rule_ids]),
             targets_by_day_type=t.by_day_type,
+            meal_pattern=mp,
         )
-        for p, t in zip(phases, phase_targets, strict=True)
+        for p, t, mp in zip(phases, phase_targets, meal_patterns, strict=True)
     ]
 
     feas: Feasibility | None = None

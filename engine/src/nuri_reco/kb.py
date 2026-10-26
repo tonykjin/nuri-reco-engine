@@ -226,6 +226,7 @@ class WeightRangeFile(FileModel):
 class ComposeFile(FileModel):
     tolerance: Rule
     templates: list[Rule]
+    meal_slots: Rule
     roles: Rule
     portions: Rule
     search: Rule

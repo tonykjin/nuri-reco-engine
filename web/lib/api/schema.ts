@@ -730,7 +730,7 @@ export interface components {
              * Slot
              * @enum {string}
              */
-            slot: "breakfast" | "lunch" | "pre_session" | "dinner" | "snack";
+            slot: "breakfast" | "lunch" | "extra_meal" | "pre_session" | "dinner" | "snack";
             /** Items */
             items: components["schemas"]["MealItem"][];
             nutrients: components["schemas"]["Nutrients"];
@@ -761,6 +761,33 @@ export interface components {
             /** Role */
             role: string;
             nutrients: components["schemas"]["Nutrients"];
+        };
+        /**
+         * MealPattern
+         * @description The meals and snacks the plan is built around (TIMING.MEAL_PATTERN).
+         */
+        MealPattern: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Meals */
+            meals: number;
+            /** Snacks */
+            snacks: number;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "user" | "default";
+            /** Per Meal Protein G */
+            per_meal_protein_g: number;
         };
         /** MicronutrientTarget */
         MicronutrientTarget: {
@@ -917,6 +944,7 @@ export interface components {
             targets_by_day_type: {
                 [key: string]: components["schemas"]["DayTargets"];
             };
+            meal_pattern: components["schemas"]["MealPattern"];
         };
         /** PhaseScoreProfile */
         PhaseScoreProfile: {
@@ -997,6 +1025,10 @@ export interface components {
             cuisines?: string[];
             /** Pattern Pref */
             pattern_pref?: string | null;
+            /** Meals Per Day */
+            meals_per_day?: number | null;
+            /** Snacks Per Day */
+            snacks_per_day?: number | null;
         };
         /** Profile */
         Profile: {

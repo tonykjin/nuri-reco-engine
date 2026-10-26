@@ -209,6 +209,8 @@ templates:
     rule: "With a GLP-1 medication, no large extra deficit is added on top of a lower appetite."
   GOAL.GLP1.PROTEIN:
     rule: "Protein is a priority on a GLP-1 medication to help keep muscle."
+  GOAL.GLP1.FOODS:
+    rule: "On a GLP-1 medication, smaller protein-first portions come first."
   GOAL.HYPERTENSION:
     headline: "Eat in a way that suits healthy blood pressure."
   GOAL.HYPERTENSION.ENERGY:
@@ -350,6 +352,8 @@ templates:
     pattern_next: "Aim for {produce_g} g of fruit and vegetables a day."
     protein_first: "Protein counts most for you: aim for about {protein_per_meal_g} g at each of {meals} meals."
     protein_next: "Protein helps too: about {protein_per_meal_g} g at each of {meals} meals."
+    protein_first_single: "Protein counts most for you: aim for about {protein_per_meal_g} g at your one meal."
+    protein_next_single: "Protein helps too: about {protein_per_meal_g} g at your one meal."
   LSW.ROW.ATHLETE:
     rule: "Score weights for endurance training."
   LSW.ROW.DEADLINE:
@@ -511,6 +515,18 @@ templates:
     rule: "Health and safety rules come before every other goal."
   TIMING.PROTEIN_PER_MEAL:
     rule: "Protein is spread across your meals."
+  TIMING.MEAL_PATTERN:
+    # {pattern} is built from the meals_* / snacks_* / with_snacks variants.
+    rule: "Your plan follows how many meals and snacks you usually eat."
+    why: "Your protein is spread across {pattern}: about {protein_g} g each."
+    default: "That's our starting pattern; tell us how you usually eat to match it."
+    snack_nudge: "Adding a protein snack makes that easier to reach."
+    glp1_nudge: "On a GLP-1, smaller protein-first portions spread through the day are often easier."
+    meals_one: "1 meal"
+    meals_many: "{n} meals"
+    snacks_one: "1 snack"
+    snacks_many: "{n} snacks"
+    with_snacks: "{meals} and {snacks}"
   # Target weight range (Task 25). {bmi_min} {bmi_max} {pct} {min_pct} {max_pct}
   WEIGHT.RANGE.BMI:
     rule: "The suggested target range is a common healthy BMI range for your height."

@@ -203,6 +203,12 @@ class _Builder:
         return panel, disabled
 
 
+def _lever_variant(component: str, i: int, t: Targets) -> str:
+    variant = f"{component}_{'first' if i == 0 else 'next'}"
+    # "at your one meal", not "at each of 1 meals" (TIMING.MEAL_PATTERN).
+    return f"{variant}_single" if component == "protein" and t.meals_per_day == 1 else variant
+
+
 def _levers(
     weights: dict[str, float], primary: str, t: Targets, profile: Profile, kb: KnowledgeBase
 ) -> list[TopLever]:
@@ -229,7 +235,7 @@ def _levers(
     return [
         TopLever(
             component=c,
-            text=explain.text(kb, lever_id, f"{c}_{'first' if i == 0 else 'next'}", **values),
+            text=explain.text(kb, lever_id, _lever_variant(c, i, t), **values),
         )
         for i, c in enumerate(ranked[: priors["top_n"]])
     ]

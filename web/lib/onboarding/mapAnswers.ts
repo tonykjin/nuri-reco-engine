@@ -138,6 +138,9 @@ export function mapAnswers(answers: Answers, { asOf }: { asOf: string }): PlanRe
       budget: answers.budget,
       cuisines: answers.cuisines,
       pattern_pref: PATTERNS[answers.eatingStyle] ?? null,
+      // Onboarding doesn't ask yet (Task 28): the engine uses its default meal pattern.
+      meals_per_day: null,
+      snacks_per_day: null,
     },
     as_of: asOf,
     sequence_confirmed: answers.sequenceConfirmed ?? false,

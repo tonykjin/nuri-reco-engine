@@ -3560,6 +3560,64 @@
                     },
                     "day_type": "rest"
                   }
+                },
+                "maya_two_meals": {
+                  "summary": "maya_two_meals",
+                  "description": "Maya eating 2 meals and 1 snack a day (TIMING.MEAL_PATTERN).",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 30,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 70,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": [],
+                        "meals_per_day": 2,
+                        "snacks_per_day": 1
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    },
+                    "day_type": "rest"
+                  }
                 }
               }
             }
@@ -6073,6 +6131,7 @@
             "enum": [
               "breakfast",
               "lunch",
+              "extra_meal",
               "pre_session",
               "dinner",
               "snack"
@@ -6181,6 +6240,61 @@
           "nutrients"
         ],
         "title": "MealItem"
+      },
+      "MealPattern": {
+        "properties": {
+          "provenance": {
+            "type": "string",
+            "const": "recommended",
+            "title": "Provenance",
+            "default": "recommended"
+          },
+          "rule_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Rule Ids"
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Why"
+          },
+          "meals": {
+            "type": "integer",
+            "title": "Meals"
+          },
+          "snacks": {
+            "type": "integer",
+            "title": "Snacks"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user",
+              "default"
+            ],
+            "title": "Source"
+          },
+          "per_meal_protein_g": {
+            "type": "number",
+            "title": "Per Meal Protein G"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule_ids",
+          "why",
+          "meals",
+          "snacks",
+          "source",
+          "per_meal_protein_g"
+        ],
+        "title": "MealPattern",
+        "description": "The meals and snacks the plan is built around (TIMING.MEAL_PATTERN)."
       },
       "MicronutrientTarget": {
         "properties": {
@@ -6640,6 +6754,9 @@
             },
             "type": "object",
             "title": "Targets By Day Type"
+          },
+          "meal_pattern": {
+            "$ref": "#/components/schemas/MealPattern"
           }
         },
         "additionalProperties": false,
@@ -6652,7 +6769,8 @@
           "end",
           "energy",
           "energy_owner",
-          "targets_by_day_type"
+          "targets_by_day_type",
+          "meal_pattern"
         ],
         "title": "Phase"
       },
@@ -6899,6 +7017,28 @@
               }
             ],
             "title": "Pattern Pref"
+          },
+          "meals_per_day": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meals Per Day"
+          },
+          "snacks_per_day": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snacks Per Day"
           }
         },
         "additionalProperties": false,
