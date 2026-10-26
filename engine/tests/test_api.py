@@ -103,11 +103,6 @@ def test_health() -> None:
     assert resp.json() == {"status": "ok"}
 
 
-@pytest.mark.parametrize("path", ["/v1/score/evaluate"])
-def test_not_implemented_yet(path: str) -> None:
-    assert_error(client.post(path, json={}), 501, "not_implemented")
-
-
 @pytest.mark.parametrize(
     ("name", "status"), [("maya", "ok"), ("glp1_t2d_strength", "rd_review"), ("under18", "blocked")]
 )
@@ -159,6 +154,51 @@ def test_recommend_day() -> None:
             assert item["provenance"] == "recommended" and item["rule_ids"] and item["why"]
             assert "peanut" not in item["name"].lower()
     assert data["citations"]
+
+
+MEAL = [
+    {"key": "chicken_breast_roasted", "grams": 150},
+    {"key": "rice_white_cooked", "grams": 200},
+    {"key": "broccoli_boiled", "grams": 100},
+]
+
+
+def test_score_evaluate() -> None:
+    scores = {}
+    for name in ("maya", "marathon_fatloss"):
+        body, _ = persona(name)
+        resp = client.post("/v1/score/evaluate", json={"request": body, "items": MEAL})
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        ev = data["evaluation"]
+        assert ev["level"] == "meal" and 0 < ev["coverage_pct"] <= 100
+        assert ev["provenance"] == "recommended" and ev["why"] and ev["rule_ids"]
+        assert all(c["rule_ids"] and c["why"] for c in ev["components"])
+        assert data["citations"]
+        scores[name] = ev["score"]
+    assert scores["maya"] != scores["marathon_fatloss"]
+
+
+def test_score_evaluate_blocked_has_no_evaluation() -> None:
+    body, _ = persona("pregnant")
+    resp = client.post("/v1/score/evaluate", json={"request": body, "items": MEAL})
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["status"] == "blocked" and resp.json()["evaluation"] is None
+
+
+def test_score_evaluate_unknown_food_is_a_422() -> None:
+    body, _ = persona("maya")
+    bad = {"request": body, "items": [{"key": "unobtainium", "grams": 10}]}
+    assert client.post("/v1/score/evaluate", json=bad).status_code == 422
+
+
+def test_knowledge_foods() -> None:
+    resp = client.get("/v1/knowledge/foods")
+    assert resp.status_code == 200
+    foods = resp.json()
+    assert len(foods) > 300
+    assert set(foods[0]) == {"key", "fdc_id", "name", "group"}
+    assert "apple" in {f["key"] for f in foods}
 
 
 def test_trace_plan() -> None:

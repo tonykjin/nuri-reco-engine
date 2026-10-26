@@ -395,3 +395,8 @@ citations:
     label: "Hall 2008, What is the required energy deficit per unit weight loss?"
     url: "https://doi.org/10.1038/sj.ijo.0803720"
     in_sources: false
+  # Score evaluation (Task 23)
+  - id: HEI
+    label: "USDA/NCI Healthy Eating Index: calculating HEI scores"
+    url: "https://epi.grants.cancer.gov/hei/calculating-hei-scores.html"
+    in_sources: false

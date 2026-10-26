@@ -13,7 +13,7 @@ from pydantic import Field
 
 from api import errors, examples
 from api.errors import ApiError
-from nuri_reco import compose, explain, foods, safety, simulate
+from nuri_reco import compose, explain, foods, safety, score_eval, simulate
 from nuri_reco.engine import plan
 from nuri_reco.kb import GoalsFile, GuardrailsFile, PatternsFile, ScoreWeightsFile, load_kb
 from nuri_reco.models import (
@@ -24,6 +24,9 @@ from nuri_reco.models import (
     PlanRequest,
     PlanResponse,
     SampleDay,
+    ScoreEvaluation,
+    ScoreItem,
+    ScoreLevel,
     StrictModel,
     TracedPlan,
 )
@@ -89,6 +92,30 @@ class TraceRequest(StrictModel):
     simulate_history: bool = False
 
 
+class ScoreEvaluateRequest(StrictModel):
+    request: PlanRequest
+    items: list[ScoreItem] = Field(min_length=1, max_length=50)
+    level: ScoreLevel = "meal"
+    # None: the user's most common day type.
+    day_type: DayType | None = None
+    # A phase name from the plan; None: the first phase.
+    phase: str | None = None
+
+
+class ScoreEvaluateResponse(StrictModel):
+    status: PlanStatus
+    # None when the plan is blocked or waiting for the user to order their goals.
+    evaluation: ScoreEvaluation | None = None
+    citations: list[str] = Field(default_factory=list)
+
+
+class FoodListing(StrictModel):
+    key: str
+    fdc_id: int
+    name: str
+    group: str
+
+
 class SafetyCheckResponse(SafetyResult):
     status: Literal["ok", "rd_review", "blocked"]
 
@@ -149,10 +176,28 @@ def score_profile(request: PlanBody) -> LoamScoreProfile:
     return plan(request, dry_run=True).loam_score_profile
 
 
-@app.post("/v1/score/evaluate", tags=["score"], responses=errors.NOT_IMPLEMENTED)
-def score_evaluate() -> None:
-    """Score a meal or day against a profile (milestone M6)."""
-    raise ApiError(501, "not_implemented", "Score evaluation isn't available yet.")
+@app.post("/v1/score/evaluate", tags=["score"], responses=errors.INVALID)
+def score_evaluate(
+    body: Annotated[ScoreEvaluateRequest, Body(openapi_examples=examples.evaluate_examples())],
+) -> ScoreEvaluateResponse:
+    """Score a meal or day (food keys + grams) against the plan's Loam Score profile, with data
+    coverage shown separately. Blocked or unordered plans return no evaluation."""
+    _check_goal_types(body.request)
+    full = plan(body.request, dry_run=True)
+    evaluation: ScoreEvaluation | None = None
+    if full.status not in ("blocked", "needs_ordering"):
+        schedule = body.request.profile.training.weekly_schedule
+        evaluation = score_eval.evaluate(
+            full,
+            body.items,
+            load_kb(),
+            foods.load_foods(),
+            level=body.level,
+            day_type=body.day_type or Counter(schedule).most_common(1)[0][0],
+            phase=body.phase,
+        )
+    resp = ScoreEvaluateResponse(status=full.status, evaluation=evaluation)
+    return resp.model_copy(update={"citations": explain.collect_citations(resp, load_kb())})
 
 
 @app.post("/v1/recommendations/foods", tags=["recommendations"], responses=errors.INVALID)
@@ -232,6 +277,16 @@ def knowledge_patterns() -> PatternsFile:
 def knowledge_guardrails() -> GuardrailsFile:
     """Matrix F: safety guardrails."""
     return load_kb().guardrails
+
+
+@app.get("/v1/knowledge/foods", tags=["knowledge"])
+def knowledge_foods() -> list[FoodListing]:
+    """The food table's foods (key, name, group) for pickers; nutrient values stay in the
+    engine."""
+    return [
+        FoodListing(key=f["key"], fdc_id=f["fdc_id"], name=f["description"], group=f["group"])
+        for f in foods.load_foods()
+    ]
 
 
 @app.get("/v1/knowledge/score_weights", tags=["knowledge"])

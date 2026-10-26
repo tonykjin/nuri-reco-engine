@@ -6,6 +6,19 @@
 spec_section: "10"
 
 templates:
+  EVAL.FORMULAS:
+    rule: "Each part of the score compares what was eaten with your personal target, from 0 to 100."
+    why: "Your day is scored against your own targets, and the score only counts the parts with data."
+  EVAL.COVERAGE:
+    rule: "Parts without nutrient data are left out of the score and shown as lower coverage instead."
+    missing: "At least one of these foods has no data for this, so it's left out of the score."
+  EVAL.MEAL_SHARE:
+    rule: "A meal is compared with its share of your day, so a small snack isn't held to a whole day's targets."
+    why: "This meal is compared with its share of your day's targets, based on its calories."
+  LS.APPLIES_TO:
+    rule: "A meal is scored on portion, protein, carbs, fiber and moderation; a day on everything."
+  EVAL.NUTRIENTS:
+    rule: "Nutrients come from the food table, scaled to the grams eaten."
   EXPENDITURE.TREND_WEIGHT:
     rule: "Your trend weight smooths out day-to-day swings from water and food in the gut."
   EXPENDITURE.ENERGY_DENSITY:
