@@ -72,3 +72,18 @@ def trace_examples() -> dict[str, dict[str, Any]]:
             "value": {**maya["value"], "simulate_history": True},
         }
     return out
+
+
+def evaluate_examples() -> dict[str, dict[str, Any]]:
+    """Maya and the marathoner scoring the same chicken, rice and broccoli meal."""
+    meal = [
+        {"key": "chicken_breast_roasted", "grams": 150},
+        {"key": "rice_white_cooked", "grams": 200},
+        {"key": "broccoli_boiled", "grams": 100},
+    ]
+    examples = plan_examples()
+    return {
+        name: {**examples[name], "value": {"request": examples[name]["value"], "items": meal}}
+        for name in ("maya", "marathon_fatloss")
+        if name in examples
+    }

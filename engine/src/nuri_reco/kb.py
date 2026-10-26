@@ -208,6 +208,13 @@ class ExpenditureFile(FileModel):
     simulation: Rule
 
 
+class ScoreEvalFile(FileModel):
+    formulas: Rule
+    coverage: Rule
+    meal_share: Rule
+    nutrients: Rule
+
+
 class ComposeFile(FileModel):
     tolerance: Rule
     templates: list[Rule]
@@ -274,6 +281,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "constraints": ConstraintRulesFile,
     "compose": ComposeFile,
     "expenditure": ExpenditureFile,
+    "score_eval": ScoreEvalFile,
     "explanations": ExplanationsFile,
     "citations": CitationsFile,
 }
@@ -296,6 +304,7 @@ class KnowledgeBase(BaseModel):
     constraints: ConstraintRulesFile
     compose: ComposeFile
     expenditure: ExpenditureFile
+    score_eval: ScoreEvalFile
     explanations: ExplanationsFile
     citations: CitationsFile
 

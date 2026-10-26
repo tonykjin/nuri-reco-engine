@@ -1,0 +1,50 @@
+# Scoring a meal or day against a loam_score_profile (Task 23). Formulas: Loam Score page §4;
+# where each component applies: spec §7b.3 (LS.APPLIES_TO in score_weights.yaml). How meal
+# targets are scaled and how shared weights split are Loam heuristics (🧪) agreed in Task 23.
+spec_section: "7b.3"
+
+formulas:
+  id: EVAL.FORMULAS
+  text: "Each component scores 0–100. Adequacy: 100 × MIN(actual/target, 1). Target range: below L scores 100 × actual/L, inside L–U scores 100, above U scores 100 × U/actual. Moderation: 100 at or under the limit, else 100 × limit/actual. Overall: SUM(weight × score) / SUM(available weight). Coverage: 100 × SUM(available weight) / SUM(all weight), shown separately from the score."
+  citation_ids: [LOAM_SCORE_PAGE]
+  verify: false
+  heuristic: false
+
+coverage:
+  id: EVAL.COVERAGE
+  text: "A nutrient is unknown for a meal or day when any of its foods has no value for it. Unknown parts are left out of the score and lower coverage instead; they are never counted as 0. A weight shared by several parts (moderation: sat fat, free sugar and sodium; micronutrients: the panel) is split equally between them, so one part without data lowers coverage, not the score. Disabled components (e.g. RD-set carbs) are left out of both. 🧪"
+  # Profile `disabled` ids that switch off a whole weight.
+  disables: { carb_auto_target: carb }
+  citation_ids: [LOAM_SCORE_PAGE]
+  verify: false
+  heuristic: true
+
+meal_share:
+  id: EVAL.MEAL_SHARE
+  text: "At meal level every target is scaled by the meal's share of the day's energy target (meal kcal ÷ day kcal), like the Healthy Eating Index's density standards, so a small food is judged against a small slice of the day, not the whole day. Energy fit is left out at meal level, since a meal's share of its own energy is always met. 🧪"
+  citation_ids: [LOAM_SCORE_PAGE, HEI]
+  verify: false
+  heuristic: true
+
+nutrients:
+  id: EVAL.NUTRIENTS
+  text: "Each component reads one food-table field per 100 g, scaled by grams eaten. Free sugar uses USDA added sugars, the closest field; free sugars also include sugars in honey, syrups and juice, so this undercounts them. ⚠️ Produce counts the grams of foods in the fruit and vegetable groups. 🧪"
+  fields:
+    energy: energy_kcal
+    protein: protein_g
+    carb: carb_g
+    fiber: fiber_g
+    sat_fat: sat_fat_g
+    free_sugar: added_sugars_g
+    sodium: sodium_mg
+    iron: iron_mg
+    calcium: calcium_mg
+    vitamin_d: vitamin_d_ug
+    magnesium: magnesium_mg
+    potassium: potassium_mg
+    vitamin_b12: b12_ug
+    folate: folate_dfe_ug
+  produce_groups: [fruits, vegetables]
+  citation_ids: [LOAM_SCORE_PAGE, WHO]
+  verify: true
+  heuristic: true

@@ -2029,14 +2029,187 @@
           "score"
         ],
         "summary": "Score Evaluate",
-        "description": "Score a meal or day against a profile (milestone M6).",
+        "description": "Score a meal or day (food keys + grams) against the plan's Loam Score profile, with data\ncoverage shown separately. Blocked or unordered plans return no evaluation.",
         "operationId": "score_evaluate_v1_score_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScoreEvaluateRequest"
+              },
+              "examples": {
+                "maya": {
+                  "summary": "maya",
+                  "description": "30F, 168 cm, 70 kg, moderate, lifts, lose fat",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 30,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 70,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    },
+                    "items": [
+                      {
+                        "key": "chicken_breast_roasted",
+                        "grams": 150
+                      },
+                      {
+                        "key": "rice_white_cooked",
+                        "grams": 200
+                      },
+                      {
+                        "key": "broccoli_boiled",
+                        "grams": 100
+                      }
+                    ]
+                  }
+                },
+                "marathon_fatloss": {
+                  "summary": "marathon_fatloss",
+                  "description": "Spec §10 example request: lose fat + marathon, pescatarian, peanut allergy",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 31,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 72,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "easy",
+                            "quality",
+                            "rest",
+                            "easy",
+                            "long",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1,
+                          "target_weight_kg": 66
+                        },
+                        {
+                          "type": "endurance_event",
+                          "priority": 2,
+                          "event": "marathon",
+                          "event_date": "2027-04-18"
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [
+                          "peanuts"
+                        ],
+                        "diet": "pescatarian",
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {
+                          "sweetness": 0.3,
+                          "richness": 0.6,
+                          "umami": 0.8
+                        },
+                        "dislikes": [
+                          "cottage cheese"
+                        ],
+                        "cook_time_min": 30,
+                        "budget": "medium",
+                        "cuisines": [
+                          "mediterranean",
+                          "japanese"
+                        ]
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    },
+                    "items": [
+                      {
+                        "key": "chicken_breast_roasted",
+                        "grams": 150
+                      },
+                      {
+                        "key": "rice_white_cooked",
+                        "grams": 200
+                      },
+                      {
+                        "key": "broccoli_boiled",
+                        "grams": 100
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ScoreEvaluateResponse"
+                }
               }
             }
           },
@@ -2050,8 +2223,8 @@
               }
             }
           },
-          "501": {
-            "description": "Not implemented yet.",
+          "422": {
+            "description": "The request failed validation.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4155,6 +4328,42 @@
         }
       }
     },
+    "/v1/knowledge/foods": {
+      "get": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "Knowledge Foods",
+        "description": "The food table's foods (key, name, group) for pickers; nutrient values stay in the\nengine.",
+        "operationId": "knowledge_foods_v1_knowledge_foods_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FoodListing"
+                  },
+                  "type": "array",
+                  "title": "Response Knowledge Foods V1 Knowledge Foods Get"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected engine error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/knowledge/score_weights": {
       "get": {
         "tags": [
@@ -4223,6 +4432,101 @@
           "absolute_min_kcal_per_day"
         ],
         "title": "CalorieFloor"
+      },
+      "ComponentScore": {
+        "properties": {
+          "provenance": {
+            "type": "string",
+            "const": "recommended",
+            "title": "Provenance",
+            "default": "recommended"
+          },
+          "rule_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Rule Ids"
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Why"
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "weight_key": {
+            "type": "string",
+            "title": "Weight Key"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "target": {
+            "$ref": "#/components/schemas/ScoreTarget"
+          },
+          "actual": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Weight"
+          },
+          "contribution": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contribution"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule_ids",
+          "why",
+          "id",
+          "weight_key",
+          "type",
+          "target",
+          "weight",
+          "available"
+        ],
+        "title": "ComponentScore"
       },
       "ComponentTargetRule": {
         "properties": {
@@ -4688,6 +4992,35 @@
         "additionalProperties": false,
         "type": "object",
         "title": "FoodContext"
+      },
+      "FoodListing": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "fdc_id": {
+            "type": "integer",
+            "title": "Fdc Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "group": {
+            "type": "string",
+            "title": "Group"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "fdc_id",
+          "name",
+          "group"
+        ],
+        "title": "FoodListing"
       },
       "FoodRecommendation": {
         "properties": {
@@ -5164,6 +5497,30 @@
           "status"
         ],
         "title": "Health"
+      },
+      "LeftOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "not_at_meal_level",
+              "disabled"
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "reason"
+        ],
+        "title": "LeftOut",
+        "description": "A component that doesn't enter the score or the coverage at this level."
       },
       "LoamScoreProfile": {
         "properties": {
@@ -6635,6 +6992,241 @@
         ],
         "title": "ScoreComponent"
       },
+      "ScoreEvaluateRequest": {
+        "properties": {
+          "request": {
+            "$ref": "#/components/schemas/PlanRequest"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ScoreItem"
+            },
+            "type": "array",
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Items"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "meal",
+              "day"
+            ],
+            "title": "Level",
+            "default": "meal"
+          },
+          "day_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "rest",
+                  "easy",
+                  "quality",
+                  "long",
+                  "carb_load"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Day Type"
+          },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request",
+          "items"
+        ],
+        "title": "ScoreEvaluateRequest"
+      },
+      "ScoreEvaluateResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "clamped",
+              "rd_review",
+              "blocked",
+              "needs_ordering"
+            ],
+            "title": "Status"
+          },
+          "evaluation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ScoreEvaluation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "citations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Citations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "ScoreEvaluateResponse"
+      },
+      "ScoreEvaluation": {
+        "properties": {
+          "provenance": {
+            "type": "string",
+            "const": "recommended",
+            "title": "Provenance",
+            "default": "recommended"
+          },
+          "rule_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Rule Ids"
+          },
+          "why": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Why"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "meal",
+              "day"
+            ],
+            "title": "Level"
+          },
+          "phase": {
+            "type": "string",
+            "title": "Phase"
+          },
+          "day_type": {
+            "type": "string",
+            "enum": [
+              "rest",
+              "easy",
+              "quality",
+              "long",
+              "carb_load"
+            ],
+            "title": "Day Type"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ScoredItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "energy_kcal": {
+            "type": "number",
+            "title": "Energy Kcal"
+          },
+          "day_energy_kcal": {
+            "type": "number",
+            "title": "Day Energy Kcal"
+          },
+          "energy_share": {
+            "type": "number",
+            "title": "Energy Share"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "coverage_pct": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Coverage Pct"
+          },
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentScore"
+            },
+            "type": "array",
+            "title": "Components"
+          },
+          "left_out": {
+            "items": {
+              "$ref": "#/components/schemas/LeftOut"
+            },
+            "type": "array",
+            "title": "Left Out"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rule_ids",
+          "why",
+          "level",
+          "phase",
+          "day_type",
+          "items",
+          "energy_kcal",
+          "day_energy_kcal",
+          "energy_share",
+          "coverage_pct",
+          "components"
+        ],
+        "title": "ScoreEvaluation"
+      },
+      "ScoreItem": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "grams": {
+            "type": "number",
+            "maximum": 5000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Grams"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "grams"
+        ],
+        "title": "ScoreItem",
+        "description": "A food from the food table (its key) and the grams eaten."
+      },
       "ScoreTarget": {
         "properties": {
           "unit": {
@@ -6763,6 +7355,35 @@
           "applies_to"
         ],
         "title": "ScoreWeightsFile"
+      },
+      "ScoredItem": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "grams": {
+            "type": "number",
+            "title": "Grams"
+          },
+          "kcal": {
+            "type": "number",
+            "title": "Kcal"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "grams",
+          "kcal"
+        ],
+        "title": "ScoredItem"
       },
       "TopLever": {
         "properties": {

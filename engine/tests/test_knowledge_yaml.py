@@ -27,6 +27,7 @@ RULE_FILES = [
     "constraints.yaml",
     "compose.yaml",
     "expenditure.yaml",
+    "score_eval.yaml",
 ]
 ID_RE = re.compile(r"^[A-Z0-9_]+(\.[A-Z0-9_]+)+$")
 NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")

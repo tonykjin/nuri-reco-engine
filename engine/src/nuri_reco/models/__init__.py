@@ -26,9 +26,11 @@ from .response import (
     ScoreTarget,
     TopLever,
 )
+from .score import ComponentScore, LeftOut, ScoredItem, ScoreEvaluation, ScoreItem, ScoreLevel
 from .trace import Trace, TraceCitation, TracedPlan, TraceRule, TraceStage
 
 __all__ = [
+    "ComponentScore",
     "ComposeSlot",
     "Constraints",
     "DailyLog",
@@ -42,6 +44,7 @@ __all__ = [
     "FoodRecommendation",
     "Goal",
     "GoalResolution",
+    "LeftOut",
     "GramRange",
     "GoalSummary",
     "LoamScoreProfile",
@@ -69,6 +72,10 @@ __all__ = [
     "Safety",
     "SafetyFinding",
     "ScoreComponent",
+    "ScoreEvaluation",
+    "ScoreItem",
+    "ScoreLevel",
+    "ScoredItem",
     "ScoreTarget",
     "Sex",
     "StrictModel",
