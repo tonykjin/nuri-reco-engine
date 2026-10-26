@@ -6,6 +6,16 @@
 spec_section: "10"
 
 templates:
+  EXPENDITURE.TREND_WEIGHT:
+    rule: "Your trend weight smooths out day-to-day swings from water and food in the gut."
+  EXPENDITURE.ENERGY_DENSITY:
+    rule: "Changes in your weight trend are turned into calories using a standard estimate per kilogram."
+  EXPENDITURE.ENERGY_BALANCE:
+    rule: "Your daily energy needs are measured from what you logged eating and how your weight trend moved."
+  EXPENDITURE.TAKEOVER:
+    rule: "After two weeks of logs your measured energy needs start to replace the starting estimate, and fully take over from week four."
+  EXPENDITURE.SIMULATION:
+    rule: "These logs are simulated for review; they aren't anyone's real data."
   TIMING.GUIDANCE_NOT_CAPS:
     rule: "Per-meal amounts are a guide, not a limit."
   TIMING.PRE_SESSION_CARBS:

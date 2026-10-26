@@ -68,6 +68,7 @@
   },
   "as_of": "2026-10-16",
   "sequence_confirmed": false,
+  "history": [],
   "expect": {
     "notes": "Spec 11.2 #3 / 4.2 / 7b.5. Request is the spec §10 example verbatim: race is 26 weeks out (11.2 says 16; the §10 and 7b.6 dates win), so base runs 2026-10-16 to 2026-12-27 and peak starts 2027-03-07. After recovery, fat loss resumes (spec §4.2 '→ resume').",
     "status": "ok",

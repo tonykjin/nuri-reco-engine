@@ -291,7 +291,7 @@ def compute(
     inp = _Inputs(phase, profile, kb)
     exp = expenditure or ColdStartExpenditure(kb)
     tdee = exp.tdee(profile)
-    inp.use(kb.targets.mifflin_st_jeor.id, kb.targets.activity_factors.id)
+    inp.use(*exp.rule_ids)
 
     g_per_kg, capped, protein_range = _protein(inp, safety)
     protein_g = g_per_kg * profile.weight_kg

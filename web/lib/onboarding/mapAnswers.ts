@@ -141,5 +141,7 @@ export function mapAnswers(answers: Answers, { asOf }: { asOf: string }): PlanRe
     },
     as_of: asOf,
     sequence_confirmed: answers.sequenceConfirmed ?? false,
+    // Onboarding collects no logs: expenditure starts from the Mifflin-St Jeor estimate.
+    history: [],
   };
 }

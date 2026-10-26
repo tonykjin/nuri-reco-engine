@@ -3,7 +3,7 @@
 from .common import DayType, Energy, Recommended, Sex, StrictModel
 from .day import ComposeSlot, GramRange, Macro, Meal, MealItem, Nutrients, SampleDay
 from .food import FoodContext, MealSlot, PantryItem, RemainingTargets, Ripeness
-from .request import Constraints, Flags, Goal, PlanRequest, Preferences, Profile, Training
+from .request import Constraints, DailyLog, Flags, Goal, PlanRequest, Preferences, Profile, Training
 from .response import (
     DayTargets,
     DisabledComponent,
@@ -26,10 +26,12 @@ from .response import (
     ScoreTarget,
     TopLever,
 )
+from .trace import Trace, TraceCitation, TracedPlan, TraceRule, TraceStage
 
 __all__ = [
     "ComposeSlot",
     "Constraints",
+    "DailyLog",
     "DayTargets",
     "DayType",
     "DisabledComponent",
@@ -71,5 +73,10 @@ __all__ = [
     "Sex",
     "StrictModel",
     "TopLever",
+    "Trace",
+    "TraceCitation",
+    "TracedPlan",
+    "TraceRule",
+    "TraceStage",
     "Training",
 ]

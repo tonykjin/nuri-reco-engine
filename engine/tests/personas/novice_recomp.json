@@ -64,6 +64,7 @@
   },
   "as_of": "2026-10-16",
   "sequence_confirmed": false,
+  "history": [],
   "expect": {
     "notes": "Spec 11.2 #2 / 4.2: overweight (BMI 29.0) beginner lifter, lose fat + build muscle resolves to recomp, deficit 0-20%.",
     "status": "ok",

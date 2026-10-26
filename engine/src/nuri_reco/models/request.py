@@ -3,7 +3,7 @@
 import datetime as dt
 from typing import Annotated, Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from .common import DayType, Sex, StrictModel
 
@@ -72,6 +72,14 @@ class Preferences(StrictModel):
     pattern_pref: str | None = None
 
 
+class DailyLog(StrictModel):
+    """One day of logs. Invariant 7: a day without an intake log or a weigh-in stays None."""
+
+    date: dt.date
+    intake_kcal: float | None = Field(default=None, ge=0)
+    weight_kg: float | None = Field(default=None, gt=0)
+
+
 class PlanRequest(StrictModel):
     profile: Profile
     goals: list[Goal] = Field(min_length=1)
@@ -81,3 +89,14 @@ class PlanRequest(StrictModel):
     # The user confirmed the goal order, so contradictory goals are sequenced by priority
     # instead of returning needs_ordering (spec §4.1 rule 2).
     sequence_confirmed: bool = False
+    # Logged intake and weigh-ins (spec §2 Monitor & Evaluate). Empty: the Mifflin-St Jeor
+    # estimate; enough logs switch targets to adaptive expenditure (expenditure.yaml).
+    history: list[DailyLog] = Field(default_factory=list)
+
+    @field_validator("history")
+    @classmethod
+    def _one_log_per_day(cls, history: list[DailyLog]) -> list[DailyLog]:
+        dates = [d.date for d in history]
+        if len(dates) != len(set(dates)):
+            raise ValueError("history has more than one log for a date")
+        return sorted(history, key=lambda d: d.date)

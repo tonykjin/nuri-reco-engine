@@ -42,6 +42,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/plan/trace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Trace Plan
+         * @description The full plan plus its decision trace: each engine stage in order, every rule it fired,
+         *     and each rule's text, flags and citations, for dietitian review. /v1/plan is unchanged.
+         */
+        post: operations["trace_plan_v1_plan_trace_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/score/profile": {
         parameters: {
             query?: never;
@@ -274,6 +295,21 @@ export interface components {
              * @default false
              */
             celiac: boolean;
+        };
+        /**
+         * DailyLog
+         * @description One day of logs. Invariant 7: a day without an intake log or a weigh-in stays None.
+         */
+        DailyLog: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Intake Kcal */
+            intake_kcal?: number | null;
+            /** Weight Kg */
+            weight_kg?: number | null;
         };
         /** DayRecommendationRequest */
         DayRecommendationRequest: {
@@ -800,6 +836,8 @@ export interface components {
              * @default false
              */
             sequence_confirmed: boolean;
+            /** History */
+            history?: components["schemas"]["DailyLog"][];
         };
         /** PlanResponse */
         PlanResponse: {
@@ -1074,6 +1112,77 @@ export interface components {
             /** Text */
             text: string;
         };
+        /** Trace */
+        Trace: {
+            /** Stages */
+            stages: components["schemas"]["TraceStage"][];
+            /** Rules Fired */
+            rules_fired: string[];
+            /** Rules */
+            rules: {
+                [key: string]: components["schemas"]["TraceRule"];
+            };
+        };
+        /** TraceCitation */
+        TraceCitation: {
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /** Url */
+            url?: string | null;
+        };
+        /** TraceRequest */
+        TraceRequest: {
+            request: components["schemas"]["PlanRequest"];
+            /**
+             * Simulate History
+             * @default false
+             */
+            simulate_history: boolean;
+        };
+        /**
+         * TraceRule
+         * @description A knowledge rule as an RD reviews it: the matrix text, flags and sources.
+         */
+        TraceRule: {
+            /** Id */
+            id: string;
+            /** File */
+            file: string;
+            /** Text */
+            text?: string | null;
+            /** Why */
+            why?: string | null;
+            /** Verify */
+            verify: boolean;
+            /** Heuristic */
+            heuristic: boolean;
+            /** Citations */
+            citations?: components["schemas"]["TraceCitation"][];
+        };
+        /** TraceStage */
+        TraceStage: {
+            /** Stage */
+            stage: string;
+            /** Rule Ids */
+            rule_ids?: string[];
+            /** Inputs */
+            inputs?: {
+                [key: string]: unknown;
+            };
+            /** Outputs */
+            outputs?: {
+                [key: string]: unknown;
+            };
+            /** Children */
+            children?: components["schemas"]["TraceStage"][];
+        };
+        /** TracedPlan */
+        TracedPlan: {
+            plan: components["schemas"]["PlanResponse"];
+            trace: components["schemas"]["Trace"];
+        };
         /** Training */
         Training: {
             /** Resistance */
@@ -1165,6 +1274,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlanResponse"];
+                };
+            };
+            /** @description The request failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unexpected engine error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    trace_plan_v1_plan_trace_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TraceRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TracedPlan"];
                 };
             };
             /** @description The request failed validation. */
