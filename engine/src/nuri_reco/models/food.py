@@ -31,5 +31,7 @@ class RemainingTargets(StrictModel):
 class FoodContext(StrictModel):
     meal_slot: MealSlot = "any"
     day_type: DayType = "rest"
+    # A phase name from the plan; None: the first phase.
+    phase: str | None = None
     pantry: list[PantryItem] = Field(default_factory=list)
     remaining: RemainingTargets | None = None

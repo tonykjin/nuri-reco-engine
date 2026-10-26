@@ -4971,6 +4971,17 @@
             "title": "Day Type",
             "default": "rest"
           },
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase"
+          },
           "pantry": {
             "items": {
               "$ref": "#/components/schemas/PantryItem"
@@ -5904,6 +5915,10 @@
             "type": "string",
             "title": "Id"
           },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
           "score": {
             "type": "number",
             "maximum": 1.0,
@@ -5917,6 +5932,7 @@
           "rule_ids",
           "why",
           "id",
+          "name",
           "score"
         ],
         "title": "PatternRecommendation"

@@ -24,7 +24,7 @@ from typing import Any
 from nuri_reco import explain
 from nuri_reco.kb import KnowledgeBase, Rule
 from nuri_reco.models import Constraints, FoodContext, Preferences
-from nuri_reco.models.response import FoodRecommendation, PlanResponse
+from nuri_reco.models.response import FoodRecommendation, Phase, PlanResponse
 
 FOODS_JSON = Path(__file__).resolve().parents[2] / "data" / "foods.json"
 Food = dict[str, Any]
@@ -200,17 +200,34 @@ def _row_score(
 
 def _rows(
     plan: PlanResponse, context: FoodContext, kb: KnowledgeBase
-) -> tuple[Rule | None, list[Rule], str | None]:
-    scoring = _params(kb)["FOOD.RANK.SCORING"]
-    phase = plan.phases[0] if plan.phases else None
+) -> tuple[Rule | None, list[Rule], str | None, bool]:
+    """The 7.2 rows for the context: meal-slot row first, then the day type's (FOOD.RANK.DAY_TYPE),
+    then the phase goal's. The last value says whether the day type chose the row."""
+    p = _params(kb)
+    scoring, by_day = p["FOOD.RANK.SCORING"], p["FOOD.RANK.DAY_TYPE"]
+    phase = _phase(plan, context.phase)
+    goals = {g.type for g in plan.goal_summary.goals}
     row_id = scoring["slot_rows"].get(context.meal_slot)
+    day_row = False
+    if row_id is None and context.day_type in by_day["day_types"]:
+        if goals & set(by_day["goal_types"]):
+            row_id, day_row = by_day["row_rule_ids"][0], True
     if row_id is None and phase is not None:
         row_id = scoring["owner_rows"].get(phase.energy_owner)
-    goals = {g.type for g in plan.goal_summary.goals}
     conditions = [
         kb.rules[scoring["condition_rows"][g]] for g in scoring["condition_goals"] if g in goals
     ]
-    return (kb.rules[row_id] if row_id else None), conditions, phase.energy if phase else None
+    primary = kb.rules[row_id] if row_id else None
+    return primary, conditions, phase.energy if phase else None, day_row
+
+
+def _phase(plan: PlanResponse, name: str | None) -> Phase | None:
+    if name is None:
+        return plan.phases[0] if plan.phases else None
+    for phase in plan.phases:
+        if phase.name == name:
+            return phase
+    raise ValueError(f"no phase named {name!r}; expected one of {[p.name for p in plan.phases]}")
 
 
 def _penalties(
@@ -314,6 +331,11 @@ def rank(
     div_p, chips_p = p["FOOD.RANK.DIVERSITY_RULES"], p["FOOD.RANK.CHIPS"]
     pre_race = context.meal_slot in ("pre_race", "during")
 
+    known = {f["key"] for f in foods}
+    unknown = [item.key for item in context.pantry if item.key not in known]
+    if unknown:
+        raise ValueError(f"unknown pantry food keys {unknown}")
+
     # 1. Hard filters.
     candidates: list[Food] = []
     constraint_ids: set[str] = set()
@@ -327,7 +349,7 @@ def rank(
             candidates.append(f)
 
     # 2-3. Goal score with the pattern lens and down-weights.
-    primary, conditions, energy = _rows(plan, context, kb)
+    primary, conditions, energy, day_row = _rows(plan, context, kb)
     up = list(_x(primary)["up"]) if primary else list(scoring["default_up"])
     if primary is not None and primary.id == "FOOD.W.MUSCLE" and energy == "surplus":
         up.append({"attribute": "energy_density", "strength": ""})  # ED flips positive in a surplus
@@ -421,6 +443,7 @@ def rank(
             *sorted(constraint_ids),
             "FOOD.RANK.GOAL_SCORE",
             "FOOD.RANK.SCORING",
+            *(["FOOD.RANK.DAY_TYPE"] if day_row else []),
             *row_ids,
         ]
         if pre_race:

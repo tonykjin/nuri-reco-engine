@@ -475,6 +475,8 @@ export interface components {
              * @enum {string}
              */
             day_type: "rest" | "easy" | "quality" | "long" | "carb_load";
+            /** Phase */
+            phase?: string | null;
             /** Pantry */
             pantry?: components["schemas"]["PantryItem"][];
             remaining?: components["schemas"]["RemainingTargets"] | null;
@@ -802,6 +804,8 @@ export interface components {
             why: string;
             /** Id */
             id: string;
+            /** Name */
+            name: string;
             /** Score */
             score: number;
         };

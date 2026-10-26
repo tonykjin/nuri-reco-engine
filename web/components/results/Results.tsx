@@ -11,12 +11,21 @@ import { usePlan } from "@/lib/onboarding/plan";
 import { useAnswers } from "@/lib/onboarding/store";
 import { byDayOrder, date, referralTitle, weight } from "@/lib/results/format";
 
-import { Banner, Why } from "./common";
+import { Banner, Tabs, Why } from "./common";
 import { DevDrawer } from "./DevDrawer";
 import { GoalsPanel } from "./GoalsPanel";
 import { SampleDayCard } from "./SampleDayCard";
-import { TryMealCard } from "./TryMealCard";
 import { ScorePanel } from "./ScorePanel";
+import { TryMealCard } from "./TryMealCard";
+import { WhatToEat } from "./WhatToEat";
+
+type Tab = "plan" | "score" | "eat";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "plan", label: "Your plan" },
+  { id: "score", label: "Loam Score" },
+  { id: "eat", label: "What to eat" },
+];
 
 export function Results() {
   const planReady = useHydrated(usePlan);
@@ -25,6 +34,7 @@ export function Results() {
   const units = useAnswers((s) => s.answers.units);
   const [phaseName, setPhaseName] = useState<string | null>(null);
   const [day, setDay] = useState("rest");
+  const [tab, setTab] = useState<Tab>("plan");
 
   if (!planReady || !answersReady) return <div className="h-64" aria-busy="true" />;
   if (!response) {
@@ -51,6 +61,9 @@ export function Results() {
   // The day type the targets card shows: the selected one if this phase has it.
   const dayTypes = Object.keys(phase?.targets_by_day_type ?? {}).sort(byDayOrder);
   const shownDay = dayTypes.includes(day) ? day : dayTypes[0];
+  // Blocked plans have no score; plans waiting for a goal order have no meals or foods yet.
+  const tabbed = !blocked;
+  const ready = tabbed && status !== "needs_ordering";
 
   return (
     <div className="space-y-8">
@@ -111,33 +124,54 @@ export function Results() {
         </div>
       )}
 
-      <GoalsPanel
-        response={response}
-        phase={blocked ? undefined : phase}
-        onPhase={setPhaseName}
-        day={day}
-        onDay={setDay}
-        pending={pending}
-        units={units}
-      />
+      {tabbed && <Tabs options={TABS} value={tab} onChange={setTab} label="Results sections" />}
 
-      {!blocked && (
-        <ScorePanel
+      {(!tabbed || tab === "plan") && (
+        <>
+          <GoalsPanel
+            response={response}
+            phase={blocked ? undefined : phase}
+            onPhase={setPhaseName}
+            day={day}
+            onDay={setDay}
+            pending={pending}
+            units={units}
+          />
+          {ready && request && phase && shownDay && (
+            <SampleDayCard request={request} phase={phase.name} day={shownDay} pending={pending} />
+          )}
+        </>
+      )}
+
+      {tabbed && tab === "score" && (
+        <>
+          <ScorePanel
+            response={response}
+            profile={profile}
+            onPhase={setPhaseName}
+            day={day}
+            onDay={setDay}
+            pending={pending}
+          />
+          {ready && request && phase && shownDay && (
+            <TryMealCard request={request} phase={phase.name} day={shownDay} pending={pending} />
+          )}
+        </>
+      )}
+
+      {tabbed && tab === "eat" && !ready && (
+        <p className="text-sm text-ink/70">Foods show once your goals are in order.</p>
+      )}
+
+      {ready && tab === "eat" && request && phase && shownDay && (
+        <WhatToEat
           response={response}
-          profile={profile}
-          onPhase={setPhaseName}
-          day={day}
+          request={request}
+          phase={phase.name}
+          dayTypes={dayTypes}
+          day={shownDay}
           onDay={setDay}
-          pending={pending}
         />
-      )}
-
-      {!blocked && status !== "needs_ordering" && request && phase && shownDay && (
-        <SampleDayCard request={request} phase={phase.name} day={shownDay} pending={pending} />
-      )}
-
-      {!blocked && status !== "needs_ordering" && request && phase && shownDay && (
-        <TryMealCard request={request} phase={phase.name} day={shownDay} pending={pending} />
       )}
 
       <DevDrawer request={request} response={response} />
