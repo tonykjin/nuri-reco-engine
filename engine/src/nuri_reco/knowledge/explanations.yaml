@@ -511,3 +511,22 @@ templates:
     rule: "Health and safety rules come before every other goal."
   TIMING.PROTEIN_PER_MEAL:
     rule: "Protein is spread across your meals."
+  # Target weight range (Task 25). {bmi_min} {bmi_max} {pct} {min_pct} {max_pct}
+  WEIGHT.RANGE.BMI:
+    rule: "The suggested target range is a common healthy BMI range for your height."
+    why: "This is a common healthy range for someone your height (BMI {bmi_min}–{bmi_max}). BMI doesn't account for muscle, so use it as a guide."
+  WEIGHT.RANGE.OLDER:
+    rule: "From age 65, the suggested range sits a little higher."
+    why: "From age 65, a slightly higher range (BMI {bmi_min}–{bmi_max}) is common for adults your age."
+  WEIGHT.RANGE.BODY_FAT:
+    rule: "With your body fat %, the range is based on your lean mass instead of BMI."
+    why: "This range is based on your body fat %, so it allows for your muscle. BMI alone can miss that."
+  WEIGHT.RANGE.MILESTONE:
+    rule: "A first milestone of a few percent breaks a bigger goal into steps."
+    why: "A first step of {min_pct}–{max_pct}% of your weight is realistic and easier to keep."
+  WEIGHT.RANGE.SLIDER:
+    rule: "The slider covers targets we can plan for safely."
+    lose_fat: "We suggest starting about {pct}% below your current weight. You can pick anywhere on the slider."
+    gain_weight: "We suggest starting about {pct}% above your current weight. You can pick anywhere on the slider."
+    at_floor: "You're already at the low end of a healthy range for your height, so we won't suggest a lower weight."
+    hidden: "We'll focus on how you eat and feel, not a number on the scale."

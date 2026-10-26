@@ -87,3 +87,19 @@ def evaluate_examples() -> dict[str, dict[str, Any]]:
         for name in ("maya", "marathon_fatloss")
         if name in examples
     }
+
+
+def weight_range_examples() -> dict[str, dict[str, Any]]:
+    """Personas with a weight goal and no target yet: the range comes before a target is picked."""
+    summaries = _summaries()
+    out = {}
+    for name, body in persona_requests().items():
+        if not any(g["type"] in ("lose_fat", "gain_weight") for g in body["goals"]):
+            continue
+        goals = [{**g, "target_weight_kg": None} for g in body["goals"]]
+        out[name] = {
+            "summary": name,
+            "description": summaries.get(name, ""),
+            "value": {**body, "goals": goals},
+        }
+    return out

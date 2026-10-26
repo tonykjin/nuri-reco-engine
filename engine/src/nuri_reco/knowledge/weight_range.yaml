@@ -1,0 +1,53 @@
+# Target weight range for the onboarding slider (Task 25). Source: spec §4.4b. weight_range.py
+# reads these rules; the floor comes from GUARD.ED_RISK (guardrails.yaml), so the slider never
+# offers a target that guardrail blocks. Values are in kg; the app converts for display.
+spec_section: "4.4"
+
+bmi:
+  id: WEIGHT.RANGE.BMI
+  text: "Adults 18 to 64: the recommended range runs from the weight at BMI 18.5 to the weight at BMI 24.9 for the user's height."
+  bmi: { min: 18.5, max: 24.9 }
+  citation_ids: [WHO, CDC_BMI]
+  verify: false
+  heuristic: false
+
+older:
+  id: WEIGHT.RANGE.OLDER
+  text: "Age 65 and over: BMI 23 to 29.9. At this age mortality rises below about BMI 23, and overweight isn't linked to higher mortality. ⚠️ verify · 🧪 the 29.9 upper bound is Loam's choice"
+  age_min: 65
+  bmi: { min: 23, max: 29.9 }
+  citation_ids: [WINTER2014]
+  verify: true
+  heuristic: true
+
+body_fat:
+  id: WEIGHT.RANGE.BODY_FAT
+  text: "When body fat % is known: fat-free mass = weight × (1 − body fat), and the range is fat-free mass ÷ (1 − target body fat), with target body fat 21–31% for women and 14–24% for men (ACE fitness to acceptable). The low end never goes below the floor (WEIGHT.RANGE.SLIDER). ⚠️ verify 🧪"
+  target_body_fat_pct:
+    female: { min: 21, max: 31 }
+    male: { min: 14, max: 24 }
+  citation_ids: [ACE_BODYFAT]
+  verify: true
+  heuristic: true
+
+milestone:
+  id: WEIGHT.RANGE.MILESTONE
+  text: "For a fat-loss goal when BMI is 30 or more: a first milestone of 5–10% below current weight."
+  bmi_min: 30
+  loss_pct: { min: 5, max: 10 }
+  citation_ids: [AHA_ACC_TOS2013]
+  verify: false
+  heuristic: false
+
+slider:
+  id: WEIGHT.RANGE.SLIDER
+  text: "Slider bounds, for display. Lose fat: from the floor to current weight, starting 5% below current. Gain weight: from current weight to the higher of the range top and 15% above current, starting 5% above current. Steps of 0.5 kg. Values are rounded to 0.1 kg, with range and slider bounds rounded inward so a bound never falls outside its band (so the slider never offers a weight just under the floor). The floor is the weight at the GUARD.ED_RISK goal BMI. No numbers are shown when GUARD.ED_RISK, GUARD.PREGNANCY or GUARD.UNDER_18 fires without blocking the plan (agreed in Task 25). 🧪"
+  floor_from: GUARD.ED_RISK
+  lose_fat: { default_change_pct: 5 }
+  gain_weight: { default_change_pct: 5, max_above_current_pct: 15 }
+  step_kg: 0.5
+  round_kg: 0.1
+  hidden_when_rule_ids: [GUARD.ED_RISK, GUARD.PREGNANCY, GUARD.UNDER_18]
+  citation_ids: []
+  verify: false
+  heuristic: true

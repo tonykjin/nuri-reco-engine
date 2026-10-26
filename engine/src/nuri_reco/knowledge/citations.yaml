@@ -400,3 +400,16 @@ citations:
     label: "USDA/NCI Healthy Eating Index: calculating HEI scores"
     url: "https://epi.grants.cancer.gov/hei/calculating-hei-scores.html"
     in_sources: false
+  # Target weight range (Task 25)
+  - id: CDC_BMI
+    label: "CDC, Adult BMI categories"
+    url: "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html"
+    in_sources: false
+  - id: WINTER2014
+    label: "Winter et al. 2014, BMI and all-cause mortality in older adults: a meta-analysis (AJCN 99(4):875-90)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/24452240/"
+    in_sources: false
+  - id: ACE_BODYFAT
+    label: "American Council on Exercise, body fat percentage categories"
+    url: "https://www.acefitness.org/resources/everyone/tools-calculators/percent-body-fat-calculator/"
+    in_sources: false

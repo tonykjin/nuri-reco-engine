@@ -28,12 +28,13 @@ RULE_FILES = [
     "compose.yaml",
     "expenditure.yaml",
     "score_eval.yaml",
+    "weight_range.yaml",
 ]
 ID_RE = re.compile(r"^[A-Z0-9_]+(\.[A-Z0-9_]+)+$")
 NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
 # Keys whose numbers are list positions, not values from the page.
 POSITION_KEYS = {"step", "order"}
-REF_KEYS = {"protein_from", "same_as", "pattern_first"}
+REF_KEYS = {"protein_from", "same_as", "pattern_first", "floor_from"}
 
 
 def load(name: str) -> Any:

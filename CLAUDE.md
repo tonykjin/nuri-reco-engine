@@ -17,7 +17,8 @@ INVARIANTS (never break):
    web/lib/onboarding/mapAnswers.ts. The web app holds no nutrition logic.
 
 ENDPOINTS: /v1/plan (?dry_run=true) · /v1/score/profile · /v1/score/evaluate (M6) ·
-  /v1/recommendations/foods · /v1/recommendations/day · /v1/safety/check · /v1/knowledge/* · /health
+  /v1/recommendations/foods · /v1/recommendations/day · /v1/goals/weight-range ·
+  /v1/safety/check · /v1/knowledge/* · /health
 DEMO: web/app/onboarding/[step] (14 screens, section 11.3) -> web/app/results (goals panel,
   Loam Score panel, dev drawer).
 

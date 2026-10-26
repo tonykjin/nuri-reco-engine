@@ -147,6 +147,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/goals/weight-range": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Goal Weight Range
+         * @description The recommended target-weight range, an optional first milestone, and target bounds with a
+         *     suggested default for each weight goal (spec §4.4b). Safety runs first: a blocked request
+         *     returns no numbers, and number-hiding cases return status `hidden`.
+         */
+        post: operations["goal_weight_range_v1_goals_weight_range_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/safety/check": {
         parameters: {
             query?: never;
@@ -753,6 +775,26 @@ export interface components {
             /** Flag */
             flag?: string | null;
         };
+        /**
+         * Milestone
+         * @description A first step for a fat-loss goal (WEIGHT.RANGE.MILESTONE).
+         */
+        Milestone: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Min Kg */
+            min_kg: number;
+            /** Max Kg */
+            max_kg: number;
+        };
         /** Nutrients */
         Nutrients: {
             /** Kcal */
@@ -984,6 +1026,28 @@ export interface components {
             min_g_per_kg: number;
             /** Max G Per Kg */
             max_g_per_kg: number;
+        };
+        /** RecommendedRange */
+        RecommendedRange: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Min Kg */
+            min_kg: number;
+            /** Max Kg */
+            max_kg: number;
+            /**
+             * Basis
+             * @enum {string}
+             */
+            basis: "bmi" | "bmi_older" | "body_fat";
         };
         /** Referral */
         Referral: {
@@ -1274,6 +1338,30 @@ export interface components {
             /** Kcal */
             kcal: number;
         };
+        /**
+         * TargetBounds
+         * @description Bounds and a suggested default target for one weight goal.
+         */
+        TargetBounds: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Min Kg */
+            min_kg: number;
+            /** Max Kg */
+            max_kg: number;
+            /** Step Kg */
+            step_kg: number;
+            /** Default Kg */
+            default_kg: number;
+        };
         /** TopLever */
         TopLever: {
             /** Component */
@@ -1360,6 +1448,34 @@ export interface components {
             weekly_schedule: ("rest" | "easy" | "quality" | "long" | "carb_load")[];
             /** Experience */
             experience?: ("novice" | "intermediate" | "advanced" | "returning") | null;
+        };
+        /** WeightRangeResponse */
+        WeightRangeResponse: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "hidden" | "blocked";
+            /** Current Kg */
+            current_kg?: number | null;
+            recommended?: components["schemas"]["RecommendedRange"] | null;
+            milestone?: components["schemas"]["Milestone"] | null;
+            /** Target Bounds */
+            target_bounds?: {
+                [key: string]: components["schemas"]["TargetBounds"];
+            };
+            /** Citations */
+            citations?: string[];
         };
         /** WeightRow */
         WeightRow: {
@@ -1653,6 +1769,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DayRecommendationResponse"];
+                };
+            };
+            /** @description The request failed validation. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unexpected engine error. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    goal_weight_range_v1_goals_weight_range_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeightRangeResponse"];
                 };
             };
             /** @description The request failed validation. */
