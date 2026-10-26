@@ -8,7 +8,9 @@ import {
   COOK_TIMES,
   CUISINES,
   EATING_STYLES,
+  MEALS,
   RELIGIOUS,
+  SNACKS,
   TASTE_DIMENSIONS,
 } from "@/lib/onboarding/options";
 import { useAnswers } from "@/lib/onboarding/store";
@@ -17,16 +19,37 @@ import { useStepNav } from "../nav";
 import { ChoiceList, Chips, Helper, Label, toggle } from "../ui";
 
 export function Eating() {
-  const eatingStyle = useAnswers((s) => s.answers.eatingStyle);
+  const answers = useAnswers((s) => s.answers);
   const update = useAnswers((s) => s.update);
+  // Single select; tapping the chosen chip clears it (like Days per week on Training).
+  const pick = (current: number | null, id: string) => (current === Number(id) ? null : Number(id));
   return (
-    <div className="space-y-4">
-      <Helper>Pick the one that sounds most like you.</Helper>
-      <ChoiceList
-        options={EATING_STYLES}
-        value={eatingStyle}
-        onChange={(e) => update({ eatingStyle: e })}
-      />
+    <div className="space-y-6">
+      <div className="space-y-4">
+        <Helper>Pick the one that sounds most like you.</Helper>
+        <ChoiceList
+          options={EATING_STYLES}
+          value={answers.eatingStyle}
+          onChange={(e) => update({ eatingStyle: e })}
+        />
+      </div>
+      <section className="space-y-2">
+        <Label>How many meals do you usually eat a day?</Label>
+        <Chips
+          options={MEALS}
+          values={answers.mealsPerDay === null ? [] : [String(answers.mealsPerDay)]}
+          onToggle={(id) => update({ mealsPerDay: pick(answers.mealsPerDay, id) })}
+        />
+      </section>
+      <section className="space-y-2">
+        <Label>And snacks?</Label>
+        <Chips
+          options={SNACKS}
+          values={answers.snacksPerDay === null ? [] : [String(answers.snacksPerDay)]}
+          onToggle={(id) => update({ snacksPerDay: pick(answers.snacksPerDay, id) })}
+        />
+        <Helper>Optional. We&apos;ll spread your protein across the meals you actually eat.</Helper>
+      </section>
     </div>
   );
 }

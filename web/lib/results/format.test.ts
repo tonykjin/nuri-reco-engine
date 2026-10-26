@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { byDayOrder, dateRange, referralTitle, ruleIds, target, weight } from "./format";
+import {
+  byDayOrder,
+  dateRange,
+  mealPattern,
+  referralTitle,
+  ruleIds,
+  target,
+  weight,
+} from "./format";
 
 const t = (patch: object) => ({ unit: "g", low: null, high: null, min: null, max: null, ...patch });
 
@@ -58,5 +66,27 @@ describe("dev drawer rule ids", () => {
       },
     };
     expect(ruleIds(response)).toEqual(["GUARD.X", "COMBO.Y", "LSW.ROW"]);
+  });
+});
+
+describe("meal pattern", () => {
+  const mp = (meals: number, snacks: number, source: "user" | "default" = "user") => ({
+    meals,
+    snacks,
+    source,
+    per_meal_protein_g: 35,
+    provenance: "recommended" as const,
+    rule_ids: ["TIMING.MEAL_PATTERN"],
+    why: "Your protein is spread across your meals.",
+  });
+
+  it("names meals and snacks, with singulars and no snack part when there are none", () => {
+    expect(mealPattern(mp(3, 1))).toBe("3 meals + 1 snack");
+    expect(mealPattern(mp(2, 2))).toBe("2 meals + 2 snacks");
+    expect(mealPattern(mp(1, 0))).toBe("1 meal");
+  });
+
+  it("says when the engine used its default", () => {
+    expect(mealPattern(mp(3, 1, "default"))).toBe("3 meals + 1 snack (our default)");
   });
 });

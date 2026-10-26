@@ -5,6 +5,7 @@ import {
   DAY_LABELS,
   dateRange,
   ENERGY_LABELS,
+  mealPattern,
   type Phase,
   type PlanResponse,
   title,
@@ -115,6 +116,14 @@ export function GoalsPanel({ response, phase, onPhase, day, onDay, pending, unit
                 <Macro label="Fat" value={whole(t.fat_g)} unit="g" />
               </dl>
             )
+          )}
+          {!pending && (
+            <div className="space-y-1">
+              <dl className="text-sm">
+                <Fact label="Meals" value={mealPattern(phase.meal_pattern)} />
+              </dl>
+              <Why why={phase.meal_pattern.why} ruleIds={phase.meal_pattern.rule_ids} />
+            </div>
           )}
         </Card>
       )}

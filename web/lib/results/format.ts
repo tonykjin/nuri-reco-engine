@@ -111,6 +111,13 @@ export const ENERGY_LABELS: Record<string, string> = {
 };
 
 /** Day types in week order of effort, for tabs. */
+/** "3 meals + 1 snack", "1 meal"; "(our default)" when the user didn't say. */
+export function mealPattern(mp: Phase["meal_pattern"]): string {
+  const meals = `${mp.meals} ${mp.meals === 1 ? "meal" : "meals"}`;
+  const snacks = mp.snacks ? ` + ${mp.snacks} ${mp.snacks === 1 ? "snack" : "snacks"}` : "";
+  return `${meals}${snacks}${mp.source === "default" ? " (our default)" : ""}`;
+}
+
 export const DAY_ORDER = ["rest", "easy", "quality", "long", "carb_load"];
 export const byDayOrder = (a: string, b: string) =>
   (DAY_ORDER.indexOf(a) + 1 || 99) - (DAY_ORDER.indexOf(b) + 1 || 99);

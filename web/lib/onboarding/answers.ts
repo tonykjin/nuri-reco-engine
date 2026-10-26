@@ -95,6 +95,9 @@ export interface Answers {
     scoffDeclined?: boolean;
   };
   eatingStyle: EatingStyle;
+  /** Meals and snacks on a usual day; null = not answered (the engine uses its default). */
+  mealsPerDay: number | null;
+  snacksPerDay: number | null;
   allergens: string[];
   religious: string[];
   dislikes: string[];
@@ -137,6 +140,8 @@ export const initialAnswers: Answers = {
     scoffDeclined: false,
   },
   eatingStyle: "no_preference",
+  mealsPerDay: null,
+  snacksPerDay: null,
   allergens: [],
   religious: [],
   dislikes: [],

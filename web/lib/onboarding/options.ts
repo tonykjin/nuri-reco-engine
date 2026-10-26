@@ -80,6 +80,22 @@ export const EVENT_TYPES: Option<string>[] = [
   { id: "other", label: "Something else" },
 ];
 
+// Must match TIMING.MEAL_PATTERN meals_allowed / snacks_allowed (engine daytypes.yaml); the engine
+// rejects any other count. The top option covers "or more".
+export const MEALS: Option<string>[] = [
+  { id: "1", label: "1" },
+  { id: "2", label: "2" },
+  { id: "3", label: "3" },
+  { id: "4", label: "4+" },
+];
+
+export const SNACKS: Option<string>[] = [
+  { id: "0", label: "None" },
+  { id: "1", label: "1" },
+  { id: "2", label: "2" },
+  { id: "3", label: "3+" },
+];
+
 export const DISTANCES: Option<string>[] = [
   { id: "5k", label: "5K" },
   { id: "10k", label: "10K" },
