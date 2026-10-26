@@ -115,7 +115,8 @@ export interface paths {
         put?: never;
         /**
          * Recommend Day
-         * @description A sample day of meals (milestone M6).
+         * @description A sample day of meals for one phase and day type, built from the ranked foods to land
+         *     within ±10% of that day's targets. Blocked or unordered plans return no day.
          */
         post: operations["recommend_day_v1_recommendations_day_post"];
         delete?: never;
@@ -273,6 +274,25 @@ export interface components {
              * @default false
              */
             celiac: boolean;
+        };
+        /** DayRecommendationRequest */
+        DayRecommendationRequest: {
+            request: components["schemas"]["PlanRequest"];
+            /** Day Type */
+            day_type?: ("rest" | "easy" | "quality" | "long" | "carb_load") | null;
+            /** Phase */
+            phase?: string | null;
+        };
+        /** DayRecommendationResponse */
+        DayRecommendationResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "clamped" | "rd_review" | "blocked" | "needs_ordering";
+            day?: components["schemas"]["SampleDay"] | null;
+            /** Citations */
+            citations?: string[];
         };
         /** DayTargets */
         DayTargets: {
@@ -514,6 +534,13 @@ export interface components {
             /** Goals */
             goals: components["schemas"]["GoalRule"][];
         };
+        /** GramRange */
+        GramRange: {
+            /** Min */
+            min: number;
+            /** Max */
+            max: number;
+        };
         /** GuardrailsFile */
         GuardrailsFile: {
             /** Spec Section */
@@ -551,6 +578,54 @@ export interface components {
             /** Max Loss Pct Bw Per Week */
             max_loss_pct_bw_per_week: number;
         };
+        /** Meal */
+        Meal: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /**
+             * Slot
+             * @enum {string}
+             */
+            slot: "breakfast" | "lunch" | "pre_session" | "dinner" | "snack";
+            /** Items */
+            items: components["schemas"]["MealItem"][];
+            nutrients: components["schemas"]["Nutrients"];
+            /** Protein Target G */
+            protein_target_g?: number | null;
+            carb_target_g?: components["schemas"]["GramRange"] | null;
+        };
+        /** MealItem */
+        MealItem: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Key */
+            key: string;
+            /** Fdc Id */
+            fdc_id: number;
+            /** Name */
+            name: string;
+            /** Grams */
+            grams: number;
+            /** Role */
+            role: string;
+            nutrients: components["schemas"]["Nutrients"];
+        };
         /** MicronutrientTarget */
         MicronutrientTarget: {
             /** Id */
@@ -563,6 +638,19 @@ export interface components {
             window: string;
             /** Flag */
             flag?: string | null;
+        };
+        /** Nutrients */
+        Nutrients: {
+            /** Kcal */
+            kcal: number;
+            /** Protein G */
+            protein_g: number;
+            /** Carb G */
+            carb_g: number;
+            /** Fat G */
+            fat_g: number;
+            /** Fiber G */
+            fiber_g?: number | null;
         };
         /** Pace */
         Pace: {
@@ -891,6 +979,38 @@ export interface components {
             /** Message */
             message: string;
         };
+        /** SampleDay */
+        SampleDay: {
+            /**
+             * Provenance
+             * @default recommended
+             * @constant
+             */
+            provenance: "recommended";
+            /** Rule Ids */
+            rule_ids: string[];
+            /** Why */
+            why: string;
+            /** Phase */
+            phase: string;
+            /**
+             * Day Type
+             * @enum {string}
+             */
+            day_type: "rest" | "easy" | "quality" | "long" | "carb_load";
+            /** Meals */
+            meals: components["schemas"]["Meal"][];
+            nutrients: components["schemas"]["Nutrients"];
+            targets: components["schemas"]["DayTargets"];
+            /** Tolerance Pct */
+            tolerance_pct: number;
+            /** Deviation Pct */
+            deviation_pct: {
+                [key: string]: number;
+            };
+            /** Within Tolerance */
+            within_tolerance: boolean;
+        };
         /** ScoreComponent */
         ScoreComponent: {
             /**
@@ -1196,7 +1316,11 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DayRecommendationRequest"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -1204,11 +1328,11 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["DayRecommendationResponse"];
                 };
             };
-            /** @description Unexpected engine error. */
-            500: {
+            /** @description The request failed validation. */
+            422: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1216,8 +1340,8 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Not implemented yet. */
-            501: {
+            /** @description Unexpected engine error. */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };

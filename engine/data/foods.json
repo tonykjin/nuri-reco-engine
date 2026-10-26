@@ -13916,7 +13916,9 @@
     "gi_source": null,
     "gi_verify": null
    },
-   "allergens": [],
+   "allergens": [
+    "peanuts"
+   ],
    "diet": {
     "vegan": true,
     "vegetarian": true,

@@ -1,0 +1,116 @@
+# Sample-day composer (Task 21). The timing rules come from Matrix C (spec §5, daytypes.yaml
+# TIMING.*) and the foods from the §7.4 ranking. The spec sets no meal template, portion sizes or
+# search settings, so those are Loam heuristics (🧪), to be tuned with RDs.
+spec_section: "5"
+
+tolerance:
+  id: COMPOSE.TOLERANCE
+  text: "A sample day aims to land within ±10% of the day type's kcal, protein, carb and fat targets. 🧪"
+  pct: 10
+  macros: [kcal, protein_g, carb_g, fat_g]
+  labels: { kcal: calories, protein_g: protein, carb_g: carbs, fat_g: fat }
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+templates:
+  - id: COMPOSE.MEALS.REST
+    text: "Days without a session: breakfast 25%, lunch 30%, dinner 30% and a snack 15% of the day's energy. Each carries protein (TIMING.PROTEIN_PER_MEAL). Shares are guidance, not caps. 🧪"
+    day_types: [rest, carb_load]
+    meals:
+      - { slot: breakfast, kcal_pct: 25, protein_meal: true }
+      - { slot: lunch, kcal_pct: 30, protein_meal: true }
+      - { slot: dinner, kcal_pct: 30, protein_meal: true }
+      - { slot: snack, kcal_pct: 15, protein_meal: true }
+    protein_rule_ids: [TIMING.PROTEIN_PER_MEAL, TIMING.GUIDANCE_NOT_CAPS]
+    citation_ids: [SCHOENFELD_ARAGON2018, ISSN2017]
+    verify: false
+    heuristic: true
+  - id: COMPOSE.MEALS.SESSION
+    text: "Session days: breakfast 20%, lunch 25%, a pre-session meal 15%, dinner 30% and a snack 10% of the day's energy. The four meals other than the pre-session one carry protein (TIMING.PROTEIN_PER_MEAL); the pre-session meal follows TIMING.PRE_SESSION_CARBS and holds at most 5 g fiber in total (a hard cap, on top of the per-food FOOD.RANK.PRE_RACE exclusions; agreed in Task 21). Shares are guidance, not caps. 🧪"
+    day_types: [easy, quality, long]
+    meals:
+      - { slot: breakfast, kcal_pct: 20, protein_meal: true }
+      - { slot: lunch, kcal_pct: 25, protein_meal: true }
+      - { slot: pre_session, kcal_pct: 15, protein_meal: false }
+      - { slot: dinner, kcal_pct: 30, protein_meal: true }
+      - { slot: snack, kcal_pct: 10, protein_meal: true }
+    protein_rule_ids: [TIMING.PROTEIN_PER_MEAL, TIMING.GUIDANCE_NOT_CAPS]
+    pre_session_rule_ids: [TIMING.PRE_SESSION_CARBS, FOOD.RANK.PRE_RACE]
+    pre_session_max_fiber_g: 5
+    citation_ids: [SCHOENFELD_ARAGON2018, ISSN2017, ACSM2016]
+    verify: false
+    heuristic: true
+
+roles:
+  id: COMPOSE.ROLES
+  text: "Each meal is built from roles, each filled by the best-ranked food from its groups (the whole table is ranked for the meal slot, so a role can reach foods outside the usual top 10) that isn't already in the day. A protein food has at least 8 g protein per 100 kcal; a carb food gets at least 50% of its energy from carbs; a fat food gets at least 50% from fat. Lunch and dinner take their fat from a cooking oil; the snack from nuts and seeds. The pre-session meal ranks foods for the pre-race slot, so high-fiber and high-fat foods are already out; it can add one sweet (honey or jam), like the FOOD.SEED.ENDURANCE pre-race seeds (bagel/toast + honey/jam). The sweet role never takes a second food. 🧪"
+  protein_min_g_per_100kcal: 8
+  carb_min_pct_energy: 50
+  single_food_roles: [sweet]
+  fat_min_pct_energy: 50
+  # Which FoodContext meal slot ranks the foods for each composer slot.
+  rank_slots:
+    { breakfast: breakfast, lunch: lunch, dinner: dinner, snack: snack, pre_session: pre_race }
+  slots:
+    breakfast:
+      protein: [eggs, dairy, plant_milk, legumes, sports_nutrition]
+      carb: [grains]
+      fruit: [fruits]
+    lunch:
+      protein: [fish, poultry, shellfish, meat, legumes, eggs]
+      carb: [grains, legumes]
+      vegetable: [vegetables]
+      fat: [fats_oils]
+    dinner:
+      protein: [fish, poultry, shellfish, meat, legumes, eggs]
+      carb: [grains, legumes]
+      vegetable: [vegetables]
+      fat: [fats_oils]
+    snack:
+      protein: [dairy, plant_milk, legumes, sports_nutrition]
+      fruit: [fruits]
+      fat: [nuts_seeds]
+    pre_session:
+      carb: [grains, snacks]
+      fruit: [fruits]
+      sweet: [sweets]
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+portions:
+  id: COMPOSE.PORTIONS
+  text: "Portions in grams, from a minimum to a maximum per food group: fish, poultry, shellfish and meat 80–250 · eggs 50–200 · dairy 100–400 · plant milk 200–500 · legumes 80–300 · grains 40–400 · vegetables 50–300 · fruits 80–250 · fats and oils 5–30 · nuts and seeds 10–40 · snacks 20–100 · sweets 10–60 · sports nutrition and anything else 30–300. No single food goes over 900 kcal. 🧪"
+  default_g: { min: 30, max: 300 }
+  max_item_kcal: 900
+  groups_g:
+    fish: { min: 80, max: 250 }
+    poultry: { min: 80, max: 250 }
+    shellfish: { min: 80, max: 250 }
+    meat: { min: 80, max: 250 }
+    eggs: { min: 50, max: 200 }
+    dairy: { min: 100, max: 400 }
+    plant_milk: { min: 200, max: 500 }
+    legumes: { min: 80, max: 300 }
+    grains: { min: 40, max: 400 }
+    vegetables: { min: 50, max: 300 }
+    fruits: { min: 80, max: 250 }
+    fats_oils: { min: 5, max: 30 }
+    nuts_seeds: { min: 10, max: 40 }
+    snacks: { min: 20, max: 100 }
+    sweets: { min: 10, max: 60 }
+  citation_ids: []
+  verify: false
+  heuristic: true
+
+search:
+  id: COMPOSE.SEARCH
+  text: "Greedy, then repair: every food starts at its minimum portion; then, one step at a time (50 g, then 5 g), the portion change that most reduces the error is taken, for at most 2000 steps. When a food sits at its maximum portion and the day still needs more of what it brings, the next-ranked food for the same role joins that meal at its minimum portion (at most 10 added foods per day). Last, any food whose removal lowers the error is dropped. The error adds the squared % miss on each day target (weight 1), each meal's miss on its energy share (weight 0.25), each protein meal's shortfall below its protein target (weight 0.5) and the pre-session meal's carbs outside the TIMING.PRE_SESSION_CARBS range (weight 0.5). 🧪"
+  steps_g: [50, 5]
+  max_steps: 2000
+  max_added_foods: 10
+  weights: { day: 1, meal_share: 0.25, meal_protein: 0.5, pre_session_carbs: 0.5 }
+  citation_ids: []
+  verify: false
+  heuristic: true

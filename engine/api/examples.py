@@ -48,3 +48,14 @@ def food_examples() -> dict[str, dict[str, Any]]:
         }
         out[name] = {**example, "value": value}
     return out
+
+
+def day_examples() -> dict[str, dict[str, Any]]:
+    """Each persona as a sample-day request: the hardest day type in their week."""
+    order = ["carb_load", "long", "quality", "easy", "rest"]
+    out = {}
+    for name, example in plan_examples().items():
+        schedule = example["value"]["profile"]["training"]["weekly_schedule"]
+        day = next(d for d in order if d in schedule)
+        out[name] = {**example, "value": {"request": example["value"], "day_type": day}}
+    return out

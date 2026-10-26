@@ -9,11 +9,12 @@ import { useState } from "react";
 import { useHydrated } from "@/lib/onboarding/hydration";
 import { usePlan } from "@/lib/onboarding/plan";
 import { useAnswers } from "@/lib/onboarding/store";
-import { date, referralTitle, weight } from "@/lib/results/format";
+import { byDayOrder, date, referralTitle, weight } from "@/lib/results/format";
 
 import { Banner, Why } from "./common";
 import { DevDrawer } from "./DevDrawer";
 import { GoalsPanel } from "./GoalsPanel";
+import { SampleDayCard } from "./SampleDayCard";
 import { ScorePanel } from "./ScorePanel";
 
 export function Results() {
@@ -46,6 +47,9 @@ export function Results() {
   const pending = status === "rd_review";
   const warnings = safety?.warnings ?? [];
   const referrals = safety?.referrals ?? [];
+  // The day type the targets card shows: the selected one if this phase has it.
+  const dayTypes = Object.keys(phase?.targets_by_day_type ?? {}).sort(byDayOrder);
+  const shownDay = dayTypes.includes(day) ? day : dayTypes[0];
 
   return (
     <div className="space-y-8">
@@ -125,6 +129,10 @@ export function Results() {
           onDay={setDay}
           pending={pending}
         />
+      )}
+
+      {!blocked && status !== "needs_ordering" && request && phase && shownDay && (
+        <SampleDayCard request={request} phase={phase.name} day={shownDay} pending={pending} />
       )}
 
       <DevDrawer request={request} response={response} />

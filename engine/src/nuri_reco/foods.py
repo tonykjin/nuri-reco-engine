@@ -283,7 +283,7 @@ def _pattern_name(kb: KnowledgeBase, pattern: str) -> str:
     return names.get(pattern, pattern.replace("_", " "))
 
 
-def _base_name(food: Food, heads: list[str]) -> str:
+def base_name(food: Food, heads: list[str]) -> str:
     words = [w.strip().lower() for w in str(food["description"]).split(",")]
     return " ".join(words[:2]) if words[0] in heads and len(words) > 1 else words[0]
 
@@ -410,7 +410,7 @@ def rank(
     row_ids = [r.id for r in ([primary] if primary else []) + conditions]
     for key in ordered:
         f = by_key[key]
-        name = _base_name(f, div_p["two_word_heads"])
+        name = base_name(f, div_p["two_word_heads"])
         if name in seen_names or per_group[f["group"]] >= group_cap:
             continue
         seen_names.add(name)

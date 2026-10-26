@@ -4,6 +4,7 @@ The API takes a domain PlanRequest and knows nothing about onboarding screens (i
 Every non-2xx response uses the error shape in api/errors.py.
 """
 
+from collections import Counter
 from typing import Annotated, Literal
 
 from fastapi import Body, FastAPI, Query
@@ -12,15 +13,17 @@ from pydantic import Field
 
 from api import errors, examples
 from api.errors import ApiError
-from nuri_reco import explain, foods, safety
+from nuri_reco import compose, explain, foods, safety
 from nuri_reco.engine import plan
 from nuri_reco.kb import GoalsFile, GuardrailsFile, PatternsFile, ScoreWeightsFile, load_kb
 from nuri_reco.models import (
+    DayType,
     FoodContext,
     FoodRecommendation,
     LoamScoreProfile,
     PlanRequest,
     PlanResponse,
+    SampleDay,
     StrictModel,
 )
 from nuri_reco.models.response import PlanStatus
@@ -60,6 +63,21 @@ class FoodRecommendationsRequest(StrictModel):
 class FoodRecommendationsResponse(StrictModel):
     status: PlanStatus
     foods: list[FoodRecommendation]
+    citations: list[str] = Field(default_factory=list)
+
+
+class DayRecommendationRequest(StrictModel):
+    request: PlanRequest
+    # None: the user's most common day type.
+    day_type: DayType | None = None
+    # A phase name from the plan; None: the first phase.
+    phase: str | None = None
+
+
+class DayRecommendationResponse(StrictModel):
+    status: PlanStatus
+    # None when the plan is blocked or waiting for the user to order their goals.
+    day: SampleDay | None = None
     citations: list[str] = Field(default_factory=list)
 
 
@@ -142,10 +160,30 @@ def recommend_foods(
     return resp.model_copy(update={"citations": explain.collect_citations(resp, load_kb())})
 
 
-@app.post("/v1/recommendations/day", tags=["recommendations"], responses=errors.NOT_IMPLEMENTED)
-def recommend_day() -> None:
-    """A sample day of meals (milestone M6)."""
-    raise ApiError(501, "not_implemented", "Sample days aren't available yet.")
+@app.post("/v1/recommendations/day", tags=["recommendations"], responses=errors.INVALID)
+def recommend_day(
+    body: Annotated[DayRecommendationRequest, Body(openapi_examples=examples.day_examples())],
+) -> DayRecommendationResponse:
+    """A sample day of meals for one phase and day type, built from the ranked foods to land
+    within ±10% of that day's targets. Blocked or unordered plans return no day."""
+    _check_goal_types(body.request)
+    full = plan(body.request)
+    day: SampleDay | None = None
+    if full.status not in ("blocked", "needs_ordering"):
+        req = body.request
+        schedule = req.profile.training.weekly_schedule
+        day = compose.compose(
+            full,
+            req.profile,
+            req.preferences,
+            req.constraints,
+            load_kb(),
+            foods.load_foods(),
+            day_type=body.day_type or Counter(schedule).most_common(1)[0][0],
+            phase=body.phase,
+        )
+    resp = DayRecommendationResponse(status=full.status, day=day)
+    return resp.model_copy(update={"citations": explain.collect_citations(resp, load_kb())})
 
 
 @app.post("/v1/safety/check", tags=["safety"], responses=errors.INVALID)

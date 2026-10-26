@@ -6,6 +6,29 @@
 spec_section: "10"
 
 templates:
+  TIMING.GUIDANCE_NOT_CAPS:
+    rule: "Per-meal amounts are a guide, not a limit."
+  TIMING.PRE_SESSION_CARBS:
+    rule: "A carb-focused meal 1–4 hours before training tops up your energy for the session."
+  COMPOSE.TOLERANCE:
+    # placeholders: {pct} {macros}
+    rule: "A sample day aims to land close to the day's calorie, protein, carb and fat targets."
+    within: "Built from your top-ranked foods to land within {pct}% of today's targets."
+    missed: "Built from your top-ranked foods; {macros} land more than {pct}% off today's targets."
+  COMPOSE.MEALS.REST:
+    rule: "On days without a session, four meals share the day's energy, each with some protein."
+  COMPOSE.MEALS.SESSION:
+    rule: "On session days, four protein meals plus a pre-session meal share the day's energy."
+  COMPOSE.ROLES:
+    # placeholders: {protein} {n}
+    rule: "Each meal pairs a protein food with carbs, vegetables, fruit or fats, picked from your top-ranked foods."
+    meal: "Picked from your top-ranked foods."
+    meal_protein: "About {protein:.0f} g protein, one of {n} protein-rich meals spread through the day."
+    meal_pre_session: "Easy-to-digest carbs 1–4 hours before your session, with high-fiber and high-fat foods left out."
+  COMPOSE.PORTIONS:
+    rule: "Portions stay within everyday sizes for each kind of food."
+  COMPOSE.SEARCH:
+    rule: "Portions are adjusted step by step until the day lands as close to its targets as it can."
   COMBO.DEFICIT_BLOCKED:
     rule: "Weight-loss plans are put on hold during pregnancy, for teens, or when dieting could be harmful."
   COMBO.ENDURANCE_T2D:
