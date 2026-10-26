@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { type Answers, initialAnswers } from "./answers";
 import { ageOn, heightCm, mapAnswers, scoffScore, toKg } from "./mapAnswers";
+import { MEALS, SNACKS } from "./options";
 import { PERSONAS } from "./personas";
 
 const ENGINE_PERSONAS = new URL("../../../engine/tests/personas/", import.meta.url);
@@ -148,5 +149,29 @@ describe("field mapping", () => {
   it("refuses to guess a missing answer", () => {
     expect(() => map({ birthDate: null })).toThrow("missing answer: birth date");
     expect(() => map({ goals: [] })).toThrow("missing answer: goals");
+  });
+});
+
+describe("meal pattern", () => {
+  const maya = PERSONAS.maya;
+
+  it("passes the meals and snacks through", () => {
+    const answers: Answers = { ...maya.answers, mealsPerDay: 2, snacksPerDay: 0 };
+    const prefs = mapAnswers(answers, { asOf: maya.as_of }).preferences;
+    expect(prefs?.meals_per_day).toBe(2);
+    expect(prefs?.snacks_per_day).toBe(0);
+  });
+
+  it("sends null when the question was skipped, so the engine uses its default", () => {
+    const prefs = mapAnswers(maya.answers, { asOf: maya.as_of }).preferences;
+    expect(prefs?.meals_per_day).toBeNull();
+    expect(prefs?.snacks_per_day).toBeNull();
+    expect(initialAnswers.mealsPerDay).toBeNull();
+    expect(initialAnswers.snacksPerDay).toBeNull();
+  });
+
+  it("offers exactly the counts the engine allows", () => {
+    expect(MEALS.map((o) => Number(o.id))).toEqual([1, 2, 3, 4]);
+    expect(SNACKS.map((o) => Number(o.id))).toEqual([0, 1, 2, 3]);
   });
 });

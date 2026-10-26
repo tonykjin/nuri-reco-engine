@@ -28,6 +28,8 @@
       "scoff": [false, false, false, false, false]
     },
     "eatingStyle": "vegan",
+    "mealsPerDay": null,
+    "snacksPerDay": null,
     "allergens": [],
     "religious": [],
     "dislikes": [],
