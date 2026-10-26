@@ -73,9 +73,10 @@ def test_marathon_long_day_has_a_low_fiber_pre_session_meal() -> None:
     fiber = pre[0].nutrients.fiber_g
     assert fiber is not None and fiber <= session["pre_session_max_fiber_g"]
     assert "TIMING.PRE_SESSION_CARBS" in pre[0].rule_ids
+    assert sum(1 for i in pre[0].items if i.role == "sweet") <= 1
     assert pre[0].carb_target_g is not None
-    low, high = pre[0].carb_target_g
-    assert low <= pre[0].nutrients.carb_g <= high
+    carbs = pre[0].carb_target_g
+    assert carbs.min <= pre[0].nutrients.carb_g <= carbs.max
 
 
 def test_rest_day_has_no_pre_session_meal() -> None:

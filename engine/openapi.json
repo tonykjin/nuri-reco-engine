@@ -4309,6 +4309,27 @@
         ],
         "title": "GoalsFile"
       },
+      "GramRange": {
+        "properties": {
+          "min": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Min"
+          },
+          "max": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Max"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "min",
+          "max"
+        ],
+        "title": "GramRange"
+      },
       "GuardrailsFile": {
         "properties": {
           "spec_section": {
@@ -4460,23 +4481,12 @@
           "carb_target_g": {
             "anyOf": [
               {
-                "prefixItems": [
-                  {
-                    "type": "number"
-                  },
-                  {
-                    "type": "number"
-                  }
-                ],
-                "type": "array",
-                "maxItems": 2,
-                "minItems": 2
+                "$ref": "#/components/schemas/GramRange"
               },
               {
                 "type": "null"
               }
-            ],
-            "title": "Carb Target G"
+            ]
           }
         },
         "additionalProperties": false,

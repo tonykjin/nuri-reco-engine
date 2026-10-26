@@ -44,9 +44,10 @@ templates:
 
 roles:
   id: COMPOSE.ROLES
-  text: "Each meal is built from roles, each filled by the best-ranked food from its groups (the whole table is ranked for the meal slot, so a role can reach foods outside the usual top 10) that isn't already in the day. A protein food has at least 8 g protein per 100 kcal; a carb food gets at least 50% of its energy from carbs; a fat food gets at least 50% from fat. Lunch and dinner take their fat from a cooking oil; the snack from nuts and seeds. The pre-session meal ranks foods for the pre-race slot, so high-fiber and high-fat foods are already out; it can add honey or jam, like the FOOD.SEED.ENDURANCE pre-race seeds (bagel/toast + honey/jam). 🧪"
+  text: "Each meal is built from roles, each filled by the best-ranked food from its groups (the whole table is ranked for the meal slot, so a role can reach foods outside the usual top 10) that isn't already in the day. A protein food has at least 8 g protein per 100 kcal; a carb food gets at least 50% of its energy from carbs; a fat food gets at least 50% from fat. Lunch and dinner take their fat from a cooking oil; the snack from nuts and seeds. The pre-session meal ranks foods for the pre-race slot, so high-fiber and high-fat foods are already out; it can add one sweet (honey or jam), like the FOOD.SEED.ENDURANCE pre-race seeds (bagel/toast + honey/jam). The sweet role never takes a second food. 🧪"
   protein_min_g_per_100kcal: 8
   carb_min_pct_energy: 50
+  single_food_roles: [sweet]
   fat_min_pct_energy: 50
   # Which FoodContext meal slot ranks the foods for each composer slot.
   rank_slots:

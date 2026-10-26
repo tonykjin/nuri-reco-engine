@@ -24,6 +24,7 @@ from nuri_reco.models import (
     DayType,
     FoodContext,
     FoodRecommendation,
+    GramRange,
     Macro,
     Meal,
     MealItem,
@@ -309,7 +310,9 @@ def _prune(error: _Error) -> bool:
 def _repair(error: _Error, picker: _Picker, kb: KnowledgeBase) -> None:
     search = _x(kb.compose.search)
     steps_left = _descend(error, search, search["max_steps"])
-    exhausted: set[tuple[int, str]] = set()
+    # Single-food roles (e.g. one sweet) never take a second food.
+    single = set(_x(kb.compose.roles)["single_food_roles"])
+    exhausted = {(it.meal, it.role) for it in error.items if it.role in single}
     added = 0
     while added < search["max_added_foods"]:
         capped = _capped(error, search["steps_g"][-1], exhausted)
@@ -422,7 +425,7 @@ def compose(
                 else round(meal.protein_target, 1),
                 carb_target_g=None
                 if meal.carb_range is None
-                else (round(meal.carb_range[0], 1), round(meal.carb_range[1], 1)),
+                else GramRange(min=round(meal.carb_range[0], 1), max=round(meal.carb_range[1], 1)),
                 why=why,
                 rule_ids=[template.id, "COMPOSE.ROLES", *extra],
             )

@@ -20,6 +20,11 @@ class Nutrients(StrictModel):
     fiber_g: float | None = Field(default=None, ge=0)
 
 
+class GramRange(StrictModel):
+    min: float = Field(ge=0)
+    max: float = Field(ge=0)
+
+
 class MealItem(Recommended):
     key: str
     fdc_id: int
@@ -36,7 +41,7 @@ class Meal(Recommended):
     nutrients: Nutrients
     # Soft per-meal guidance (TIMING.GUIDANCE_NOT_CAPS); None when the meal has no protein target.
     protein_target_g: float | None = None
-    carb_target_g: tuple[float, float] | None = None
+    carb_target_g: GramRange | None = None
 
 
 class SampleDay(Recommended):
