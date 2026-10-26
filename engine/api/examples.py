@@ -59,3 +59,16 @@ def day_examples() -> dict[str, dict[str, Any]]:
         day = next(d for d in order if d in schedule)
         out[name] = {**example, "value": {"request": example["value"], "day_type": day}}
     return out
+
+
+def trace_examples() -> dict[str, dict[str, Any]]:
+    """Each persona as a trace request; Maya also with simulated weeks of logs."""
+    out = {name: {**ex, "value": {"request": ex["value"]}} for name, ex in plan_examples().items()}
+    maya = out.get("maya")
+    if maya:
+        out["maya_simulated"] = {
+            **maya,
+            "summary": f"{maya['summary']} with simulated logs",
+            "value": {**maya["value"], "simulate_history": True},
+        }
+    return out

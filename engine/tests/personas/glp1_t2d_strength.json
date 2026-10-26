@@ -72,6 +72,7 @@
   },
   "as_of": "2026-10-16",
   "sequence_confirmed": false,
+  "history": [],
   "expect": {
     "notes": "Spec 11.2 #6 / 4.2 / 7b.2: PRD stacking example, RD-gated. Medical floors: GLP-1 protein >= 25 and micronutrients >= 20; T2D carb >= 20 and fiber >= 20.",
     "status": "rd_review",

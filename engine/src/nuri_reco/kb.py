@@ -200,6 +200,14 @@ class ComponentTargetRule(Rule):
     score_type: str
 
 
+class ExpenditureFile(FileModel):
+    trend_weight: Rule
+    energy_density: Rule
+    energy_balance: Rule
+    takeover: Rule
+    simulation: Rule
+
+
 class ComposeFile(FileModel):
     tolerance: Rule
     templates: list[Rule]
@@ -265,6 +273,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "summary": SummaryFile,
     "constraints": ConstraintRulesFile,
     "compose": ComposeFile,
+    "expenditure": ExpenditureFile,
     "explanations": ExplanationsFile,
     "citations": CitationsFile,
 }
@@ -286,6 +295,7 @@ class KnowledgeBase(BaseModel):
     summary: SummaryFile
     constraints: ConstraintRulesFile
     compose: ComposeFile
+    expenditure: ExpenditureFile
     explanations: ExplanationsFile
     citations: CitationsFile
 

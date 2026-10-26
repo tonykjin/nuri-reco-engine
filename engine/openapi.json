@@ -116,7 +116,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "glp1_t2d_strength": {
@@ -179,7 +180,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "goal_bmi_low": {
@@ -232,7 +234,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "hybrid": {
@@ -284,7 +287,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "marathon_fatloss": {
@@ -357,7 +361,8 @@
                       ]
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "novice_recomp": {
@@ -414,7 +419,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "pregnant": {
@@ -467,7 +473,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "under18": {
@@ -520,7 +527,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "vegan_muscle": {
@@ -573,7 +581,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "wedding_8wk": {
@@ -632,7 +641,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 }
               }
@@ -646,6 +656,714 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PlanResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected engine error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The request failed validation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plan/trace": {
+      "post": {
+        "tags": [
+          "plan"
+        ],
+        "summary": "Trace Plan",
+        "description": "The full plan plus its decision trace: each engine stage in order, every rule it fired,\nand each rule's text, flags and citations, for dietitian review. /v1/plan is unchanged.",
+        "operationId": "trace_plan_v1_plan_trace_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TraceRequest"
+              },
+              "examples": {
+                "maya": {
+                  "summary": "maya",
+                  "description": "30F, 168 cm, 70 kg, moderate, lifts, lose fat",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 30,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 70,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "glp1_t2d_strength": {
+                  "summary": "glp1_t2d_strength",
+                  "description": "52F on a GLP-1 + metformin, T2D, lifts",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 52,
+                        "sex": "female",
+                        "height_cm": 165,
+                        "weight_kg": 98,
+                        "activity": "light",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [
+                            "glp1_agonist",
+                            "metformin"
+                          ],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "glp1",
+                          "priority": 1
+                        },
+                        {
+                          "type": "t2d",
+                          "priority": 2
+                        },
+                        {
+                          "type": "strength_hybrid",
+                          "priority": 3
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "goal_bmi_low": {
+                  "summary": "goal_bmi_low",
+                  "description": "Goal 50 kg at 168 cm (BMI 17.7)",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 24,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 56,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": false,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1,
+                          "target_weight_kg": 50
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "hybrid": {
+                  "summary": "hybrid",
+                  "description": "28M, strength + endurance",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 28,
+                        "sex": "male",
+                        "height_cm": 180,
+                        "weight_kg": 80,
+                        "activity": "active",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "quality",
+                            "easy",
+                            "rest",
+                            "quality",
+                            "long",
+                            "easy"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "strength_hybrid",
+                          "priority": 1
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "marathon_fatloss": {
+                  "summary": "marathon_fatloss",
+                  "description": "Spec §10 example request: lose fat + marathon, pescatarian, peanut allergy",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 31,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 72,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "easy",
+                            "quality",
+                            "rest",
+                            "easy",
+                            "long",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1,
+                          "target_weight_kg": 66
+                        },
+                        {
+                          "type": "endurance_event",
+                          "priority": 2,
+                          "event": "marathon",
+                          "event_date": "2027-04-18"
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [
+                          "peanuts"
+                        ],
+                        "diet": "pescatarian",
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {
+                          "sweetness": 0.3,
+                          "richness": 0.6,
+                          "umami": 0.8
+                        },
+                        "dislikes": [
+                          "cottage cheese"
+                        ],
+                        "cook_time_min": 30,
+                        "budget": "medium",
+                        "cuisines": [
+                          "mediterranean",
+                          "japanese"
+                        ]
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "novice_recomp": {
+                  "summary": "novice_recomp",
+                  "description": "34M, 92 kg (BMI 29), beginner lifter, lose fat + build muscle",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 34,
+                        "sex": "male",
+                        "height_cm": 178,
+                        "weight_kg": 92,
+                        "activity": "light",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ],
+                          "experience": "novice"
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1
+                        },
+                        {
+                          "type": "build_muscle",
+                          "priority": 2
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "pregnant": {
+                  "summary": "pregnant",
+                  "description": "Pregnant, lose fat",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 31,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 70,
+                        "activity": "light",
+                        "training": {
+                          "resistance": false,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": true,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1,
+                          "target_weight_kg": 65
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "under18": {
+                  "summary": "under18",
+                  "description": "16-year-old, lose fat",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 16,
+                        "sex": "female",
+                        "height_cm": 165,
+                        "weight_kg": 60,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": false,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1,
+                          "target_weight_kg": 55
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "vegan_muscle": {
+                  "summary": "vegan_muscle",
+                  "description": "26M vegan, build muscle",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 26,
+                        "sex": "male",
+                        "height_cm": 175,
+                        "weight_kg": 68,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "build_muscle",
+                          "priority": 1
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "diet": "vegan",
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "wedding_8wk": {
+                  "summary": "wedding_8wk",
+                  "description": "29F, 72 kg, wants −9 kg in 8 weeks",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 29,
+                        "sex": "female",
+                        "height_cm": 165,
+                        "weight_kg": 72,
+                        "activity": "light",
+                        "training": {
+                          "resistance": false,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1,
+                          "target_weight_kg": 63
+                        },
+                        {
+                          "type": "deadline_event",
+                          "priority": 2,
+                          "event": "wedding",
+                          "event_date": "2026-12-11"
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    }
+                  }
+                },
+                "maya_simulated": {
+                  "summary": "maya with simulated logs",
+                  "description": "30F, 168 cm, 70 kg, moderate, lifts, lose fat",
+                  "value": {
+                    "request": {
+                      "profile": {
+                        "age": 30,
+                        "sex": "female",
+                        "height_cm": 168,
+                        "weight_kg": 70,
+                        "activity": "moderate",
+                        "training": {
+                          "resistance": true,
+                          "weekly_schedule": [
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest",
+                            "rest"
+                          ]
+                        },
+                        "flags": {
+                          "pregnant": false,
+                          "breastfeeding": false,
+                          "medications": [],
+                          "conditions": [],
+                          "scoff_score": 0,
+                          "ed_history": false,
+                          "reported_symptoms": []
+                        }
+                      },
+                      "goals": [
+                        {
+                          "type": "lose_fat",
+                          "priority": 1
+                        }
+                      ],
+                      "constraints": {
+                        "allergens": [],
+                        "religious": [],
+                        "celiac": false
+                      },
+                      "preferences": {
+                        "taste": {},
+                        "dislikes": [],
+                        "cuisines": []
+                      },
+                      "as_of": "2026-10-16",
+                      "sequence_confirmed": false,
+                      "history": []
+                    },
+                    "simulate_history": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TracedPlan"
                 }
               }
             }
@@ -737,7 +1455,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "glp1_t2d_strength": {
@@ -800,7 +1519,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "goal_bmi_low": {
@@ -853,7 +1573,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "hybrid": {
@@ -905,7 +1626,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "marathon_fatloss": {
@@ -978,7 +1700,8 @@
                       ]
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "novice_recomp": {
@@ -1035,7 +1758,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "pregnant": {
@@ -1088,7 +1812,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "under18": {
@@ -1141,7 +1866,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "vegan_muscle": {
@@ -1194,7 +1920,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "wedding_8wk": {
@@ -1253,7 +1980,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 }
               }
@@ -1400,7 +2128,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1470,7 +2199,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1530,7 +2260,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1589,7 +2320,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1669,7 +2401,8 @@
                         ]
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1733,7 +2466,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1793,7 +2527,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1853,7 +2588,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1913,7 +2649,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -1979,7 +2716,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "context": {
                       "meal_slot": "lunch",
@@ -2092,7 +2830,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2158,7 +2897,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2214,7 +2954,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2269,7 +3010,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "long"
                   }
@@ -2345,7 +3087,8 @@
                         ]
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "long"
                   }
@@ -2405,7 +3148,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2461,7 +3205,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2517,7 +3262,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2573,7 +3319,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2635,7 +3382,8 @@
                         "cuisines": []
                       },
                       "as_of": "2026-10-16",
-                      "sequence_confirmed": false
+                      "sequence_confirmed": false,
+                      "history": []
                     },
                     "day_type": "rest"
                   }
@@ -2743,7 +3491,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "glp1_t2d_strength": {
@@ -2806,7 +3555,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "goal_bmi_low": {
@@ -2859,7 +3609,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "hybrid": {
@@ -2911,7 +3662,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "marathon_fatloss": {
@@ -2984,7 +3736,8 @@
                       ]
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "novice_recomp": {
@@ -3041,7 +3794,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "pregnant": {
@@ -3094,7 +3848,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "under18": {
@@ -3147,7 +3902,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "vegan_muscle": {
@@ -3200,7 +3956,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 },
                 "wedding_8wk": {
@@ -3259,7 +4016,8 @@
                       "cuisines": []
                     },
                     "as_of": "2026-10-16",
-                    "sequence_confirmed": false
+                    "sequence_confirmed": false,
+                    "history": []
                   }
                 }
               }
@@ -3556,6 +4314,46 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Constraints"
+      },
+      "DailyLog": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "intake_kcal": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intake Kcal"
+          },
+          "weight_kg": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Kg"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "date"
+        ],
+        "title": "DailyLog",
+        "description": "One day of logs. Invariant 7: a day without an intake log or a weigh-in stays None."
       },
       "DayRecommendationRequest": {
         "properties": {
@@ -5085,6 +5883,13 @@
             "type": "boolean",
             "title": "Sequence Confirmed",
             "default": false
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/DailyLog"
+            },
+            "type": "array",
+            "title": "History"
           }
         },
         "additionalProperties": false,
@@ -5977,6 +6782,201 @@
           "text"
         ],
         "title": "TopLever"
+      },
+      "Trace": {
+        "properties": {
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/TraceStage"
+            },
+            "type": "array",
+            "title": "Stages"
+          },
+          "rules_fired": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rules Fired"
+          },
+          "rules": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TraceRule"
+            },
+            "type": "object",
+            "title": "Rules"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "stages",
+          "rules_fired",
+          "rules"
+        ],
+        "title": "Trace"
+      },
+      "TraceCitation": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "TraceCitation"
+      },
+      "TraceRequest": {
+        "properties": {
+          "request": {
+            "$ref": "#/components/schemas/PlanRequest"
+          },
+          "simulate_history": {
+            "type": "boolean",
+            "title": "Simulate History",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request"
+        ],
+        "title": "TraceRequest"
+      },
+      "TraceRule": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "file": {
+            "type": "string",
+            "title": "File"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "why": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Why"
+          },
+          "verify": {
+            "type": "boolean",
+            "title": "Verify"
+          },
+          "heuristic": {
+            "type": "boolean",
+            "title": "Heuristic"
+          },
+          "citations": {
+            "items": {
+              "$ref": "#/components/schemas/TraceCitation"
+            },
+            "type": "array",
+            "title": "Citations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "file",
+          "verify",
+          "heuristic"
+        ],
+        "title": "TraceRule",
+        "description": "A knowledge rule as an RD reviews it: the matrix text, flags and sources."
+      },
+      "TraceStage": {
+        "properties": {
+          "stage": {
+            "type": "string",
+            "title": "Stage"
+          },
+          "rule_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Rule Ids"
+          },
+          "inputs": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Inputs"
+          },
+          "outputs": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Outputs"
+          },
+          "children": {
+            "items": {
+              "$ref": "#/components/schemas/TraceStage"
+            },
+            "type": "array",
+            "title": "Children"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "stage"
+        ],
+        "title": "TraceStage"
+      },
+      "TracedPlan": {
+        "properties": {
+          "plan": {
+            "$ref": "#/components/schemas/PlanResponse"
+          },
+          "trace": {
+            "$ref": "#/components/schemas/Trace"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan",
+          "trace"
+        ],
+        "title": "TracedPlan"
       },
       "Training": {
         "properties": {

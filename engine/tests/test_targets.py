@@ -77,11 +77,13 @@ def test_mifflin_st_jeor_from_yaml() -> None:
     assert exp.rmr(profile(sex="male")) == 1439 + 166
 
 
-def test_unknown_activity_and_adaptive_stub() -> None:
+def test_unknown_activity_and_adaptive_without_logs() -> None:
     with pytest.raises(ValueError, match="unknown activity 'couch'"):
         ColdStartExpenditure(load_kb()).tdee(profile(activity="couch"))
-    with pytest.raises(NotImplementedError):
-        AdaptiveExpenditure().tdee(profile())
+    # Task 22 replaced the stub: with no logs, adaptive falls back to the cold-start estimate.
+    adaptive = AdaptiveExpenditure(load_kb(), [])
+    assert adaptive.method == "mifflin_st_jeor"
+    assert adaptive.tdee(profile()) == ColdStartExpenditure(load_kb()).tdee(profile())
 
 
 # --- Maya (PRD §8.1, re-baselined: Matrix F rate cap wins) ---
@@ -269,6 +271,7 @@ def test_rule_ids_exist(name: str) -> None:
 
 class _Fixed:
     method = "fixed"
+    rule_ids = ["ENERGY.MIFFLIN_ST_JEOR"]
 
     def __init__(self, tdee: float) -> None:
         self._tdee = tdee

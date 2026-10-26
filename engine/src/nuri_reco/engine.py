@@ -1,19 +1,31 @@
 """The engine: PlanRequest -> PlanResponse (spec §10).
 
-safety -> goals -> feasibility -> targets -> score_profile, then goal_summary (spec §7b.6).
+safety -> goals -> feasibility -> expenditure -> targets -> score_profile, then goal_summary
+(spec §7b.6). trace=True records each stage and the rules it fired (Task 22).
 Blocked requests stop after safety and carry no numbers. Pure apart from loading the packaged
 knowledge base when none is passed.
 """
 
 import datetime as dt
 from collections import Counter
-from typing import Any
+from typing import Any, Literal, overload
 
-from nuri_reco import explain, feasibility, foods, goals, patterns, safety, score_profile, targets
+from nuri_reco import (
+    expenditure,
+    explain,
+    feasibility,
+    foods,
+    goals,
+    patterns,
+    safety,
+    score_profile,
+    targets,
+)
+from nuri_reco.expenditure import AdaptiveExpenditure, ColdStartExpenditure, Expenditure
 from nuri_reco.feasibility import FeasibilityResult
 from nuri_reco.goals import PhasePlan, Resolution
 from nuri_reco.kb import KnowledgeBase, Rule, load_kb
-from nuri_reco.models import FoodContext, PlanRequest
+from nuri_reco.models import FoodContext, PlanRequest, TracedPlan
 from nuri_reco.models.response import (
     Feasibility,
     FoodRecommendation,
@@ -29,6 +41,7 @@ from nuri_reco.models.response import (
     SafetyFinding,
 )
 from nuri_reco.safety import SafetyResult
+from nuri_reco.trace import Tracer, rule_ids_of
 
 
 def _x(rule: Rule) -> dict[str, Any]:
@@ -412,21 +425,129 @@ all_rule_ids = explain.rule_ids_in
 # --- The pipeline ---
 
 
+@overload
 def plan(
-    request: PlanRequest, kb: KnowledgeBase | None = None, *, dry_run: bool = False
-) -> PlanResponse:
-    """The full plan. dry_run skips patterns and foods (the onboarding pace slider, spec §10)."""
+    request: PlanRequest,
+    kb: KnowledgeBase | None = None,
+    *,
+    dry_run: bool = False,
+    trace: Literal[False] = False,
+) -> PlanResponse: ...
+
+
+@overload
+def plan(
+    request: PlanRequest,
+    kb: KnowledgeBase | None = None,
+    *,
+    dry_run: bool = False,
+    trace: Literal[True],
+) -> TracedPlan: ...
+
+
+def plan(
+    request: PlanRequest,
+    kb: KnowledgeBase | None = None,
+    *,
+    dry_run: bool = False,
+    trace: bool = False,
+) -> PlanResponse | TracedPlan:
+    """The full plan. dry_run skips patterns and foods (the onboarding pace slider, spec §10).
+    trace=True also returns each stage and every rule it fired, in order (Task 22)."""
     kb = kb or load_kb()
+    tracer = Tracer(kb) if trace else None
+    resp = _plan(request, kb, dry_run, tracer)
+    if tracer is None:
+        return resp
+    tracer.stage(
+        "summary",
+        rule_ids=rule_ids_of(resp.goal_summary),
+        inputs={"status": resp.status},
+        outputs={"goal_summary": resp.goal_summary, "citations": resp.citations},
+    )
+    return TracedPlan(plan=resp, trace=tracer.build())
+
+
+def _expenditure_stage(exp: Expenditure, request: PlanRequest, kb: KnowledgeBase) -> dict[str, Any]:
+    if isinstance(exp, AdaptiveExpenditure):
+        return {"estimate": exp.estimate(request.profile)}
+    cold = ColdStartExpenditure(kb)
+    return {
+        "method": exp.method,
+        "rmr_kcal": cold.rmr(request.profile),
+        "activity_factor": cold.activity_factor(request.profile),
+        "tdee_kcal": exp.tdee(request.profile),
+    }
+
+
+def _plan(
+    request: PlanRequest, kb: KnowledgeBase, dry_run: bool, tracer: Tracer | None
+) -> PlanResponse:
     result = safety.check(request, kb)
+    if tracer:
+        tracer.stage(
+            "safety",
+            rule_ids=rule_ids_of(result),
+            inputs={
+                "profile": request.profile,
+                "goals": request.goals,
+                "constraints": request.constraints,
+            },
+            outputs={"blocked": result.blocked, "rd_gated": result.rd_gated, "result": result},
+        )
     if result.blocked:
         return _blocked(request, result, kb)
 
     resolution = goals.resolve(request, result, kb)
+    if tracer:
+        tracer.stage(
+            "goals",
+            rule_ids=rule_ids_of(resolution),
+            inputs={"goals": request.goals, "sequence_confirmed": request.sequence_confirmed},
+            outputs={"resolution": resolution},
+        )
     if resolution.status == "needs_ordering":
         return _needs_ordering(request, result, resolution, kb)
 
     phases, proj = _project(resolution.phases, request, kb)
-    phase_targets = [targets.compute(p, request.profile, kb, safety=result) for p in phases]
+    if tracer:
+        tracer.stage(
+            "feasibility",
+            rule_ids=rule_ids_of(list(proj.by_phase.values())),
+            inputs={"start_weight_kg": request.profile.weight_kg},
+            outputs={
+                "by_phase": proj.by_phase,
+                "deadline_phase": next(
+                    (n for n, r in proj.by_phase.items() if r is proj.deadline), None
+                ),
+                "reachable_date": proj.reachable,
+            },
+        )
+    exp = expenditure.for_request(request, kb)
+    if tracer:
+        tracer.stage(
+            "expenditure",
+            rule_ids=exp.rule_ids,
+            inputs={"history_days": len(request.history), "as_of": request.as_of},
+            outputs=_expenditure_stage(exp, request, kb),
+        )
+    phase_targets = [
+        targets.compute(p, request.profile, kb, safety=result, expenditure=exp) for p in phases
+    ]
+    if tracer:
+        tracer.stage(
+            "targets",
+            rule_ids=[],
+            children=[
+                tracer.node(
+                    "targets",
+                    rule_ids=t.rule_ids,
+                    inputs={"phase": p, "tdee_kcal": t.tdee_kcal},
+                    outputs={"targets": t},
+                )
+                for p, t in zip(phases, phase_targets, strict=True)
+            ],
+        )
     profile = score_profile.build(
         phases,
         phase_targets,
@@ -436,6 +557,16 @@ def plan(
         diet=request.constraints.diet,
         safety=result,
     )
+    if tracer:
+        tracer.stage(
+            "score_profile",
+            rule_ids=rule_ids_of(profile),
+            inputs={
+                "goal_types": [g.type for g in request.goals],
+                "diet": request.constraints.diet,
+            },
+            outputs={"loam_score_profile": profile},
+        )
     api_phases = [
         Phase(
             **p.model_dump(include=set(PhaseTimeline.model_fields) - {"rule_ids"}),
@@ -470,6 +601,13 @@ def plan(
     if dry_run:
         return resp
     recs = patterns.rank(resp, request.preferences, request.constraints, result, kb)
+    if tracer:
+        tracer.stage(
+            "patterns",
+            rule_ids=rule_ids_of(recs),
+            inputs={"preferences": request.preferences, "diet": request.constraints.diet},
+            outputs={"patterns": recs},
+        )
     resp = _response(status, safety_out, api_phases, feas, summary, profile, kb, recs)
     # Default context for the plan: the user's most common day type, any meal.
     day = Counter(request.profile.training.weekly_schedule).most_common(1)[0][0]
@@ -481,4 +619,11 @@ def plan(
         kb,
         foods.load_foods(),
     )
+    if tracer:
+        tracer.stage(
+            "foods",
+            rule_ids=rule_ids_of(food_recs),
+            inputs={"context": FoodContext(day_type=day), "constraints": request.constraints},
+            outputs={"foods": food_recs},
+        )
     return _response(status, safety_out, api_phases, feas, summary, profile, kb, recs, food_recs)

@@ -56,6 +56,7 @@
   },
   "as_of": "2026-10-16",
   "sequence_confirmed": false,
+  "history": [],
   "expect": {
     "notes": "Spec 11.2 #8 / 4.4 / Matrix F: goal 50 kg at 168 cm is BMI 17.7 (< 18.5), an eating-disorder risk trigger, so blocked with supportive copy + referral.",
     "status": "blocked",

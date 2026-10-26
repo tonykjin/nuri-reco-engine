@@ -161,6 +161,34 @@ def test_recommend_day() -> None:
     assert data["citations"]
 
 
+def test_trace_plan() -> None:
+    body, _ = persona("maya")
+    resp = client.post("/v1/plan/trace", json={"request": body})
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    stages = [s["stage"] for s in data["trace"]["stages"]]
+    assert stages[0] == "safety" and stages[-1] == "summary"
+    assert data["trace"]["rules_fired"]
+    plain = client.post("/v1/plan", json=body).json()
+    assert data["plan"] == plain
+    assert "trace" not in plain
+
+
+def test_trace_plan_with_simulated_history() -> None:
+    body, _ = persona("maya")
+    resp = client.post("/v1/plan/trace", json={"request": body, "simulate_history": True})
+    assert resp.status_code == 200, resp.text
+    stages = {s["stage"]: s for s in resp.json()["trace"]["stages"]}
+    assert stages["expenditure"]["outputs"]["estimate"]["method"] == "adaptive"
+
+
+def test_trace_plan_rejects_unknown_goal_type() -> None:
+    body, _ = persona("maya")
+    bad = {**body, "goals": [{"type": "fly", "priority": 1}]}
+    resp = client.post("/v1/plan/trace", json={"request": bad})
+    assert_error(resp, 422, "unknown_goal_type")
+
+
 def test_recommend_day_defaults_to_the_most_common_day_type() -> None:
     body, _ = persona("maya")
     resp = client.post("/v1/recommendations/day", json={"request": body})

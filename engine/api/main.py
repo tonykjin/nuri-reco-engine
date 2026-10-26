@@ -13,7 +13,7 @@ from pydantic import Field
 
 from api import errors, examples
 from api.errors import ApiError
-from nuri_reco import compose, explain, foods, safety
+from nuri_reco import compose, explain, foods, safety, simulate
 from nuri_reco.engine import plan
 from nuri_reco.kb import GoalsFile, GuardrailsFile, PatternsFile, ScoreWeightsFile, load_kb
 from nuri_reco.models import (
@@ -25,6 +25,7 @@ from nuri_reco.models import (
     PlanResponse,
     SampleDay,
     StrictModel,
+    TracedPlan,
 )
 from nuri_reco.models.response import PlanStatus
 from nuri_reco.safety import SafetyResult
@@ -81,6 +82,13 @@ class DayRecommendationResponse(StrictModel):
     citations: list[str] = Field(default_factory=list)
 
 
+class TraceRequest(StrictModel):
+    request: PlanRequest
+    # Demo only: trace after simulated weeks of logs (EXPENDITURE.SIMULATION), so the
+    # expenditure stage shows the adaptive estimate. Replaces any history in the request.
+    simulate_history: bool = False
+
+
 class SafetyCheckResponse(SafetyResult):
     status: Literal["ok", "rd_review", "blocked"]
 
@@ -119,6 +127,18 @@ def create_plan(
     patterns and foods."""
     _check_goal_types(request)
     return plan(request, dry_run=dry_run)
+
+
+@app.post("/v1/plan/trace", tags=["plan"], responses=errors.INVALID)
+def trace_plan(
+    body: Annotated[TraceRequest, Body(openapi_examples=examples.trace_examples())],
+) -> TracedPlan:
+    """The full plan plus its decision trace: each engine stage in order, every rule it fired,
+    and each rule's text, flags and citations, for dietitian review. /v1/plan is unchanged."""
+    _check_goal_types(body.request)
+    if body.simulate_history:
+        return simulate.traced_demo(body.request, load_kb())
+    return plan(body.request, trace=True)
 
 
 @app.post("/v1/score/profile", tags=["score"], responses=errors.INVALID)

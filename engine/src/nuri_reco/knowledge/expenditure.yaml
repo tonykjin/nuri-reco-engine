@@ -1,0 +1,56 @@
+# Adaptive expenditure (Task 22). Spec §2 Monitor & Evaluate ("weekly re-evaluation: trend
+# weight, adaptive expenditure") and §3 GOAL.METHOD ("until adaptive expenditure takes over
+# (week 3–4)"). The spec sets no smoothing, window or blend, so those are Loam heuristics (🧪),
+# agreed in Task 22, to be tuned with RDs.
+spec_section: "2"
+
+trend_weight:
+  id: EXPENDITURE.TREND_WEIGHT
+  text: "Trend weight is an exponential moving average of daily weigh-ins: each weigh-in moves the trend 10% of the way toward it (smoothing 0.1), and a day without a weigh-in leaves the trend where it was. It smooths out day-to-day water and gut-content swings and is shown alongside expenditure. 🧪"
+  smoothing: 0.1
+  citation_ids: [HACKERS_DIET, MACROFACTOR]
+  verify: false
+  heuristic: true
+
+energy_density:
+  id: EXPENDITURE.ENERGY_DENSITY
+  text: "Each kg of body-weight change is counted as 7,700 kcal of stored energy when turning a weight trend into expenditure. ⚠️ 🧪"
+  kcal_per_kg: 7700
+  citation_ids: [HALL2008]
+  verify: true
+  heuristic: true
+
+energy_balance:
+  id: EXPENDITURE.ENERGY_BALANCE
+  text: "Measured expenditure = average logged intake − weight slope (kg/day) × 7,700 kcal/kg, over the last 28 days of logs. The slope is a least-squares line through the daily weigh-ins, which has no start-up lag (agreed in Task 22). It needs at least 14 days with logged intake and 14 days with a weigh-in in that window; days without a log are left out, never counted as 0. 🧪"
+  window_days: 28
+  min_intake_days: 14
+  min_weigh_in_days: 14
+  energy_density_rule_ids: [EXPENDITURE.ENERGY_DENSITY]
+  citation_ids: [MACROFACTOR]
+  verify: false
+  heuristic: true
+
+takeover:
+  id: EXPENDITURE.TAKEOVER
+  text: "Weeks 1–2 of logs use the Mifflin-St Jeor estimate; week 3 blends it 50/50 with the measured expenditure; from week 4 the measured expenditure is used alone (GOAL.METHOD: adaptive expenditure takes over in week 3–4). A week is 7 days of logs, counted from the first log. 🧪"
+  blend_from_week: 3
+  blend_measured_pct: 50
+  measured_from_week: 4
+  days_per_week: 7
+  method_rule_ids: [GOAL.METHOD]
+  citation_ids: [MACROFACTOR, NURI_PRD]
+  verify: false
+  heuristic: true
+
+simulation:
+  id: EXPENDITURE.SIMULATION
+  text: "The /trace demo simulates 8 weeks of logs ending the day before the plan date: true expenditure 8% above the Mifflin-St Jeor estimate, intake at the plan's first-phase average target, daily weigh-in noise 0.3 kg and intake logging noise 100 kcal, random seed 1. Synthetic data for dietitian review only. 🧪"
+  weeks: 8
+  true_tdee_offset_pct: 8
+  weight_noise_kg: 0.3
+  intake_noise_kcal: 100
+  seed: 1
+  citation_ids: []
+  verify: false
+  heuristic: true

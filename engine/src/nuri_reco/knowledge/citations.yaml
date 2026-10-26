@@ -386,3 +386,12 @@ citations:
     label: "NIH Body Weight Planner"
     url: "https://www.niddk.nih.gov/health-information/weight-management/body-weight-planner"
     in_sources: false
+  # Adaptive expenditure (Task 22)
+  - id: HACKERS_DIET
+    label: "Walker, The Hacker's Diet (trend weight moving average)"
+    url: "https://www.fourmilab.ch/hackdiet/"
+    in_sources: false
+  - id: HALL2008
+    label: "Hall 2008, What is the required energy deficit per unit weight loss?"
+    url: "https://doi.org/10.1038/sj.ijo.0803720"
+    in_sources: false
