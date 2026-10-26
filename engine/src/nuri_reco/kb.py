@@ -200,6 +200,14 @@ class ComponentTargetRule(Rule):
     score_type: str
 
 
+class ComposeFile(FileModel):
+    tolerance: Rule
+    templates: list[Rule]
+    roles: Rule
+    portions: Rule
+    search: Rule
+
+
 class ExplanationsFile(FileModel):
     """explanations.yaml: rule id -> variant -> sentence template (no rules of its own)."""
 
@@ -256,6 +264,7 @@ FILE_MODELS: dict[str, type[FileModel]] = {
     "score_weights": ScoreWeightsFile,
     "summary": SummaryFile,
     "constraints": ConstraintRulesFile,
+    "compose": ComposeFile,
     "explanations": ExplanationsFile,
     "citations": CitationsFile,
 }
@@ -276,6 +285,7 @@ class KnowledgeBase(BaseModel):
     score_weights: ScoreWeightsFile
     summary: SummaryFile
     constraints: ConstraintRulesFile
+    compose: ComposeFile
     explanations: ExplanationsFile
     citations: CitationsFile
 

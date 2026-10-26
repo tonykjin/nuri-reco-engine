@@ -103,7 +103,7 @@ def test_health() -> None:
     assert resp.json() == {"status": "ok"}
 
 
-@pytest.mark.parametrize("path", ["/v1/score/evaluate", "/v1/recommendations/day"])
+@pytest.mark.parametrize("path", ["/v1/score/evaluate"])
 def test_not_implemented_yet(path: str) -> None:
     assert_error(client.post(path, json={}), 501, "not_implemented")
 
@@ -139,6 +139,46 @@ def test_recommend_foods() -> None:
         assert food["provenance"] == "recommended" and food["rule_ids"] and food["why"]
         assert "peanut" not in food["name"].lower()
     assert data["citations"]
+
+
+def test_recommend_day() -> None:
+    body, _ = persona("marathon_fatloss")
+    resp = client.post("/v1/recommendations/day", json={"request": body, "day_type": "long"})
+    assert resp.status_code == 200, resp.text
+    data = resp.json()
+    assert data["status"] == "ok"
+    sample = data["day"]
+    assert sample["day_type"] == "long" and sample["phase"] == "base"
+    assert sample["within_tolerance"] is True
+    for macro in ("kcal", "protein_g"):
+        assert abs(sample["deviation_pct"][macro]) <= sample["tolerance_pct"]
+    assert "pre_session" in [m["slot"] for m in sample["meals"]]
+    for meal in sample["meals"]:
+        assert meal["provenance"] == "recommended" and meal["rule_ids"] and meal["why"]
+        for item in meal["items"]:
+            assert item["provenance"] == "recommended" and item["rule_ids"] and item["why"]
+            assert "peanut" not in item["name"].lower()
+    assert data["citations"]
+
+
+def test_recommend_day_defaults_to_the_most_common_day_type() -> None:
+    body, _ = persona("maya")
+    resp = client.post("/v1/recommendations/day", json={"request": body})
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["day"]["day_type"] == "rest"
+
+
+def test_recommend_day_unknown_day_type_for_the_phase() -> None:
+    body, _ = persona("maya")
+    resp = client.post("/v1/recommendations/day", json={"request": body, "day_type": "long"})
+    assert_error(resp, 422, "invalid_request")
+
+
+def test_recommend_day_when_blocked() -> None:
+    body, _ = persona("under18")
+    resp = client.post("/v1/recommendations/day", json={"request": body})
+    assert resp.status_code == 200
+    assert resp.json() == {"status": "blocked", "day": None, "citations": []}
 
 
 def test_recommend_foods_when_blocked() -> None:

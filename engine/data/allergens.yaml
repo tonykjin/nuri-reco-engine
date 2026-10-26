@@ -1,8 +1,9 @@
 # Allergen and diet tagging rules for build_foods.py (spec §9 constraint handling).
 # Matching: lowercase description (+ ingredients for branded foods), `except` phrases removed first,
 # then each keyword matched as a whole word with an optional plural (s/es). Foods can add allergens
-# their name can't reveal with `contains` in food_list.yaml. Highly refined peanut and soybean oils
-# are exempt from FDA allergen labeling, so they're excepted.
+# their name can't reveal with `contains` in food_list.yaml. Highly refined soybean oil is
+# exempt from FDA allergen labeling, so it's excepted. Peanut oil is tagged anyway (agreed in
+# Task 21): a peanut allergy shouldn't see "Oil, peanut" in a plan.
 
 allergens:
   milk:
@@ -86,7 +87,7 @@ allergens:
     except: []
   peanuts:
     keywords: [peanut]
-    except: ["oil, peanut", "peanut oil"]
+    except: []
   wheat:
     keywords:
       [

@@ -108,6 +108,7 @@ def test_apple_fiber() -> None:
         ("eggs_grade_a_large_egg_whole", "egg"),
         ("nuts_almonds_whole_raw", "tree_nuts"),
         ("trail_mix", "peanuts"),
+        ("oil_peanut", "peanuts"),  # tagged despite the FDA refined-oil exemption (Task 21)
     ],
 )
 def test_allergen_tags(key: str, allergen: str) -> None:
@@ -121,7 +122,6 @@ def test_allergen_tags(key: str, allergen: str) -> None:
         ("almond_milk_unsweetened_plain_refrigerated", "milk"),
         ("eggplant_raw", "egg"),
         ("squash_winter_butternut_raw", "milk"),
-        ("oil_peanut", "peanuts"),  # highly refined oil: exempt
         ("oil_soybean", "soy"),
         ("buckwheat_whole_grain", "wheat"),
     ],
