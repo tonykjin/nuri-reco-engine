@@ -7,10 +7,12 @@ Missing nutrients stay missing (invariant 7). Pure; every number comes from the 
 """
 
 from collections import Counter
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
 
 from nuri_reco import explain
+from nuri_reco.foods import Food
 from nuri_reco.kb import KnowledgeBase, Rule
 from nuri_reco.models import (
     ComponentScore,
@@ -126,7 +128,7 @@ def evaluate(
     plan: PlanResponse,
     items: list[ScoreItem],
     kb: KnowledgeBase,
-    food_table: list[dict[str, Any]],
+    food_table: Sequence[Food],
     *,
     level: ScoreLevel,
     day_type: DayType,
