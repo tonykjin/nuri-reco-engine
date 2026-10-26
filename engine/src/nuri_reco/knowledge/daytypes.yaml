@@ -131,6 +131,20 @@ timing:
     citation_ids: [HELMS2014, ISSN2017]
     verify: false
     heuristic: false
+  - id: TIMING.MEAL_PATTERN
+    element: "Meal pattern"
+    text: "The plan follows the meals (1, 2, 3 or 4 a day) and snacks (0, 1, 2 or 3) the user usually eats; without an answer, 3 meals + 1 snack. Meal frequency has little effect on its own (TIMING.MEAL_FREQUENCY), so the count is the user's choice. Protein is spread over meals + snacks: per meal = max(daily protein ÷ occasions, the TIMING.PROTEIN_PER_MEAL g/kg dose); daily protein never changes. A protein-snack nudge when there are fewer occasions than TIMING.PROTEIN_PER_MEAL's minimum meals or more protein per meal than its per-meal maximum; with a GLP-1 goal and 2 meals or fewer, a nudge toward protein-forward small portions (GOAL.GLP1.FOODS). Sample-day meals keep the TIMING.PROTEIN_PER_MEAL per-dose target up to its minimum meals; with more protein occasions than that, each meal's target is the lower of that dose and daily protein ÷ occasions, so the day's protein isn't overshot (agreed in Task 27). 🧪"
+    meals_allowed: [1, 2, 3, 4]
+    snacks_allowed: [0, 1, 2, 3]
+    default: { meals: 3, snacks: 1 }
+    glp1_goal_type: glp1
+    glp1_max_meals: 2
+    protein_rule_ids: [TIMING.PROTEIN_PER_MEAL]
+    frequency_rule_ids: [TIMING.MEAL_FREQUENCY]
+    glp1_rule_ids: [GOAL.GLP1.FOODS]
+    citation_ids: [SCHOENFELD2015, SCHOENFELD_ARAGON2018]
+    verify: false
+    heuristic: true
 
 per_meal_note:
   id: TIMING.GUIDANCE_NOT_CAPS

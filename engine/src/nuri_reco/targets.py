@@ -7,15 +7,17 @@ comes from the knowledge base.
 """
 
 import datetime as dt
+from dataclasses import dataclass
 from typing import Any, Literal
 
 from pydantic import Field
 
+from nuri_reco import explain
 from nuri_reco.expenditure import ColdStartExpenditure, Expenditure
 from nuri_reco.goals import PhasePlan
 from nuri_reco.kb import KnowledgeBase, Rule
-from nuri_reco.models import DayTargets, DayType, Profile, StrictModel
-from nuri_reco.models.response import MicronutrientTarget
+from nuri_reco.models import DayTargets, DayType, Preferences, Profile, StrictModel
+from nuri_reco.models.response import MealPattern, MicronutrientTarget
 from nuri_reco.safety import SafetyResult
 
 KCAL_PER_G = {"protein": 4, "carb": 4, "fat": 9}
@@ -46,7 +48,11 @@ class Targets(StrictModel):
     weight_basis_kg: float
     protein_capped: bool = False
     per_meal_protein_g: float
+    # Protein occasions: meals + snacks (TIMING.MEAL_PATTERN).
     meals_per_day: int
+    meals: int
+    snacks: int
+    meal_source: Literal["user", "default"]
     micronutrients: list[MicronutrientTarget]
     rule_ids: list[str] = Field(min_length=1)
 
@@ -279,6 +285,69 @@ def _micronutrients(inp: _Inputs) -> list[MicronutrientTarget]:
     return out
 
 
+@dataclass(frozen=True)
+class MealChoice:
+    meals: int
+    snacks: int
+    source: Literal["user", "default"]
+
+
+def meal_pattern(preferences: Preferences | None, kb: KnowledgeBase) -> MealChoice:
+    """The user's meals and snacks (TIMING.MEAL_PATTERN), or its default when they didn't say.
+    Raises ValueError for a count the rule doesn't allow."""
+    rule = _x(kb.rules["TIMING.MEAL_PATTERN"])
+    meals = preferences.meals_per_day if preferences else None
+    snacks = preferences.snacks_per_day if preferences else None
+    for name, value, allowed in (
+        ("meals_per_day", meals, rule["meals_allowed"]),
+        ("snacks_per_day", snacks, rule["snacks_allowed"]),
+    ):
+        if value is not None and value not in allowed:
+            raise ValueError(f"{name} must be one of {allowed}, got {value}")
+    default = rule["default"]
+    return MealChoice(
+        meals=default["meals"] if meals is None else meals,
+        snacks=default["snacks"] if snacks is None else snacks,
+        source="default" if meals is None and snacks is None else "user",
+    )
+
+
+def _count(kb: KnowledgeBase, variant: str, n: int) -> str:
+    return explain.text(kb, "TIMING.MEAL_PATTERN", f"{variant}_{'one' if n == 1 else 'many'}", n=n)
+
+
+def meal_pattern_output(t: Targets, goal_types: list[str], kb: KnowledgeBase) -> MealPattern:
+    """The meal pattern a phase's targets were built around, with its why and any nudges."""
+    rule_id = "TIMING.MEAL_PATTERN"
+    rule = _x(kb.rules[rule_id])
+    per_meal = _x(kb.rules["TIMING.PROTEIN_PER_MEAL"])
+    pattern = _count(kb, "meals", t.meals)
+    if t.snacks:
+        pattern = explain.text(
+            kb, rule_id, "with_snacks", meals=pattern, snacks=_count(kb, "snacks", t.snacks)
+        )
+    protein = round(t.per_meal_protein_g)
+    parts = [explain.text(kb, rule_id, "why", pattern=pattern, protein_g=protein)]
+    rule_ids = [rule_id, *rule["protein_rule_ids"]]
+    if t.meal_source == "default":
+        parts.append(explain.text(kb, rule_id, "default"))
+    few = t.meals_per_day < per_meal["min_meals"]
+    # Compare what the user sees ("about 40 g"), not float noise just above the bound.
+    if few or protein > per_meal["protein_g_per_meal"]["max"]:
+        parts.append(explain.text(kb, rule_id, "snack_nudge"))
+    if rule["glp1_goal_type"] in goal_types and t.meals <= rule["glp1_max_meals"]:
+        parts.append(explain.text(kb, rule_id, "glp1_nudge"))
+        rule_ids.extend(rule["glp1_rule_ids"])
+    return MealPattern(
+        meals=t.meals,
+        snacks=t.snacks,
+        source=t.meal_source,
+        per_meal_protein_g=round(t.per_meal_protein_g, 1),
+        why=" ".join(parts),
+        rule_ids=rule_ids,
+    )
+
+
 def compute(
     phase: PhasePlan,
     profile: Profile,
@@ -286,6 +355,7 @@ def compute(
     *,
     safety: SafetyResult | None = None,
     expenditure: Expenditure | None = None,
+    preferences: Preferences | None = None,
 ) -> Targets:
     """Daily targets for each day type in the profile's weekly schedule during this phase."""
     inp = _Inputs(phase, profile, kb)
@@ -315,7 +385,8 @@ def compute(
 
     fiber = _x(kb.targets.fiber)
     meal = _x(kb.rules["TIMING.PROTEIN_PER_MEAL"])
-    meals = int(meal["min_meals"])
+    choice = meal_pattern(preferences, kb)
+    meals = choice.meals + choice.snacks
     inp.use(kb.targets.fiber.id, "TIMING.PROTEIN_PER_MEAL")
     return Targets(
         phase=phase.name,
@@ -339,6 +410,9 @@ def compute(
             protein_g / meals, meal["protein_g_per_kg_per_meal"] * profile.weight_kg
         ),
         meals_per_day=meals,
+        meals=choice.meals,
+        snacks=choice.snacks,
+        meal_source=choice.source,
         micronutrients=_micronutrients(inp),
         rule_ids=list(dict.fromkeys(inp.rule_ids)),
     )

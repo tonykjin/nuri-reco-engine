@@ -58,6 +58,18 @@ def day_examples() -> dict[str, dict[str, Any]]:
         schedule = example["value"]["profile"]["training"]["weekly_schedule"]
         day = next(d for d in order if d in schedule)
         out[name] = {**example, "value": {"request": example["value"], "day_type": day}}
+    maya = persona_requests()["maya"]
+    out["maya_two_meals"] = {
+        "summary": "maya_two_meals",
+        "description": "Maya eating 2 meals and 1 snack a day (TIMING.MEAL_PATTERN).",
+        "value": {
+            "request": {
+                **maya,
+                "preferences": {**maya["preferences"], "meals_per_day": 2, "snacks_per_day": 1},
+            },
+            "day_type": "rest",
+        },
+    }
     return out
 
 

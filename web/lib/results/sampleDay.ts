@@ -29,6 +29,7 @@ export async function fetchSampleDay(
 export const SLOT_LABELS: Record<string, string> = {
   breakfast: "Breakfast",
   lunch: "Lunch",
+  extra_meal: "Extra meal",
   pre_session: "Before your session",
   dinner: "Dinner",
   snack: "Snack",

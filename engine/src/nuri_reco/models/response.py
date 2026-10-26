@@ -64,8 +64,20 @@ class PhaseTimeline(Recommended):
         return self
 
 
+class MealPattern(Recommended):
+    """The meals and snacks the plan is built around (TIMING.MEAL_PATTERN)."""
+
+    meals: int
+    snacks: int
+    # "user": from preferences; "default": the user didn't say.
+    source: Literal["user", "default"]
+    # Daily protein spread over meals + snacks; the daily target itself never changes.
+    per_meal_protein_g: float
+
+
 class Phase(PhaseTimeline):
     targets_by_day_type: dict[DayType, DayTargets]
+    meal_pattern: MealPattern
 
 
 class Feasibility(StrictModel):

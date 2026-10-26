@@ -1,7 +1,9 @@
 """Sample-day composer (spec §5 timing, §7.4 ranked foods; knowledge in compose.yaml).
 
-1. Template: the day type's meals (COMPOSE.MEALS.*), each with an energy share. Protein meals aim
-   for TIMING.PROTEIN_PER_MEAL; the pre-session meal aims for TIMING.PRE_SESSION_CARBS.
+1. Template: the day's slots follow the user's meal pattern (COMPOSE.MEAL_SLOTS,
+   TIMING.MEAL_PATTERN); each slot's energy share is its day-type weight (COMPOSE.MEALS.*) over
+   the slots present. Protein meals aim for TIMING.PROTEIN_PER_MEAL; the pre-session meal aims
+   for TIMING.PRE_SESSION_CARBS.
 2. Fill: each meal role (protein, carb, vegetable, fruit, fat) takes the best-ranked food from
    its groups (foods.rank, so hard filters, pre-race exclusions and the taste re-rank all apply)
    that isn't already in the day. Foods missing kcal or a macro are skipped, never counted as 0.
@@ -34,6 +36,7 @@ from nuri_reco.models import (
     Profile,
     SampleDay,
 )
+from nuri_reco.targets import MealChoice, meal_pattern
 
 MACROS: tuple[Macro, ...] = get_args(Macro)
 Totals = dict[str, float]
@@ -79,25 +82,46 @@ def _timing(kb: KnowledgeBase, rule_id: str) -> dict[str, Any]:
     return _x(kb.rules[rule_id])
 
 
-def _meals(template: Rule, profile: Profile, kb: KnowledgeBase) -> list[_Meal]:
+def _slots(template: Rule, choice: MealChoice, kb: KnowledgeBase) -> list[str]:
+    """The day's slots in order: the user's meals (pre-session added on session days), then
+    one slot per snack (COMPOSE.MEAL_SLOTS)."""
+    ms = _x(kb.compose.meal_slots)
+    slots = list(ms["by_meal_count"][str(choice.meals)])
+    if "pre_session" in _x(template)["weights"]:
+        slots.insert(slots.index(ms["pre_session_before"]), "pre_session")
+    return slots + ["snack"] * choice.snacks
+
+
+def _meals(
+    template: Rule, slots: list[str], profile: Profile, day_protein_g: float, kb: KnowledgeBase
+) -> list[_Meal]:
     per_meal = _timing(kb, "TIMING.PROTEIN_PER_MEAL")
     bounds = per_meal["protein_g_per_meal"]
     protein = min(
         max(per_meal["protein_g_per_kg_per_meal"] * profile.weight_kg, bounds["min"]),
         bounds["max"],
     )
+    t = _x(template)
+    non_protein = set(t.get("non_protein_slots", []))
+    protein_meals = sum(1 for s in slots if s not in non_protein)
+    # Past the minimum meals, the day's protein is split so the doses don't overshoot it
+    # (COMPOSE.MEAL_SLOTS).
+    if protein_meals > per_meal["min_meals"]:
+        protein = min(protein, day_protein_g / protein_meals)
     pre = _timing(kb, "TIMING.PRE_SESSION_CARBS")["carb_g_per_kg"]
     carbs = (pre["min"] * profile.weight_kg, pre["max"] * profile.weight_kg)
-    fiber_cap = _x(template).get("pre_session_max_fiber_g")
+    fiber_cap = t.get("pre_session_max_fiber_g")
+    weights = t["weights"]
+    total = sum(weights[s] for s in slots)
     return [
         _Meal(
-            slot=m["slot"],
-            kcal_share=m["kcal_pct"] / 100,
-            protein_target=protein if m["protein_meal"] else None,
-            carb_range=carbs if m["slot"] == "pre_session" else None,
-            fiber_cap=fiber_cap if m["slot"] == "pre_session" else None,
+            slot=slot,
+            kcal_share=weights[slot] / total,
+            protein_target=None if slot in non_protein else protein,
+            carb_range=carbs if slot == "pre_session" else None,
+            fiber_cap=fiber_cap if slot == "pre_session" else None,
         )
-        for m in _x(template)["meals"]
+        for slot in slots
     ]
 
 
@@ -360,7 +384,12 @@ def compose(
         raise ValueError(f"phase {chosen.name!r} has no targets for day type {day_type!r}")
 
     template = _template(kb, day_type)
-    meals = _meals(template, profile, kb)
+    choice = meal_pattern(preferences, kb)
+    meals = _meals(template, _slots(template, choice, kb), profile, day_targets.protein_g, kb)
+    # A pattern the user chose cites the rules that shaped the slots; the default adds nothing.
+    pattern_ids = (
+        [kb.compose.meal_slots.id, "TIMING.MEAL_PATTERN"] if choice.source == "user" else []
+    )
     roles = _x(kb.compose.roles)
     # Rank against this phase, so the goal row and pattern lens match the day being built.
     phase_plan = plan.model_copy(update={"phases": [chosen]})
@@ -427,7 +456,7 @@ def compose(
                 if meal.carb_range is None
                 else GramRange(min=round(meal.carb_range[0], 1), max=round(meal.carb_range[1], 1)),
                 why=why,
-                rule_ids=[template.id, "COMPOSE.ROLES", *extra],
+                rule_ids=[template.id, "COMPOSE.ROLES", *extra, *pattern_ids],
             )
         )
 
@@ -455,6 +484,7 @@ def compose(
             "COMPOSE.ROLES",
             "COMPOSE.PORTIONS",
             "COMPOSE.SEARCH",
+            *pattern_ids,
             *chosen.rule_ids,
         ],
     )

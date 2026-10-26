@@ -70,6 +70,10 @@ class Preferences(StrictModel):
     cuisines: list[str] = Field(default_factory=list)
     # A Matrix D pattern id the user asked for (e.g. "mediterranean"); boosts its adherence.
     pattern_pref: str | None = None
+    # How many meals and snacks the user usually eats; None = the engine default
+    # (TIMING.MEAL_PATTERN, which also lists the allowed values).
+    meals_per_day: int | None = None
+    snacks_per_day: int | None = None
 
 
 class DailyLog(StrictModel):

@@ -97,8 +97,9 @@ function DayBody({ sample }: { sample: SampleDay }) {
       <Why why={sample.why} ruleIds={sample.rule_ids} />
 
       <ol className="space-y-3">
-        {sample.meals.map((meal) => (
-          <li key={meal.slot} className="space-y-2 rounded-xl border border-ink/10 p-4">
+        {/* A day can hold several snacks, so the slot alone isn't a unique key. */}
+        {sample.meals.map((meal, i) => (
+          <li key={`${meal.slot}-${i}`} className="space-y-2 rounded-xl border border-ink/10 p-4">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="font-medium">{SLOT_LABELS[meal.slot] ?? title(meal.slot)}</p>
               <p className="text-xs text-ink/60">

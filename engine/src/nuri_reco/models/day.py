@@ -7,7 +7,7 @@ from pydantic import Field
 from .common import DayType, Recommended, StrictModel
 from .response import DayTargets
 
-ComposeSlot = Literal["breakfast", "lunch", "pre_session", "dinner", "snack"]
+ComposeSlot = Literal["breakfast", "lunch", "extra_meal", "pre_session", "dinner", "snack"]
 Macro = Literal["kcal", "protein_g", "carb_g", "fat_g"]
 
 

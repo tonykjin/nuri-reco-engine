@@ -68,7 +68,9 @@
     "cook_time_min": null,
     "budget": null,
     "cuisines": [],
-    "pattern_pref": null
+    "pattern_pref": null,
+    "meals_per_day": null,
+    "snacks_per_day": null
   },
   "as_of": "2026-10-16",
   "sequence_confirmed": false,
